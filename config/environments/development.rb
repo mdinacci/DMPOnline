@@ -33,14 +33,14 @@ Dmponline3::Application.configure do
     g.stylesheets     false
   end
   
-  # Error notifications by email.  Letter opener used to display mail rather 
-  # than send from within development environment
-  config.middleware.use ExceptionNotifier,
-    sender_address: 'noreply@example.com',
-    exception_recipients: 'dev@example.com',
-    email_prefix: '[DMPOnline ERROR] '
-
-  config.action_mailer.delivery_method = :letter_opener
+  # Error notifications by email.
+  # config.middleware.use ExceptionNotifier,
+  #   sender_address: 'noreply@example.com',
+  #   exception_recipients: 'dev@example.com',
+  #   email_prefix: '[DMPOnline ERROR] '
   
+  # Letter opener used to display mail rather 
+  # than send from within development environment
+  config.action_mailer.delivery_method = :letter_opener
 
 end

@@ -9,8 +9,8 @@ gem "cancan", "1.6.7"
 gem "omniauth", "0.3.2"
 gem "recaptcha", "0.3.4"
 
-gem "activeadmin", "0.4.2"
-gem "tinymce-rails", "3.4.8"
+gem "activeadmin", "0.4.4"
+gem "tinymce-rails", "3.5.2"
 gem "kaminari", "0.13.0"
 
 # Gems used only for assets and not required
@@ -22,14 +22,15 @@ end
 gem 'sass-rails', "3.1.4"
 
 gem 'jquery-rails', "1.0.19"
-gem "rails3-jquery-autocomplete", "1.0.6"
+gem "rails3-jquery-autocomplete", "1.0.7"
 gem "paperclip", "2.4.5"
-gem "formtastic", "2.1.0"
-gem "cocoon", "1.0.15"
+gem "formtastic", "2.1.1"
+gem "cocoon", "1.0.22"
 gem "rack-pjax", "0.5.7"
-gem "acts_as_list", "0.1.4"
-gem "awesome_nested_set", "2.0.2"
-gem "the_sortable_tree", "1.2.0"
+gem "acts_as_list", "0.1.6"
+gem "awesome_nested_set", "2.1.3"
+gem "the_sortable_tree", "1.9.4"
+gem "sanitize", "2.0.3"
 
 gem "nokogiri", "1.5.0"
 gem "libxml-ruby", "2.2.2"
@@ -37,8 +38,8 @@ gem "libxslt-ruby", "1.0.8"
 gem "rubyzip", "0.9.6.1"
 gem "rtf", "0.3.3"
 gem "romans", "0.1.0"
-gem "wicked_pdf", "0.7.7"
-gem "rubyXL", "1.2.5"
+gem "wicked_pdf", "0.7.9"
+gem "rubyXL", "1.2.7"
 
 # Use unicorn as the web server
 # gem 'unicorn'
@@ -55,8 +56,8 @@ group :test do
 end
 
 gem "paper_trail", "2.6.0"
-gem "exception_notification", "2.5.2"
+gem "exception_notification", "2.6.1"
 gem 'letter_opener', :group => :development
+gem 'win32console', :platforms => :mingw
 
-gem 'therubyracer', :platforms => :ruby 
-gem "win32-open3-19", "~> 0.0.1", :platforms => [:mswin, :mingw]
+gem 'therubyracer', "0.10.1", :platforms => :ruby 

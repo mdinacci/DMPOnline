@@ -235,6 +235,12 @@ en:
         published: "Published"
         unpublished: "Draft"
         old: "Old"
+        
+      roles:
+        sysadmin: "System Admin"
+        orgadmin: "Organisation Admin"
+        dccadmin: "DCC Administrator"
+        apifull: "API Access"
 
     types:
       mapped: "Mapped to DCC Checklist"

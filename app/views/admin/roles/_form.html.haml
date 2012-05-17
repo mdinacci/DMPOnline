@@ -1,0 +1,8 @@
+= semantic_form_for [:admin, @role] do |f|
+  = f.inputs I18n.t('dmp.admin.details') do
+    = f.input :user_email, :label => :email
+    = f.input :role_flags, :as => :select, :collection => role_options
+    = f.input :organisation, :label => :organisation_id
+    = f.input :edition, :as => :select, :collection => edition_options
+
+  = f.buttons

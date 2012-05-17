@@ -1,0 +1,6 @@
+<p>Welcome to DMPOnline!</p>
+
+<p>An account has been created for you on the DCC's Data Management Planning tool, DMPOnline, by your institution using the
+email address <%= @resource.email %>.  Please now set a password for your account using the link below:</p>
+
+<p><%= link_to 'Set my password', edit_password_url(@resource, :reset_password_token => @resource.reset_password_token) %></p>

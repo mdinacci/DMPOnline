@@ -5,5 +5,5 @@ require 'active_admin_views_headerrenderer'
 require 'active_admin_application'
 require 'active_admin_resourcecontroller'
 
-# General DMPOnline application libraries
-
+# Devise error output formatting
+require 'dmponline_failure_app'

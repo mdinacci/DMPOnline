@@ -8,7 +8,8 @@ class User < ActiveRecord::Base
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :lockable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, :confirmable, :timeoutable, :encryptable
+         :omniauthable, :confirmable, :timeoutable, :encryptable,
+         :token_authenticatable
 
   # Setup accessible (or protected) attributes for the model
   attr_accessible :password, :password_confirmation, :remember_me, :categories, :email, :email_confirmation, :current_password
@@ -23,7 +24,7 @@ class User < ActiveRecord::Base
   # dccadmin: can manage the DCC Questions and manage organisations
   # orgadmin: per organisation, can update organisations and dependent templates
   # APPEND ONLY - DO NOT CHANGE ORDER
-  ROLES = %w[sysadmin dccadmin orgadmin]
+  ROLES = %w[sysadmin dccadmin orgadmin apifull]
   CATEGORIES = %w[researcher support other]
 
   before_save :user_default_organisation
@@ -200,7 +201,7 @@ class User < ActiveRecord::Base
         .where('roles.user_id' => self.id)
         .all
     end
-  end      
+  end
 
   private
 

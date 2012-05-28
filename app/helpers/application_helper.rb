@@ -62,6 +62,10 @@ module ApplicationHelper
       end
     end
   end
+  
+  def bp_format(content)
+    simple_format(content.strip, {}, sanitize: true)
+  end
 
   # User categories 
   def translated_categories

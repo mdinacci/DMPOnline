@@ -67,7 +67,7 @@ module PhaseEditionInstancesHelper
           export_question[:answers] << export_answer
         end
       elsif q.is_mapped?
-        @phase_edition_instance.question_answers(q.id).each do |d|
+        pei.question_answers(q.id).each do |d|
           unless d.dcc_question.nil?
             export_answer = {}
             export_answer[:dmp_number] = "DCC #{dcc_q_numbering[d.dcc_question.id]}"

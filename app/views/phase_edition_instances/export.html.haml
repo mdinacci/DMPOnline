@@ -50,13 +50,13 @@
     %br
     &nbsp;
     %br
+    - qs = export_questions(@pei, @doc[:selection])
     %table{:class => 'export'}    
       %tbody
-        - qs = export_questions(@pei, @doc[:selection])
         - qs.each do |section|
           %tr{class: "depth-0 type-h section"}
             %td.number= section[:number]
-            %td.heading{colspan: 5}= section[:heading]
+            %td.heading{colspan: 4}= section[:heading]
           
           - section[:template_clauses].each do |q|
             %tr{class: "depth-#{q[:depth]} type-#{q[:kind]} #{cycle('odd', 'even')}"}
@@ -66,11 +66,11 @@
               %td.number= q[:number]
               
               - if q[:is_heading]
-                %td.heading{colspan: "#{5-q[:depth]}"}= q[:question]
+                %td.heading{colspan: "#{4-q[:depth]}"}= q[:question]
               - elsif q[:is_mapped]
-                %td.question-heading{colspan: "#{5-q[:depth]}"}= q[:question]
+                %td.question-heading{colspan: "#{4-q[:depth]}"}= q[:question]
               - else
-                %td.question{colspan: "#{4-q[:depth]}"}= q[:question]
+                %td.question{colspan: "#{3-q[:depth]}"}= q[:question]
                 %td.answer
                   - q[:answers].each do |a|
                     .answer= simple_format(a[:response])
@@ -78,16 +78,19 @@
             - if q[:is_mapped]
               - q[:answers].each do |a|
                 %tr{class: "mapped depth-#{q[:depth]} type-#{a[:kind]} #{cycle('odd', 'even')}"}
-                  %td.spacer{colspan: "#{q[:depth] + 1}"}
-                  %td.dcc_number= @doc[:dcc_question_numbers] ? a[:dmp_number] : ''
+                  - (q[:depth].to_i + 1).times do |l|
+                    %td.spacer
                   - if @doc[:include_dcc_questions]
-                    %td.question{colspan: "#{3-q[:depth]}"}= a[:dmp_clause]
+                    %td.question{colspan: "#{3-q[:depth]}"}
+                      - if @doc[:dcc_question_numbers]
+                        %span.dcc_number= a[:dmp_number]
+                      = a[:dmp_clause]
                     %td.answer= simple_format(a[:response])
                   - else
-                    %td.answer{colspan: "#{4-q[:depth]}"}= simple_format(a[:response])
-
+                    %td.answer{colspan: "#{3-q[:depth]}"}= simple_format(a[:response])
+                     
           %tr.spacer
-            %td{:colspan => 6} &nbsp;
+            %td{:colspan => 5} &nbsp;
 
     
     - if @doc[:page_signatures]

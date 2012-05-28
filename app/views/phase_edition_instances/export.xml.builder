@@ -36,7 +36,7 @@ xml.dmp do
       xml.heading(strip_tags(s[:heading]))
       s[:questions] ||= []
       s[:questions].each do |q|
-        xml.dcc_clause do
+        xml.template_clause do
           xml.question(strip_tags(q[:dmp_clause]), "number" => q[:dmp_clause_number])
           xml.response(q[:response])
         end

@@ -373,8 +373,13 @@ thead th {
 }
 
 tbody tr.even {
-  td {
+  > td {
     background-color: $evenrow;
+  }
+}
+tbody tr.odd {
+  > td {
+    background-color: $white;
   }
 }
 td > a.member_link {
@@ -479,4 +484,18 @@ label {
 }
 td > p:last-child {
   margin-bottom: 0;
+}
+
+div.boilerplate {
+  border: solid 1px $green;
+  padding: 0.5em 0.5em;
+}
+
+.warning_message {
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  padding: 0.7em 0.7em;
+  font-size: 130%;
+  background: #ff0000;
 }

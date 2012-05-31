@@ -1,7 +1,7 @@
 - if @template.errors.any?
   - render(partial: "/layouts/errormessages", locals: {errors: @template.errors})
 
-- @template.phases.build if @template.phases.nil?
+- @template.phases.build if @template.phases.empty?
 
 = semantic_form_for [:admin, @template] do |f|
   = f.inputs I18n.t('dmp.admin.details') do

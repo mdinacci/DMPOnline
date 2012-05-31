@@ -17,7 +17,7 @@ $offblack: #3f3e3e;
     // Fix for IE9 - can't have rounded corners and graduated background on same entity
     a {
       @include no-gradient;
-      background: lighten($green, 5%) url(large-green-grad.gif) 0px 0px repeat-x;
+      background: lighten($green, 5%) url(../large-green-grad.gif) 0px 0px repeat-x;
       @include icon-color($offwhite);
       color: $offwhite;
       @include text-shadow(darken($green, 12%));
@@ -25,14 +25,14 @@ $offblack: #3f3e3e;
       &:hover { 
         @include no-gradient;        
         color: $offwhite; @include icon-color($offwhite);
-        background: darken($green, 5%) url(large-green-grad.gif) 0px -48px repeat-x;
+        background: darken($green, 5%) url(../large-green-grad.gif) 0px -48px repeat-x;
       }
       &:active { @include no-shadow; }
     }
 
     a[data-method=delete] {
       @include no-gradient;
-      background: lighten($red, 15%) url(large-red-grad.gif) 0px 0px repeat-x;
+      background: lighten($red, 15%) url(../large-red-grad.gif) 0px 0px repeat-x;
       @include icon-color($offwhite);
       color: $offwhite;
       @include text-shadow(darken($red, 25%));
@@ -40,7 +40,7 @@ $offblack: #3f3e3e;
       &:hover { 
         @include no-gradient;        
         color: $offwhite; @include icon-color($offwhite);
-        background: darken($red, 15%) url(large-red-grad.gif) 0px -48px repeat-x;
+        background: darken($red, 15%) url(../large-red-grad.gif) 0px -48px repeat-x;
       }
       &:active { @include no-shadow; }
     }
@@ -50,7 +50,7 @@ $offblack: #3f3e3e;
 form {
   input[type="submit"] {
     @include no-gradient;
-    background: lighten($green, 5%) url(small-green-grad.gif) 0px 0px repeat-x;
+    background: lighten($green, 5%) url(../small-green-grad.gif) 0px 0px repeat-x;
     @include icon-color($offwhite);
     color: $offwhite;
     @include text-shadow(darken($green, 12%));
@@ -58,13 +58,13 @@ form {
     &:hover {
       @include no-gradient;        
       color: $offwhite; @include icon-color($offwhite);
-      background: darken($green, 5%) url(small-green-grad.gif) 0px -34px repeat-x;
+      background: darken($green, 5%) url(../small-green-grad.gif) 0px -34px repeat-x;
     }
   }
   
   fieldset.buttons li.cancel a {
     @include no-gradient;
-    background: lighten($red, 15%) url(small-red-grad.gif) 0px 0px repeat-x;
+    background: lighten($red, 15%) url(../small-red-grad.gif) 0px 0px repeat-x;
     @include icon-color($offwhite);
     color: $offwhite;
     @include text-shadow(darken($red, 25%));
@@ -72,7 +72,7 @@ form {
     &:hover { 
       @include no-gradient;        
       color: $offwhite; @include icon-color($offwhite);
-      background: darken($red, 15%) url(small-red-grad.gif) 0px -34px repeat-x;
+      background: darken($red, 15%) url(../small-red-grad.gif) 0px -34px repeat-x;
     }
     &:active { @include no-shadow; }
   }
@@ -81,7 +81,7 @@ form {
 
 a.view_link, a.edit_link, a.create_link {
   @include no-gradient;
-  background: lighten($green, 5%) url(small-green-grad.gif) 0px 0px repeat-x;
+  background: lighten($green, 5%) url(../small-green-grad.gif) 0px 0px repeat-x;
   @include icon-color($offwhite);
   color: $offwhite;
   @include text-shadow(darken($green, 12%));
@@ -95,7 +95,7 @@ a.view_link, a.edit_link, a.create_link {
 }
 a.delete_link, a.cancel_link {
   @include no-gradient;
-  background: lighten($red, 15%) url(small-red-grad.gif) 0px 0px repeat-x;
+  background: lighten($red, 15%) url(../small-red-grad.gif) 0px 0px repeat-x;
   @include icon-color($offwhite);
   color: $offwhite;
   @include text-shadow(darken($red, 25%));
@@ -103,13 +103,13 @@ a.delete_link, a.cancel_link {
   &:hover { 
     @include no-gradient;        
     color: $offwhite; @include icon-color($offwhite);
-    background: darken($red, 15%) url(small-red-grad.gif) 0px -34px repeat-x;
+    background: darken($red, 15%) url(../small-red-grad.gif) 0px -34px repeat-x;
   }
   &:active { @include no-shadow; }
 }
 a.special_link {
   @include no-gradient;
-  background: lighten($orange, 5%) url(small-orange-grad.gif) 0px 0px repeat-x;
+  background: lighten($orange, 5%) url(../small-orange-grad.gif) 0px 0px repeat-x;
   @include icon-color($offwhite);
   color: $offwhite;
   @include text-shadow(darken($orange, 12%));
@@ -117,7 +117,7 @@ a.special_link {
   &:hover { 
     @include no-gradient;
     color: $offwhite; @include icon-color($offwhite);
-    background: darken($orange, 5%) url(small-orange-grad.gif) 0px -34px repeat-x;
+    background: darken($orange, 5%) url(../small-orange-grad.gif) 0px -34px repeat-x;
   }
   &:active { @include no-shadow; }
 }

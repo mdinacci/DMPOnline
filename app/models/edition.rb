@@ -3,6 +3,7 @@ class Edition < ActiveRecord::Base
   belongs_to :dcc_edition, :class_name => "Edition", :foreign_key => "dcc_edition_id"
   has_many :phase_edition_instances
   has_many :questions
+  has_many :mappings, :through => :questions
   has_many :template_instances, :through => :phase_edition_instances
   has_many :answers, :through => :phase_edition_instances
 
@@ -25,6 +26,10 @@ class Edition < ActiveRecord::Base
   
   def state
     STATUS[self.status].to_sym
+  end
+  
+  def checklist_locked?
+    self.mappings.count > 0
   end
   
   def publish
@@ -76,7 +81,7 @@ class Edition < ActiveRecord::Base
   def self.dcc_checklist_editions
     joins(:phase => {:template => :organisation})
     .select('editions.*, phases.phase, templates.name, organisations.short_name')
-    .where(:templates => {:checklist => true})  #.where('status IN (?, ?)', STATUS.index('active'), STATUS.index('published'))
+    .where(:templates => {:checklist => true})
     .order('id desc')
     .all
   end
@@ -102,10 +107,18 @@ class Edition < ActiveRecord::Base
     .all
   end
 
+  def used_by
+    User
+    .joins(:plans => {:template_instances => :phase_edition_instances})
+    .where('phase_edition_instances.edition_id' => self.id)
+    .select('DISTINCT users.*')
+    .all
+  end
+  
   private
  
   def not_in_use?
-    if self.status != STATUS.index('unpublished')
+    if self.state != :unpublished && self.state != :old
       errors.add :base, I18n.t('dmp.admin.not_unpublished') 
     end
     errors.blank?

@@ -6,6 +6,7 @@ class Phase < ActiveRecord::Base
   validates :phase, :presence => true
   
   acts_as_list :scope => :template_id
+  default_scope order(:position)
   
   after_create do |phase|
     edition = phase.editions.build
@@ -18,5 +19,5 @@ class Phase < ActiveRecord::Base
       phase.delete!
     end
   end
-      
+
 end

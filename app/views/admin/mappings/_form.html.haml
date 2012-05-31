@@ -25,5 +25,5 @@
       = link_to_add_association image_tag('plus.png', {:alt => "#{t('dmp.admin.add_model', model: t('activerecord.models.boilerplate_text.one'))}"}), f, :boilerplate_texts
 
   = f.buttons do
-    %li.button= link_to t('dmp.go_back'), url_for(:back), class: 'cancel_link'
+    %li.button= link_to t('dmp.go_back'), admin_question_path(@mapping.question), class: 'cancel_link'
     = f.commit_button

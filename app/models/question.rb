@@ -6,7 +6,7 @@ class Question < ActiveRecord::Base
   belongs_to :edition
 #  has_many :dependents, :class_name => "Question"
   belongs_to :dependency, :class_name => "Question", :foreign_key => "dependency_question_id"
-  has_many :mappings
+  has_many :mappings, :order => 'position ASC'
   has_many :answers
   has_many :dcc_questions, :class_name => "Question", :through => :mappings, :foreign_key => "dcc_question_id"
   has_one :guide, :as => :guidance, :dependent => :delete
@@ -15,7 +15,8 @@ class Question < ActiveRecord::Base
   accepts_nested_attributes_for :boilerplate_texts, :allow_destroy => true
   accepts_nested_attributes_for :mappings, :allow_destroy => true 
   attr_accessible :edition_id, :kind, :number_style, :question, :dependency_question_id, :dependency_value,
-                  :guide_attributes, :boilerplate_texts_attributes, :select_dcc_questions, :default_value
+                  :guide_attributes, :boilerplate_texts_attributes, :mappings_attributes, 
+                  :select_dcc_questions, :default_value
 
   # Question types available
   # boolean: a special choice type of Yes/No

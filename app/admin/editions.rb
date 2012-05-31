@@ -5,7 +5,7 @@ ActiveAdmin.register Edition do
   scope_to :current_user
   
   action_item :only => :show do
-    link_to(I18n.t('dmp.admin.edit_model', model: t('activerecord.models.question.other')), edit_admin_edition_path(edition))
+    link_to(I18n.t('dmp.admin.edit_edition_sort_questions'), edit_admin_edition_path(edition))
   end
   
   action_item :only => :show do
@@ -42,6 +42,9 @@ ActiveAdmin.register Edition do
     h2 "#{edition.phase.template.organisation.short_name} #{edition.phase.template.name} #{edition.phase.phase}" 
     attributes_table do 
       row :edition
+      row :dcc_edition do
+        sanitize edition.dcc_edition.try(:edition)
+      end
       row :status do
         status_tag(edition.state.to_s)
       end
@@ -49,10 +52,37 @@ ActiveAdmin.register Edition do
 
     q_set = edition.questions.nested_set.all
     number_questions(q_set)
+    dcc_numbers = dcc_numbering(edition)
+
     table_for(q_set) do |q|
       q.column(t('dmp.admin.number'), :number_display)
-      q.column(t('dmp.template_question')) {|question| raw question.question }
-      q.column(t('attributes.kind')) {|question| question_type_title(question.kind)}
+      q.column(t('dmp.template_question')) {|question| sanitize question.question }
+      q.column(t('attributes.kind')) {|question| question_type_title(question.kind) }
+      q.column(t('attributes.guidance')) {|question| sanitize question.guide.try(:guidance) }
+      q.column(t('activerecord.models.boilerplate_text.other')) do |question|
+        question.boilerplate_texts.each do |bp| 
+          div bp_format(bp.content), class: "boilerplate"
+        end
+      end
+      q.column(t('activerecord.models.mapping.other')) do |question|
+        if question.mappings.count > 0
+          table_for(question.mappings.all) do |m|
+            m.column(t('attributes.dcc_question_id')) do |mapping| 
+              div "DCC #{dcc_numbers[mapping.dcc_question.id]}", class: "dcc_question" 
+              div sanitize(mapping.dcc_question.question)
+            end
+            m.column(t('attributes.guidance')) {|mapping| sanitize mapping.guide.try(:guidance) }
+            m.column(t('activerecord.models.boilerplate_text.other')) do |mapping|
+              mapping.boilerplate_texts.each do |bp| 
+                div bp_format(bp.content), class: "boilerplate"
+              end
+            end
+          end
+        end
+      end
+      q.column(t('dmp.admin.actions')) do |question|
+        link_to t('dmp.admin.edit'), edit_admin_question_path(question), class: "edit_link"
+      end
     end
 
     # active_admin_comments
@@ -62,8 +92,25 @@ ActiveAdmin.register Edition do
     edition = Edition.find(params[:id])
 
     new = edition.dup
-    new.edition = DateTime.current.to_s(:db)
+    new.edition = (Float(edition.edition) + 0.01).to_s rescue DateTime.current.to_s(:db)
+    new.state= :unpublished
     new.save!
+
+    id_table = {}
+    edition.questions.nested_set.each do |q|
+      newq = q.dup
+      newq.edition_id = new.id
+      unless q.parent_id.nil?
+        newq.parent_id = id_table[q.parent_id]
+      end
+      newq.save!
+      id_table[q.id] = newq.id
+      q.mappings.each do |m|
+        newm = m.dup
+        newm.question_id = newq.id
+        newm.save!
+      end
+    end
 
     redirect_to edit_admin_edition_path(new)
   end
@@ -73,7 +120,7 @@ ActiveAdmin.register Edition do
 
     new = Edition.new
     new.phase_id = edition.phase_id
-    new.edition = (Float(edition.edition) + 1).to_s rescue DateTime.current.to_s(:db)
+    new.edition = (Float(edition.edition) + 0.01).to_s rescue DateTime.current.to_s(:db)
     new.state= :unpublished
     new.save!
 
@@ -84,14 +131,14 @@ ActiveAdmin.register Edition do
     edition = Edition.find(params[:id])
     
     edition.publish
-    redirect_to admin_edition_path(edition)    
+    redirect_to admin_template_path(edition.phase.template)    
   end
   
   member_action :unpublish do
     edition = Edition.find(params[:id])
     
     edition.unpublish
-    redirect_to admin_edition_path(edition)
+    redirect_to admin_template_path(edition.phase.template)
   end
 
  

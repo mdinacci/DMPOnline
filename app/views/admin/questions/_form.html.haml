@@ -1,6 +1,9 @@
 - if @question.errors.any?
   - render partial: "/layouts/errormessages", locals: {errors: @question.errors}
 
+- if @question.edition.state == :active || @question.edition.state == :published
+  .warning_message= I18n.t('dmp.admin.is_active_warning')
+
 - @question.build_guide if @question.guide.nil?
 - @question.boilerplate_texts.build if @question.boilerplate_texts.nil?
 
@@ -8,11 +11,15 @@
   = f.inputs t('dmp.admin.details') do
     = f.input :edition_id, :as => :hidden
     - kind_options = translated_types
-    - if !@question.mappings.blank?
+    - if @question.edition.phase.template.checklist
+      -# Checklists cannot contain mapped questions.
+      - kind_options.delete_if { |k, v| v == 'm' }
+    - elsif !@question.mappings.blank?
       - kind_options = mapped_kind_option
-    = f.input :kind, :as => :select, :collection => kind_options
-    = f.input :number_style, :as => :select, :collection => translated_styles
-    = f.input :question, :input_html => { :class => 'wysiwyg' }
+    = f.input :kind, :as => :select, :collection => kind_options, required: true, hint: @question.mappings.blank? ? nil : I18n.t('dmp.admin.mappings_active'), input_html: {disabled: !@question.mappings.blank?}
+
+    = f.input :number_style, :as => :select, :collection => translated_styles, required: true
+    = f.input :question, required: true, :input_html => { :class => 'wysiwyg' }
     = f.input :default_value, :rows => 3, :hint => t('dmp.admin.token_hint', :tokens => Answer::TOKENS.join('], ['))
 
     - d1 = dependency_question_options(@question)

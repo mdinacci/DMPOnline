@@ -4,4 +4,3 @@
 //= require tinymce-jquery
 //= require wysiwyg
 //= require conditionals
-//= require cocoon

@@ -56,12 +56,19 @@ ActiveAdmin.register Template do
         when :active
           links = link_to I18n.t('dmp.admin.view'), admin_edition_path(edition), :class => 'view_link'
           links += ' '
-          links += link_to I18n.t('dmp.admin.edit_text'), edit_admin_edition_path(edition), :class => 'edit_link'
+          links += link_to I18n.t('dmp.admin.publish'), publish_admin_edition_path(edition), :class => 'cancel_link'
+          links += ' '
+          links += link_to I18n.t('dmp.admin.edit_edition_sort_questions'), edit_admin_edition_path(edition), :class => 'cancel_link'
           links += ' '
           links += link_to I18n.t('dmp.admin.new_edition'), generate_admin_edition_path(edition), :class => 'edit_link'
+          links += ' '
+          links += link_to I18n.t('dmp.admin.copy_questions'), copy_admin_edition_path(edition), :class => 'edit_link'
+          # NB cannot delete if active!
           links
         when :published
           links = link_to I18n.t('dmp.admin.view'), admin_edition_path(edition), :class => 'view_link'
+          links += ' '
+          links += link_to I18n.t('dmp.admin.edit_edition_sort_questions'), edit_admin_edition_path(edition), :class => 'cancel_link'
           links += ' '
           links += link_to I18n.t('dmp.admin.unpublish'), unpublish_admin_edition_path(edition), :class => 'cancel_link'
           links += ' '
@@ -70,18 +77,30 @@ ActiveAdmin.register Template do
           links += link_to I18n.t('dmp.admin.copy_questions'), copy_admin_edition_path(edition), :class => 'edit_link'
           links
         when :unpublished
-          links = link_to I18n.t('dmp.admin.view_publish'), admin_edition_path(edition), :class => 'view_link'
+          links = link_to I18n.t('dmp.admin.view'), admin_edition_path(edition), :class => 'view_link'
           links += ' '
-          links += link_to I18n.t('dmp.admin.edit_questions'), edit_admin_edition_path(edition), :class => 'edit_link'
+          links += link_to I18n.t('dmp.admin.edit_edition_sort_questions'), edit_admin_edition_path(edition), :class => 'edit_link'
+          links += ' '
+          links += link_to I18n.t('dmp.admin.publish'), publish_admin_edition_path(edition), :class => 'cancel_link'
+          links += ' '
+          links += link_to I18n.t('dmp.admin.new_edition'), generate_admin_edition_path(edition), :class => 'edit_link'
           links += ' '
           links += link_to I18n.t('dmp.admin.copy_questions'), copy_admin_edition_path(edition), :class => 'edit_link'
-          if edition.state != :active
-            links += ' '
-            links += link_to I18n.t('dmp.admin.delete'), admin_edition_path(edition), :method => :delete, :confirm => I18n.t('dmp.admin.delete_confirm'), :class => 'delete_link'
-          end
+          links += ' '
+          links += link_to I18n.t('dmp.admin.delete'), admin_edition_path(edition), :method => :delete, :confirm => I18n.t('dmp.admin.delete_confirm'), :class => 'delete_link'
           links
         when :old
-          link_to I18n.t('dmp.admin.view'), admin_edition_path(edition), :class => 'view_link'
+          links = link_to I18n.t('dmp.admin.view'), admin_edition_path(edition), :class => 'view_link'
+          links += ' '
+          links += link_to I18n.t('dmp.admin.edit_edition_sort_questions'), edit_admin_edition_path(edition), :class => 'edit_link'
+          links += ' '
+          links += link_to I18n.t('dmp.admin.publish'), publish_admin_edition_path(edition), :class => 'cancel_link'
+          links += ' '
+          links += link_to I18n.t('dmp.admin.new_edition'), generate_admin_edition_path(edition), :class => 'edit_link'
+          links += ' '
+          links += link_to I18n.t('dmp.admin.copy_questions'), copy_admin_edition_path(edition), :class => 'edit_link'
+          links += ' '
+          links += link_to I18n.t('dmp.admin.delete'), admin_edition_path(edition), :method => :delete, :confirm => I18n.t('dmp.admin.delete_confirm'), :class => 'delete_link'
         end
       end
     end

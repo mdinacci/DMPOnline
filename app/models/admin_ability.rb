@@ -12,7 +12,6 @@ class AdminAbility
       if user.is_sysadmin?
         can :manage, :all
       elsif user.is_admin?
-        Rails.logger.debug "IS ADMIN"
         orgs = user.is_org_admin_for
 
         can ["show", "index"], ["dashboard", "documents", "organisations", "pages", "posts", "templates"] 

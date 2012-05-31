@@ -39,13 +39,13 @@ class PhaseEditionInstance < ActiveRecord::Base
         pvi.answers.create!(:question_id => q.id) unless q.is_heading?
       end
     end
-       
+
     pvi.active_check = true
   end
 
   after_commit do |pvi|
     if pvi.active_check
-      Edition.active_check
+      pvi.edition.active_check
     end
   end
 
@@ -73,17 +73,14 @@ class PhaseEditionInstance < ActiveRecord::Base
       if q.is_mapped?
         q.mappings.each do |m|
           a = self.answers.find_or_create_by_question_id_and_dcc_question_id(:question_id => q.id, :dcc_question_id => m.dcc_question_id)
-          unless a.answered
-            p = a.phase_edition_instance.edition.phase
-            d = Answer.joins(:phase_edition_instance => {:edition => :phase}) 
-                  .where("answers.dcc_question_id = ? AND phase_edition_instances.template_instance_id = ? AND phases.position < ?", m.dcc_question_id, self.template_instance_id, p.position)
-                  .order('updated_at DESC')
-                  .first
-            a.update_attributes(:answer => d.try(:answer))
-          end        
+          d = Answer.joins(:phase_edition_instance => :template_instance) 
+                .where("answers.dcc_question_id = ? AND ((template_instances.plan_id = ? AND template_instances.current_edition_id = phase_edition_instances.edition_id) OR phase_edition_instances.template_instance_id = ?)", m.dcc_question_id, self.template_instance.plan_id, self.template_instance_id)
+                .order('updated_at DESC')
+                .first
+          a.update_attributes(:answer => d.try(:answer))
         end
       end
-    end    
+    end
   end
   
   def plan_owner

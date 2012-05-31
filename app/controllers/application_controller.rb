@@ -12,10 +12,8 @@ class ApplicationController < ActionController::Base
   end
   rescue_from CanCan::AccessDenied do |exception|
     if current_user.is_admin? && controller_path.split('/').first == 'admin'
-      Rails.logger.debug "CanCan ACCESS DENIED redirect to dashboard"
       redirect_to admin_dashboard_path, :alert => exception.message
     else
-      Rails.logger.debug "CanCan ACCESS DENIED render access denied"
       render_access_denied
     end
   end

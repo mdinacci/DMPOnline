@@ -18,7 +18,6 @@
             .panel_contents
               = s.inputs :class => 'inputs cocoon' do
                 - @plan.common_rights.each do |tir|
-                  - Rails.logger.debug tir.inspect
                   = s.semantic_fields_for :template_instance_rights, tir do |ftir|
                     = render 'template_instance_right_fields', :f => ftir
                 .links

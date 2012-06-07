@@ -9,6 +9,7 @@ ActiveAdmin.register OrganisationType do
     f.inputs do
       f.input :title
       f.input :description
+      f.input :position, :as => :select, :collection => (1..20)
     end
     
     f.buttons
@@ -17,11 +18,12 @@ ActiveAdmin.register OrganisationType do
   index do 
     column :title
     column :description
+    column :position
     default_actions
   end
   
   show :title => :title do
-    attributes_table :title, :description 
+    attributes_table :title, :description, :position
     # active_admin_comments
   end
  

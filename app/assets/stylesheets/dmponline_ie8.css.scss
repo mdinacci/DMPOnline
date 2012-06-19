@@ -1,0 +1,15 @@
+// CSS Styles fixes for IE8
+@import "dmponline/mixins/variables";
+
+#facebox .popup, #facebox .content {
+  behavior: url(/assets/PIE.htc);
+  position: relative;
+}
+
+#header { 
+  ul#tabs {
+    & > li a {
+      background: $evenrow;
+    }
+  }
+}

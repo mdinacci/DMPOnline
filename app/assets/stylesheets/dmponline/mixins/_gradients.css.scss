@@ -11,6 +11,7 @@ $secondary-gradient-stop: #dfe1e2;
   background: linear-gradient($start, $end); /*future CSS3 browsers*/
   -pie-background: linear-gradient($start, $end); /*PIE*/
   behavior: url(/assets/PIE.htc);
+  position: relative;
 }
 
 @mixin primary-gradient { 

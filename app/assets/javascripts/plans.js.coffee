@@ -1,12 +1,26 @@
 # Accordion using jQuery UI http://jqueryui.com (as are tabs - JS in plans/template partial)
 
 jQuery ->
-  @ie_disable = 'NONE'
-  if jQuery.browser.msie && (parseInt(jQuery.browser.version) < 9)
-    @ie_disable = 'TABS'
-  if jQuery.browser.msie && (parseInt(jQuery.browser.version) < 8)
-    @ie_disable = 'ACCORDION'
 
+  $.DirtyForms.dialog = 
+    selector: ''
+    fire: (message, dlgTitle) ->
+      e = jQuery.Event("click")        
+      if confirm dlgTitle + "\n\n" + message
+        $.DirtyForms.decidingContinue(e)
+      else
+        $.DirtyForms.decidingCancel(e)
+    bind: ->
+    refire: (content) ->
+      return false
+    stash: ->
+      return false
+
+
+
+  @ie_disable_tabs = jQuery.browser.msie && (parseInt(jQuery.browser.version) < 9)
+  @ie_disable_accordion = jQuery.browser.msie && (parseInt(jQuery.browser.version) < 9)
+    
   $("#rights_tabs").tabs()
 
   @guidance_dialogue = '' 
@@ -86,7 +100,7 @@ jQuery ->
       @guidance_dialogue = ''
 
 
-  unless @ie_disable == 'ACCORDION'
+  unless @ie_disable_accordion
     $("#templates.accordion .panel").accordion 
       active: ".current", 
       clearStyle: true,
@@ -127,29 +141,35 @@ jQuery ->
   # guidance_hovers()
   plan_conditionals()
 
-  if @ie_disable == 'NONE'
-    $("#templates.accordion .ui-accordion-content-active .sections").livequery ->
+  if @ie_disable_accordion
+    section_id = "#templates .sections"
+  else
+    section_id = "#templates.accordion .ui-accordion-content-active .sections"
+
+  unless @ie_disable_tabs  
+    $(section_id).livequery ->
       $(this).tabs
         cache: false
         ajaxOptions:
           cache: false
         event: ''
         load: (event, ui) -> 
-          $("#templates.accordion .ui-accordion-content-active .sections ol a").removeAttr("title")    
+          $(section_id + " ol a").removeAttr("title")    
         spinner: $("#templates").data('preloader')
   
-    $('#templates.accordion .ui-accordion-content-active .ui-tabs-nav a').livequery "click", (event) ->
+    $(section_id + ' .ui-tabs-nav a').livequery "click", (event) ->
       event.stopImmediatePropagation()
       
       if $("form.phase_edition_instance").isDirty() && !confirm 'You have unsaved changes.  Are you sure you want to navigate away?'
         return false
       
       $("form.phase_edition_instance").cleanDirty()
-      i = $('#templates.accordion .ui-accordion-content-active .ui-tabs-nav a').index(this)
-      $("#templates.accordion .ui-accordion-content-active .sections").tabs( "option", "event", 'click' )
-      $("#templates.accordion .ui-accordion-content-active .sections").tabs('select', i)
-      $("#templates.accordion .ui-accordion-content-active .sections").tabs( "option", "event", '' )
+      i = $(section_id + ' .ui-tabs-nav a').index(this)
+      $(section_id).tabs( "option", "event", 'click' )
+      $(section_id).tabs('select', i)
+      $(section_id).tabs( "option", "event", '' )
       return false
+
 
   # Hide the position field and boilerplate text.  Done here so degrades if JS not running
   $('head').append '<style>div.hide_opt { display: none; }</style>'

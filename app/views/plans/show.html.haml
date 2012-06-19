@@ -5,13 +5,6 @@
 
 .plan_wrapper
   .plan_left_column
-    .link_spacing.top
-      - if cannot? :update, @plan
-        %span.disabled_link= t('dmp.edit_project')
-      - elsif @plan.locked
-        %span.disabled_link= t('dmp.locked')
-      - else
-        = link_to t('dmp.edit_project'), edit_plan_path(@plan), class: 'edit_link'
     .panel
       %h3= t('dmp.project_details')
       .panel_contents
@@ -39,10 +32,15 @@
               %tr
                 %th= t('attributes.other_orgs')
                 %td= plan_display(@plan, :other_orgs, nil, true)
+    .link_spacing.top
+      - if cannot? :update, @plan
+        %span.disabled_link= t('dmp.edit_project')
+      - elsif @plan.locked
+        %span.disabled_link= t('dmp.locked')
+      - else
+        = link_to t('dmp.edit_project'), edit_plan_path(@plan), class: 'edit_link'
   
   .plan_right_column
-    .link_spacing.top
-      = link_to t('dmp.edit_project_access'), rights_plan_path(@plan), class: 'edit_link'
     .panel
       %h3= t('dmp.project_access')
       .panel_contents
@@ -64,15 +62,18 @@
                       = t("dmp.roles.#{u_rights}")
             - if @plan.external_writable
               .external-write= t('dmp.external_write')
+    .link_spacing.top
+      = link_to t('dmp.edit_project_access'), rights_plan_path(@plan), class: 'edit_link'
 
 .link_spacing
-  = link_to t('dmp.my_plans'), plans_path, class: 'nav_link'
-  - if cannot?(:update, @plan)
-    %span.disabled_link= t('dmp.complete_plan')
-  - else
-    = link_to t('dmp.complete_plan'), complete_plan_path(@plan), class: "edit_link"
-  = link_to t('dmp.output'), output_plan_path(@plan), class: "nav_link"
-  %span.right
+  .left
+    = link_to t('dmp.my_plans'), plans_path, class: 'nav_link'
+    - if cannot?(:update, @plan)
+      %span.disabled_link= t('dmp.complete_plan')
+    - else
+      = link_to t('dmp.complete_plan'), complete_plan_path(@plan), class: "edit_link"
+    = link_to t('dmp.output'), output_plan_path(@plan), class: "nav_link"
+  .right
     - unless @plan.locked 
       - if cannot? :update, @plan
         %span.disabled_link= t('dmp.admin.lock')
@@ -104,6 +105,10 @@
               - if t.phase_edition_instances.count > 1
                 - multi_message = true
               - t.phase_edition_instances.each do |p|
+                - opts = {}
+                - opts[:method] = :put
+                - if answered_count[p.id].to_i > 0 && t.current_edition_id != p.edition_id
+                  - opts[:confirm] = t('dmp.confirm_phase_change')
                 - c = ''
                 - if answered_count[p.id] == question_count[p.id]
                   - c = 'completed'
@@ -122,7 +127,7 @@
                     = phase_block
                   - else
                     = link_to_if(t.current_edition_id == p.edition_id, phase_block, complete_plan_path(@plan, :tid => t.template_id)) do
-                      = link_to(phase_block, change_phase_plan_path(@plan, :edition_id => p.edition_id), method: :put)
+                      = link_to(phase_block, change_phase_plan_path(@plan, :edition_id => p.edition_id), opts)
 
     - if multi_message
       %p.phase_guide= t('dmp.change_phase')

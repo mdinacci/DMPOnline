@@ -2,7 +2,6 @@
 @import "dmponline/mixins";
 @import "dmponline/base";
 
-
 #wrapper {
   min-width: 780px;
   .static_body {
@@ -36,6 +35,9 @@
     & > li { 
       padding-top: 1em;
       
+      a {
+        @include rounded(200px);
+      }
       &.current > a, a.current {
         background: $orange;
         color: $offwhite;
@@ -125,9 +127,10 @@ form {
 }
 
 .plan_right_column {
+  position: relative;
   float: right;
   width: 37%;
-  margin-right: 1px;
+  margin-right: 2px;
   label {
     width: 100%;
     text-align: left;
@@ -147,10 +150,17 @@ form {
     font-weight: bold;
     font-size: 120%;
   }
+  .panel_contents {
+    padding-bottom: 30px;
+  }
 }
 .plan_left_column {
+  position: relative;
   float: left;
   width: 60%;
+  .panel_contents {
+    padding-bottom: 30px;
+  }
 }
 .plan_footer {
   clear: both;
@@ -253,6 +263,11 @@ a.view_link, a.edit_link, a.create_link {
 
 a.delete_link, a.cancel_link, a.lock_link {
   @include red-button;
+}
+
+a.ignoredirty.red {
+  @include red-button;
+  margin-right: 5em;
 }
 
 a.nav_link {
@@ -392,10 +407,12 @@ div.progress_bar {
 }
 
 div.link_spacing {
-  padding-bottom: 3em;
+  padding-bottom: 5em;
   &.top {
-    float: right;
-    padding-top: 3.5em;
+    position: absolute;
+    right: 0;
+    bottom: 0.1em;
+    padding-bottom: 3em;
   }
   .right {
     float: right;
@@ -720,11 +737,19 @@ td.input-area {
 }
 
 .output {
-  .actions {
-    margin-left: 25%;
-  }
   .output-format {
+    overflow: auto;
     margin-bottom: 2em;
+  }
+  .selection {
+    padding: 10px 100px 0 40px;
+    float: left;
+    label {
+      width: auto;
+    }
+  }
+  .actions {
+    float: left;
   }
 }
 
@@ -741,6 +766,9 @@ fieldset.collapsible legend, dl.boilerplate dt {
 }
 dl.boilerplate {
   margin-bottom: 0;
+  width: 90%;
+  padding-left: 10px;
+  
   dt {
     color: $green;
   }
@@ -771,7 +799,7 @@ table.index th a {
 }
 
 
-ol.ui-sortable, fieldset.cocoon > ol {
+ol.ui-sortable {
   img.handle {
     float: left;
   }
@@ -892,41 +920,64 @@ h2.step {
   font-style: italics;
   padding-bottom: 20px;
 }
+
 .rights_block {
   width: 47%;
   margin-right: 30px;
   float: left;
-  min-width: 400px;
-  .nested-fields {
-    & > fieldset.inputs {
-      margin-bottom: 4px;
-    }
-    input[type=text] {
-      left: 0;
-      width: 60%;
-    }
-    fieldset.choices {
-      width: 20%;
-      left: 75%;
-      ol.choices-group {
-        padding: 0 0;
-        margin: 0 0;
-        left: 0;
-        width: 100%;
-        position: relative;
-        li.choice {
-          padding: 0 0;
-          margin: 0 0;
-          label {
-            left: 2em;
-            padding-top: 0;
-          }
-          input {
-            left: -1.5em;
-            width: 40%;
+  min-width: 480px;
+  fieldset.cocoon {
+    position: static;  
+    .nested-fields {
+      & > fieldset.inputs {
+        margin-bottom: 4px;
+        & > ol {
+          padding: 10px 0 0 0;
+          margin: 0 0 -5px 0;
+          width: 100%;
+          float: none;
+          white-space: nowrap;
+          & > li {
+            display: inline;
           }
         }
       }
+      input[type=text] {
+        left: auto;
+        width: 60%;
+      }
+      a {
+        margin-left: 2em;
+        img {
+          vertical-align: middle;      
+        }
+      }
+      fieldset.choices {
+        display: inline-block;
+        vertical-align: middle;
+        ol.choices-group {
+          padding: 0 0;
+          margin: 0 0;
+          float: none;
+          width: auto;
+          position: static;
+          li.choice {
+            width: auto;
+            float: none;
+            padding: 0 0;
+            margin: 0 0;
+            label {
+              padding-left: 2em;
+              display: inline-block;
+              width: auto;
+              padding-top: 0;
+            }
+          }
+        }
+      }
+    }
+    .links a {
+      padding-left: 12px;
     }
   } 
 }
@@ -1045,4 +1096,13 @@ form.user {
   border: solid 2px red;
   padding: 0.3em 1em;
   margin-bottom: 1em;
+}
+
+.warning_message {
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  padding: 0.7em 0.7em;
+  font-size: 130%;
+  background: #ff0000;
 }

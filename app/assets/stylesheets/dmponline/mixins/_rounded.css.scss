@@ -2,6 +2,8 @@
   -webkit-border-radius: $radius; 
   -moz-border-radius: $radius; 
   border-radius: $radius;
+  behavior: url(/assets/PIE.htc);
+  position: relative;
 }
 
 @mixin rounded-all($top-left:3px, $top-right:3px, $bottom-right:3px, $bottom-left:3px) {
@@ -20,6 +22,9 @@
   border-bottom-left-radius: $bottom-left;
   -moz-border-radius-bottomleft: $bottom-left;
   -webkit-border-bottom-left-radius: $bottom-left;
+
+  behavior: url(/assets/PIE.htc);
+  position: relative;
 }
 
 @mixin rounded-top($radius: 3px) {

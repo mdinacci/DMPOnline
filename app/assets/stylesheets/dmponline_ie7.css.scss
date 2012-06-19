@@ -26,7 +26,11 @@ form.user fieldset.inputs,
   border: solid 1px #c0c0c0;
   background: transparent;
   behavior: none;
+  position: static;
+  float: none;
+  margin-bottom: 10px;
 }
+
 .accordion {
   .panel {
     height: 10%;
@@ -62,5 +66,24 @@ li.input {
   }
   select {
     margin-bottom: 4px;
+  }
+}
+
+div.link_spacing.top {
+  padding-bottom: 2em;
+}
+
+div.rights_block {
+  fieldset.choices {
+    border: #f4f4f4 solid 1px;
+    ol {
+      line-spacing: 0;
+    }
+  }
+  li * {
+    vertical-align: top;
+  }
+  fieldset.inputs {
+    border: none;
   }
 }

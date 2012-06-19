@@ -45,6 +45,7 @@
                           = sanitize i.description
                           - unless i.url.blank? 
                             .website= link_to t('dmp.further_details'), i.url
+                          &nbsp;
 
     - else
       %p.error= t('dmp.no_templates')

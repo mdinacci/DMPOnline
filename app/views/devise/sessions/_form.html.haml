@@ -4,7 +4,7 @@
     = f.input :password
     = f.input :remember_me, :as => :boolean
 
-    = f.buttons class: "buttons indent" do
-      = f.commit_button t('dmp.auth.sign_in')
+  = f.buttons class: "buttons" do
+    = f.commit_button t('dmp.auth.sign_in')
 
 = render :partial => "devise/shared/links"

@@ -79,9 +79,10 @@
 
 
     .output-format
-      %label{for: "format"}
-        = t('dmp.output_format')
-        = select_tag 'format', '<option value="pdf">PDF</option><option value="html">HTML</option><option value="csv">CSV</option><option value="txt">TXT</option><option value="xml">XML</option><option value="xlsx">XLSX</option><option value="docx">DOCX</option><option value="rtf">RTF</option>'.html_safe
+      .selection
+        %label{for: "format"}
+          = t('dmp.output_format')
+          = select_tag 'format', '<option value="pdf">PDF</option><option value="html">HTML</option><option value="csv">CSV</option><option value="txt">TXT</option><option value="xml">XML</option><option value="xlsx">XLSX</option><option value="docx">DOCX</option><option value="rtf">RTF</option>'.html_safe
     
       .actions
         = f.submit name: "doc[inline]", value: t('dmp.open')
@@ -105,4 +106,6 @@
               %tr
                 %th= t('dmp.font_style')
                 %td= select_tag 'doc[font_style]', "<option value='sans-serif'>#{t('dmp.sans_serif')}</option><option value='serif'>#{t('dmp.serif')}</option>".html_safe
+
   
+= link_to t('dmp.finished'), plan_path(@plan), :class => "nav_link"

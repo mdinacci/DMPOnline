@@ -4,13 +4,14 @@ class PhaseEditionInstance < ActiveRecord::Base
   has_many :answers
   has_many :questions, :through => :answers
   has_many :template_instance_rights, :through => :template_instance
-  
+
   accepts_nested_attributes_for :answers, :allow_destroy => true
   attr_accessible :sword_edit_uri, :answers_attributes, :edition_id
 
   attr_accessor :active_check
 
-  
+
+  scope :sorted, joins(:edition => :phase).order("phases.position")  
   scope :with_role, ->(role) { joins(:template_instance_rights).where('template_instance_rights.role_flags = ?', TemplateInstance::ROLES.index(role)) }
   scope :rights_matching, ->(email) { joins(:template_instance_rights).where("? LIKE template_instance_rights.email_mask", email) }
 

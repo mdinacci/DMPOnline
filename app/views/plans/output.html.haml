@@ -16,7 +16,7 @@
             %p.error= t('dmp.no_phases')
           - else
             %ol
-              - t.phase_edition_instances.each do |p|
+              - t.phase_edition_instances.sorted.each do |p|
                 - c = ''
                 - if answered_count[p.id] == question_count[p.id]
                   - c = 'completed'

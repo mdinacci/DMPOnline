@@ -104,7 +104,7 @@
             %ol
               - if t.phase_edition_instances.count > 1
                 - multi_message = true
-              - t.phase_edition_instances.each do |p|
+              - t.phase_edition_instances.sorted.each do |p|
                 - opts = {}
                 - opts[:method] = :put
                 - if answered_count[p.id].to_i > 0 && t.current_edition_id != p.edition_id

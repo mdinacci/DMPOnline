@@ -9,8 +9,6 @@
 //= require jquery_ujs
 //= require cocoon
 //= require jquery.tools.min
-//= require tinymce-jquery
-//= require wysiwyg
 //= require datepicker
 //= require livequery/jquery.livequery.min
 //= require dirtyforms/jquery.dirtyforms

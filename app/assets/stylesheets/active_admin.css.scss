@@ -337,9 +337,7 @@ ol.ui-sortable, fieldset.cocoon > ol {
   }
   .link > a {
     display: inline-block;
-    float: left;
-    position: absolute;
-    left: 45px;
+    float: right;
     right: 15em;
   }
 }
@@ -417,12 +415,15 @@ span.checklist {
   }
 }
 
-.nested_set .link .value {
-  display: block;
-  font-weight: bold;
-  left: 30px;
-  margin: 0 15em 0 40px;
-  vertical-align: bottom;
+.nested_set .link {
+  min-height: 28px;
+ .value {
+    display: block;
+    font-weight: bold;
+    left: 30px;
+    margin: 0 15em 0 40px;
+    vertical-align: bottom;
+  }
 }
 
 .mapping_questions {

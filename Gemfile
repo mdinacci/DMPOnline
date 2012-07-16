@@ -29,7 +29,7 @@ gem "cocoon", "1.0.22"
 gem "rack-pjax", "0.5.7"
 gem "acts_as_list", "0.1.6"
 gem "awesome_nested_set", "2.1.3"
-gem "the_sortable_tree", "1.9.4"
+gem "the_sortable_tree", "1.9.4" 
 gem "sanitize", "2.0.3"
 
 gem "nokogiri", "1.5.0"
@@ -40,6 +40,8 @@ gem "rtf", "0.3.3"
 gem "romans", "0.1.0"
 gem "wicked_pdf", "0.7.9"
 gem "rubyXL", "1.2.7"
+
+gem "highcharts-js-rails", "0.1.9"
 
 # Use unicorn as the web server
 # gem 'unicorn'

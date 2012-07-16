@@ -8,7 +8,7 @@
     - unless @edition.phase.template.checklist
       = f.input :dcc_edition, as: :select, collection: dcc_checklist_editions, required: true, hint: @edition.checklist_locked? ? I18n.t('dmp.admin.mappings_active') : nil, input_html: {disabled: @edition.checklist_locked?}
 
-  = sortable_tree @edition.questions.nested_set.all, klass: :question, rebuild_url: rebuild_admin_questions_path, path: 'admin/questions/the_sortable_tree', :max_levels => 3
+  = sortable_tree @edition.questions.nested_set.all, klass: "question", rebuild_url: rebuild_admin_questions_path, path: 'admin/questions/sortable/base', :max_levels => 3, :admin => current_user.is_dccadmin?
 
 
   = f.buttons do

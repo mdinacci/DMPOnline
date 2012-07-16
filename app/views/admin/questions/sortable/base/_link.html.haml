@@ -3,11 +3,10 @@
   %div{ :class => "link#{' root' if root}" }
     .drag-button.handle{:title => t('dmp.admin.drag')}
       = image_tag("white/drag.png", {:alt => t('dmp.admin.drag'), :class => "handle"})
-    = controls
+    = raw render(:partial => "#{opts[:path]}/controls", :locals => {:opts => opts, :node => node})
     %span.value
       %span{class: "s_#{node.id}"}= raw display
 - else
   %div{:class => "link #{'root' if root}"}
     %span.value
       %span{class: "s_#{node.id}"}= raw display
-

@@ -28,7 +28,7 @@ class Template < ActiveRecord::Base
   protected
   
   def phase_empty(attributes)
-    Sanitize.clean(atttributes['phase']).blank?
+    Sanitize.clean(attributes['phase']).blank?
   end
 
 end

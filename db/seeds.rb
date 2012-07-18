@@ -23,12 +23,23 @@ org = Organisation.create(
   :default_locale => 'en'
 )
 
-t = Template.create(
-  :organisation_id => dcc.id,
-  :name => "DCC Checklist",
-  :phases_attributes => [{:phase => "Checklist", :position => 1 }]
-) 
-t.make_checklist(dcc.id)
+#
+# t = Template.create(
+#   :organisation_id => dcc.id,
+#   :name => "DCC Checklist",
+#   :phases_attributes => [{:phase => "Checklist", :position => 1 }]
+# )
+# t.make_checklist(dcc.id)
+#
+
+# 
+# Load DCC Checklist from SQL file
+#
+conn = ActiveRecord::Base.connection()
+sql = File.read("#{Rails.root}/db/checklist.sql")
+sql.split("\n").each do |line|
+  conn.execute line
+end
 
 Page.create([
   {
@@ -92,34 +103,33 @@ Currency.create([
 ])
 
 user = User.new
-user.send :attributes=, {:email => 'admin@example.com', :password => 'password', :password_confirmation => 'password', :confirmed_at => Time.current}, false
+user.send :attributes=, {:email => 'admin@example.com', :email_confirmation => 'admin@example.com', :password => 'password', :password_confirmation => 'password', :confirmed_at => Time.current}, false
 user.save!
 
 role = Role.new
-role.user_id = user.id
+role.user_email = user.email
 role.assigned= :sysadmin
 role.save!
 
 user = User.new
-user.send :attributes=, {:email => 'dcc@example.com', :password => 'password', :password_confirmation => 'password', :confirmed_at => Time.current}, false
+user.send :attributes=, {:email => 'dcc@example.com', :email_confirmation => 'dcc@example.com', :password => 'password', :password_confirmation => 'password', :confirmed_at => Time.current}, false
 user.save!
 
 role = Role.new
-role.user_id = user.id
+role.user_email = user.email
 role.assigned= :dccadmin
 role.save!
 
 user = User.new
-user.send :attributes=, {:email => 'organisation@example.com', :password => 'password', :password_confirmation => 'password', :confirmed_at => Time.current}, false
+user.send :attributes=, {:email => 'organisation@example.com', :email_confirmation => 'organisation@example.com', :password => 'password', :password_confirmation => 'password', :confirmed_at => Time.current}, false
 user.save!
 
 role = Role.new
-role.user_id = user.id
+role.user_email = user.email
 role.organisation_id = org.id
 role.assigned= :orgadmin
 role.save!
 
 user = User.new
-user.send :attributes=, {:email => 'user@example.com', :password => 'password', :password_confirmation => 'password', :confirmed_at => Time.current}, false
+user.send :attributes=, {:email => 'user@example.com', :email_confirmation => 'user@example.com', :password => 'password', :password_confirmation => 'password', :confirmed_at => Time.current}, false
 user.save!
-

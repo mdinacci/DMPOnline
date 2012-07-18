@@ -3,7 +3,7 @@ class Role < ActiveRecord::Base
   belongs_to :organisation
   belongs_to :edition
   
-  scope :dcc, where(:organisation_id => Organisation.dcc.first.id)
+  scope :dcc, -> { where(:organisation_id => Organisation.dcc.first.id) }
   scope :for_organisation, ->(org) { where(:organisation_id => org.id) }
   scope :for_user, ->(user) { where(:user_id => user.id) }
   scope :with_role, ->(role) { where(:role_flags => 2**User::ROLES.index(role.to_s)) }

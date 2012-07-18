@@ -39,7 +39,7 @@
                     - t.each do |i|
                       %li.choice
                         %label{for: dom_id(i)}
-                          = check_box_tag 'plan[template_ids][]', i.id, @plan.template_ids.include?(i.id), id: dom_id(i), class: @plan.template_ids.include?(i.id) ? "warning" : nil, readonly: @plan.template_ids.include?(i.id)
+                          = check_box_tag 'plan[template_ids][]', i.id, @plan.template_ids.include?(i.id), id: dom_id(i), class: @plan.template_ids.include?(i.id) ? "warning" : nil, disabled: @plan.template_ids.include?(i.id)
                           = i.name
                         .description
                           = sanitize i.description

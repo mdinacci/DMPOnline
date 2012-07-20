@@ -4,14 +4,12 @@
     %meta{:content => 'text/html; charset=utf-8', 'http-equiv' => 'Content-Type'}
     - if @doc[:format] == 'pdf'
       = wicked_pdf_stylesheet_link_tag 'export'
-      - fs = @doc[:font_size].to_f * 1.4
     - else
       = stylesheet_link_tag 'export'
-      - fs = @doc[:font_size]
 
     :css
       table {
-        font-size: #{fs}pt;
+        font-size: #{@doc[:font_size]}pt;
         font-family: #{@doc[:font_style]};
       }
 

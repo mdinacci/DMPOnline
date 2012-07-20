@@ -87,6 +87,7 @@
       .actions
         = f.submit name: "doc[inline]", value: t('dmp.open')
         = f.submit name: "doc[attachment]", value: t('dmp.download')
+        = link_to t('dmp.finished'), plan_path(@plan), :class => "nav_link"
 
     - unless @phase_edition_instance.template_instance.template.constraint_text.blank?
       .constraint= @phase_edition_instance.template_instance.template.constraint_text
@@ -110,5 +111,4 @@
                 %th= t('dmp.font_style')
                 %td= select_tag 'doc[font_style]', "<option value='sans-serif'>#{t('dmp.sans_serif')}</option><option value='serif'>#{t('dmp.serif')}</option>".html_safe
 
-  
-= link_to t('dmp.finished'), plan_path(@plan), :class => "nav_link"
+ 

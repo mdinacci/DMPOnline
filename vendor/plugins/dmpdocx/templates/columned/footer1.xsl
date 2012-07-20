@@ -25,7 +25,7 @@
 				</w:pPr>
 				<w:r>
 					<w:t>
-						<xsl:value-of select="format/footer" />
+						<xsl:value-of select="format/footer"/>
 					</w:t>
 				</w:r>
 			</w:p>

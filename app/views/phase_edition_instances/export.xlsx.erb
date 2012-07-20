@@ -38,7 +38,7 @@ r += 1
 qs = export_questions(@pei, @doc[:selection])
 qs.each do |section|
   ws.add_cell(r, 0, section[:number])
-  ws.add_cell(r, 1, section[:heading])
+  ws.add_cell(r, 1, strip_tags(section[:heading]))
   r += 1
 
   section[:template_clauses].each do |q|

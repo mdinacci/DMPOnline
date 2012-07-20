@@ -30,7 +30,7 @@
 				</w:pPr>
 				<w:r w:rsidRPr="00603D2B">
 					<w:t>
-						<xsl:value-of select="format/header" />
+						<xsl:value-of select="format/header"/>
 					</w:t>
 				</w:r>
 				<w:r w:rsidRPr="00603D2B">

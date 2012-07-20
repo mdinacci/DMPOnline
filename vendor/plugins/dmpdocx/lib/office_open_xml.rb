@@ -1,15 +1,15 @@
 # encoding: utf-8
 class OfficeOpenXML
   
-  def self.transform(xml, newdoc)
-    docx = new(xml, newdoc)
+  def self.transform(xml, newdoc, template)
+    docx = new(xml, newdoc, template)
     docx.apply_xslt
   end
 
-  def initialize(xml, newdoc)
+  def initialize(xml, newdoc, template)
     @xml, @newdoc = xml, newdoc
 
-    @tpl = File.expand_path(File.join(File.dirname(__FILE__), '../templates'))
+    @tpl = File.expand_path(File.join(File.dirname(__FILE__), "../templates/#{template}"))
 #    FileUtils.copy("#{@tpl}/dmp.docx", @newdoc)    
   end
 

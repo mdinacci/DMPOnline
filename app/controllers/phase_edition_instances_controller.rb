@@ -100,6 +100,9 @@ class PhaseEditionInstancesController < ApplicationController
     @doc[:selection].sort!{ |a, b| pos[a.to_s].to_i <=> pos[b.to_s].to_i }
     @doc[:selection].collect!(&:to_i)
     
+    if @doc[:layout] != 'columned'
+      @doc[:layout] = 'full'
+    end
     if @doc[:orientation] != 'portrait'
       @doc[:orientation] = 'landscape'
       @doc[:width] = 120
@@ -145,9 +148,11 @@ class PhaseEditionInstancesController < ApplicationController
       @pei = @phase_edition_instance
     end
     
+    template = (@doc[:layout] == 'full') ? 'export' : 'export_col'
+    
     respond_to do |format|
-      format.html { render :export, layout: false }
-      format.rtf  { render :export, layout: false }
+      format.html { render template.to_sym, layout: false }
+      format.rtf  { render template.to_sym, layout: false }
       format.txt  { render :export, layout: false }
       format.xml  { render :export, layout: false }
       format.csv  { render :export, layout: false }
@@ -167,7 +172,7 @@ class PhaseEditionInstancesController < ApplicationController
         @doc[:page_footer] = false
         @doc[:page_header] = false
         render  pdf: @doc[:filename],
-                template: 'phase_edition_instances/export.html',
+                template: "phase_edition_instances/#{template}.html",
                 margin: {:top => '1.7cm'},
                 orientation: @doc[:orientation], 
                 default_header: false,
@@ -179,7 +184,7 @@ class PhaseEditionInstancesController < ApplicationController
         xml_data = render_to_string 'export.xml'
         docx = Tempfile.new("dmp")
         docx.close
-        OfficeOpenXML.transform(xml_data, docx.path)
+        OfficeOpenXML.transform(xml_data, docx.path, @doc[:layout])
         send_file docx.path, :type => :docx, :filename => @doc[:filename]
       end
 

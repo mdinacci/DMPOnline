@@ -98,11 +98,14 @@
           %table
             %tbody
               %tr
+                %th= t('dmp.layout')
+                %td= select_tag 'doc[layout]', "<option value='full'>#{t('dmp.full_width')}</option><option value='columned'>#{t('dmp.columned')}</option>".html_safe
+              %tr
                 %th= t('dmp.paper_orientation')
                 %td= select_tag 'doc[orientation]', "<option value='portrait'>#{t('dmp.portrait')}</option><option value='landscape'>#{t('dmp.landscape')}</option>".html_safe
               %tr
                 %th= t('dmp.font_size')
-                %td= text_field_tag 'doc[font_size]', "10"
+                %td= text_field_tag 'doc[font_size]', "9"
               %tr
                 %th= t('dmp.font_style')
                 %td= select_tag 'doc[font_style]', "<option value='sans-serif'>#{t('dmp.sans_serif')}</option><option value='serif'>#{t('dmp.serif')}</option>".html_safe

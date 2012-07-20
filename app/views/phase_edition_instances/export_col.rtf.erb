@@ -124,31 +124,27 @@ qs.each do |section|
     row[1] = strip_tags(q[:question])
     unless q[:is_mapped]
       q[:answers].each do |a|
+        row[2] = a[:response]
         rows << row
         row = {}
-        row[:style] = 'Answer'
         row[0] = ''
-        row[1] = a[:response]
+        row[1] = ''
       end
+    else
+      rows << row
+      row = {}    
     end
-    rows << row
-    row = {}
+
 
     if q[:is_mapped]
       q[:answers].each do |a|
-        if @doc[:dcc_question_numbers] || @doc[:include_dcc_questions]
-          row[:style] = 'Question'
-          row[0] = ''
-          row[1] = @doc[:dcc_question_numbers] ? "#{a[:dmp_number]}: " : ''
-          if @doc[:include_dcc_questions]
-            row[1] += strip_tags(a[:dmp_clause])
-          end
-          rows << row
-          row = {}
-        end
         row[:style] = 'Answer'
         row[0] = ''
-        row[1] = a[:response]
+        row[1] = @doc[:dcc_question_numbers] ? "#{a[:dmp_number]}: " : ''
+        if @doc[:include_dcc_questions]
+          row[1] += strip_tags(a[:dmp_clause])
+        end 
+        row[2] = a[:response]
         rows << row
         row = {}
       end
@@ -156,22 +152,28 @@ qs.each do |section|
   end
 end
   
-grid = document.table(rows.size, 2, (tableWidth * 0.08).to_i, (tableWidth * 0.92).to_i)
+grid = document.table(rows.size, 3, (tableWidth * 0.08).to_i, (tableWidth * 0.32).to_i, (tableWidth * 0.6).to_i)
 grid.border_width = 0
 
 0.upto(rows.size - 1).each do |i|
   row = rows[i]
 
   grid[i][0].apply(styles[row[:style]]) << row[0]
-  paragraphs = row[1].split(/(\n\s*){2,}/).delete_if{|x| x !~ /\S/}
-  paragraphs.each do |p|
-    lines = p.split(/\n/).delete_if{|x| x !~ /\S/}
-    lines.each do |l|
-      grid[i][1].apply(styles[row[:style]]) << l
-      grid[i][1].line_break unless l == lines.last
+  grid[i][1].apply(styles[row[:style]]) << row[1]
+  if row[2].blank?
+    grid[i][1].width = (tableWidth * 0.92).to_i
+    grid[i][2].width = 0
+  else
+    paragraphs = row[2].split(/(\n\s*){2,}/).delete_if{|x| x !~ /\S/}
+    paragraphs.each do |p|
+      lines = p.split(/\n/).delete_if{|x| x !~ /\S/}
+      lines.each do |l|
+        grid[i][2].apply(styles['Answer']) << l
+        grid[i][2].line_break unless l == lines.last
+      end       
+      grid[i][2].line_break unless p == paragraphs.last
+      grid[i][2].line_break unless p == paragraphs.last
     end
-    grid[i][1].line_break unless p == paragraphs.last
-    grid[i][1].line_break unless p == paragraphs.last
   end
 end
 

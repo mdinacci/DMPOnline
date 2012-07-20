@@ -385,11 +385,23 @@ td > a.member_link {
   margin-bottom: 4px;
 }
 
-.panel_contents table td .empty {
-  color: #BBBBBB;
-  font-size: 0.8em;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+.panel_contents table td {
+  .empty {
+    color: #BBBBBB;
+    font-size: 0.8em;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .warning {
+    color: #ff0000;
+    font-weight: bold;
+    margin-left: 1em;
+  }
+}
+.inline-hints .warning {
+  color: #ff0000;
+  font-weight: bold;
+  margin-left: 1em;
 }
 
 .mceEditor table.mceLayout {

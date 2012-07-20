@@ -1,3 +1,5 @@
+%h2= "#{@edition.phase.template.organisation.short_name}: #{@edition.phase.template.name} - #{@edition.phase.phase}" 
+
 - if @edition.state == :active || @edition.state == :published
   .warning_message= I18n.t('dmp.admin.is_active_warning')
    
@@ -6,7 +8,12 @@
     = f.input :edition
 
     - unless @edition.phase.template.checklist
-      = f.input :dcc_edition, as: :select, collection: dcc_checklist_editions, required: true, hint: @edition.checklist_locked? ? I18n.t('dmp.admin.mappings_active') : nil, input_html: {disabled: @edition.checklist_locked?}
+      - org_checklist = edition.phase.template.organisation.dcc_edition_id || dcc_organisation.dcc_edition_id
+      - hint = @edition.checklist_locked? ? I18n.t('dmp.admin.mappings_active') : ''
+      - if @edition.dcc_edition_id != org_checklist && @edition.dcc_edition.state != :published
+        - hint += content_tag(:span, I18n.t('dmp.admin.warn_checklist_not_published'), class: "warning")
+
+      = f.input :dcc_edition, as: :select, collection: dcc_checklist_editions, required: true, hint: hint.html_safe, input_html: {disabled: @edition.checklist_locked?}
 
   = sortable_tree @edition.questions.nested_set.all, klass: "question", rebuild_url: rebuild_admin_questions_path, path: 'admin/questions/sortable/base', :max_levels => 3, :admin => current_user.is_dccadmin?
 

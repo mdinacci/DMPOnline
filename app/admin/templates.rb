@@ -37,7 +37,7 @@ ActiveAdmin.register Template do
   end
 
   # TODO: Replace with a redirect to the index layout
-  show :title => :name do |template|
+  show :title => proc { "#{template.organisation.short_name} #{template.name}" } do |template|
     attributes_table do
       row :name
       row :url

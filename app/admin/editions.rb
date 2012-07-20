@@ -7,6 +7,10 @@ ActiveAdmin.register Edition do
   action_item :only => :show do
     link_to(I18n.t('dmp.admin.edit_edition_sort_questions'), edit_admin_edition_path(edition))
   end
+
+  action_item :only => :edit do
+    link_to(I18n.t('dmp.admin.edition_detail'), admin_edition_path(edition))
+  end
   
   action_item :only => :show do
     case edition.state
@@ -38,12 +42,18 @@ ActiveAdmin.register Edition do
     controller.redirect_to admin_templates_path
   end
   
-  show :title => :edition do |edition|
-    h2 "#{edition.phase.template.organisation.short_name} #{edition.phase.template.name} #{edition.phase.phase}" 
+  show :title => proc { "#{edition.phase.template.organisation.full_name}" } do |edition|
+    h2 "#{edition.phase.template.name} - #{edition.phase.phase}" 
     attributes_table do 
       row :edition
       row :dcc_edition do
-        sanitize edition.dcc_edition.try(:edition)
+        checklist = edition.dcc_edition.try(:edition) || ''
+        warn = ''
+        org_checklist = edition.phase.template.organisation.dcc_edition_id || dcc_organisation.dcc_edition_id
+        if edition.dcc_edition_id != org_checklist && edition.dcc_edition.state != :published
+          warn = content_tag(:span, I18n.t('dmp.admin.warn_checklist_not_published'), class: "warning").html_safe
+        end
+        sanitize checklist + warn
       end
       row :status do
         status_tag(edition.state.to_s)

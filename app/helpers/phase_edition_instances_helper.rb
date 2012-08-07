@@ -21,6 +21,11 @@ module PhaseEditionInstancesHelper
       dcc_q_numbering = dcc_numbering(pei.edition)
     end
     
+    export_section = {}
+    export_section[:number] = ''
+    export_section[:heading] = ''
+    export_section[:template_clauses] = []
+    export_section[:q_id] = 0
     first = true
     qs.each do |q|
       if (q.depth == 0 && q.is_heading?)

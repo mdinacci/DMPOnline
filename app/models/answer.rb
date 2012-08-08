@@ -15,7 +15,11 @@ class Answer < ActiveRecord::Base
 
 
   def all_live_occurrences
-    self.phase_edition_instance.template_instance.plan.current_answers.where(dcc_question_id: self.dcc_question_id, hidden: false).uniq
+    if self.question.is_mapped?
+      self.phase_edition_instance.template_instance.plan.current_answers.where(dcc_question_id: self.dcc_question_id, hidden: false).uniq
+    else
+      [self]
+    end
   end
   
   def mapped_guide

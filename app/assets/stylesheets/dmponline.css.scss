@@ -553,11 +553,16 @@ ul.news {
     padding: 10px 20px;
     position: relative;
 
-    .heading .guidance {
-      img {
-        position: absolute;
-        float: left;
-        top: 10px;
+    .heading {
+      &.question {
+        position: relative;
+      }
+      .guidance {
+        img {
+          position: absolute;
+          top: 2px;
+          left: 0;
+        }
       }
     }
     

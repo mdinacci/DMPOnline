@@ -84,7 +84,12 @@ class ApplicationController < ActionController::Base
     if domain.blank?
       dcc_organisation || Organisation.first
     else
-      Organisation.find_by_domain(domain) || dcc_organisation || Organisation.first      
+      org = Organisation.find_by_domain(domain)
+      if org.try(:branded)
+        org
+      else
+        dcc_organisation || Organisation.first
+      end      
     end
   end
   

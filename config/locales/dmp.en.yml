@@ -159,6 +159,7 @@ en:
       current_password_hint: "Please confirm your current password to make changes"
       change_email: "Change my email address"
       sign_in_with_shib: "Sign in with your institution's credentials"
+      acceptance_statement: "By signing up to use this service you are agreeing to the terms laid out in the Privacy Statement"
 
     admin:
       title: 'Admin Area'

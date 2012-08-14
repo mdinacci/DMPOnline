@@ -11,6 +11,8 @@
 
   = render :partial => 'profile', locals: {f: f}
 
+  .terms= t('dmp.auth.acceptance_statement')
+  
   - if Rails.application.config.recaptcha_enabled
     = recaptcha_tags
     

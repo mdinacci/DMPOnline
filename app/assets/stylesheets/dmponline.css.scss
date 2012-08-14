@@ -1127,3 +1127,9 @@ fieldset.inputs fieldset.buttons {
   margin-top: 0;
   margin-bottom: 0;
 }
+
+form .terms {
+  font-weight: bold;
+  padding: 0.7em 0.7em;
+  border: $grey 3px solid;  
+}

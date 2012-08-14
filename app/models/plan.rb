@@ -17,6 +17,7 @@ class Plan < ActiveRecord::Base
 
   validates_presence_of :project
   validates_presence_of :template_instances, :message => I18n.t('dmp.require_template')
+  validate :validate_project_dates 
   attr_accessor :template_ids
   before_validation :update_template_instances
   after_initialize :load_template_instances
@@ -101,5 +102,15 @@ class Plan < ActiveRecord::Base
       self.template_ids = self.template_instances.collect {|t| t.template_id} || []
     end
   end
-
+  
+  def validate_project_dates
+    if !self.start_date.nil? && self.start_date < '1900-01-01'.to_date
+      errors.add(:start_date, I18n.t('dmp.date_not_current'))
+      self.start_date = nil
+    end
+    if !self.end_date.nil? && (self.start_date.nil? || self.end_date < self.start_date)
+      errors.add(:end_date, I18n.t('dmp.end_before_start'))
+      self.end_date = nil
+    end
+  end
 end

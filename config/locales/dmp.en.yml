@@ -29,6 +29,8 @@ en:
     update_plan: "Save Responses"
     plan_create_step_1: "1. Enter your project details:"
     plan_create_step_2: "2. Select plan templates from the groupings below:"
+    date_not_current: "date not current"
+    end_before_start: "must be after start"
     copy_stamp: "COPY"
     lock: "Lock"
     lock_confirm: "Are you sure you want to lock this?  You can't edit the plan once locked."

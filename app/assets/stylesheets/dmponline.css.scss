@@ -209,9 +209,11 @@ p.error {
   }
 }
 
-abbr {
-  display: none;
+label abbr[title=required] {
   border: none;
+  color: $red;
+  font-size: 150%;
+  padding-left: 3px;
 }
 
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120809113000) do
+ActiveRecord::Schema.define(:version => 20120809163000) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",                       :null => false
@@ -321,12 +321,14 @@ ActiveRecord::Schema.define(:version => 20120809113000) do
     t.integer  "user_types",                            :default => 0
     t.string   "authentication_token"
     t.datetime "token_created_at"
+    t.string   "shibboleth_id"
   end
 
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["organisation_id"], :name => "index_users_on_organisation_id"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  add_index "users", ["shibboleth_id"], :name => "index_users_on_shibboleth_id"
 
   create_table "versions", :force => true do |t|
     t.string   "item_type",                      :null => false

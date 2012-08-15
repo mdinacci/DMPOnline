@@ -287,9 +287,12 @@ span.disabled_link {
 .front {
   float: left;
   margin-right: 400px;
-  
   ul.menuitem {
     padding-top: 2em;
+  }
+}
+.front, .session {
+  ul.menuitem {
     list-style: none;
     
     li {
@@ -301,6 +304,7 @@ span.disabled_link {
     }
   }
 }
+
 #sidebar {
   float: right;
   width: 370px;
@@ -1094,6 +1098,10 @@ form.user {
   }
 }
 
+.half {
+  width: 50%;
+}
+
 .constraint {
   clear: both;
   right: 0;
@@ -1110,4 +1118,10 @@ form.user {
   padding: 0.7em 0.7em;
   font-size: 130%;
   background: #ff0000;
+}
+
+fieldset.inputs fieldset.buttons {
+  float: right;
+  margin-top: 0;
+  margin-bottom: 0;
 }

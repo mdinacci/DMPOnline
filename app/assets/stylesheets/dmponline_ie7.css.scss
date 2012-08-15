@@ -29,6 +29,9 @@ form.user fieldset.inputs,
   position: static;
   float: none;
   margin-bottom: 10px;
+  li {
+    position: relative;
+  }
 }
 
 .accordion {
@@ -86,4 +89,8 @@ div.rights_block {
   fieldset.inputs {
     border: none;
   }
+}
+
+fieldset.inputs li.input.stringish {
+  padding-bottom: 1em;
 }

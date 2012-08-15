@@ -9,7 +9,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :lockable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, :confirmable, :timeoutable, :encryptable,
-         :token_authenticatable
+         :token_authenticatable, :omniauth_providers => [:shibboleth] 
+
 
   # Setup accessible (or protected) attributes for the model
   attr_accessible :password, :password_confirmation, :remember_me, :categories, :email, :email_confirmation, :current_password
@@ -27,6 +28,7 @@ class User < ActiveRecord::Base
   ROLES = %w[sysadmin dccadmin orgadmin apifull]
   CATEGORIES = %w[researcher support other]
 
+  before_create :user_shibboleth_id
   before_save :user_default_organisation
 
 
@@ -207,6 +209,10 @@ class User < ActiveRecord::Base
 
   def user_default_organisation
     self.organisation = self.organisation || Organisation.where("? LIKE CONCAT('%', domain)", self.email).first
+  end
+
+  def user_shibboleth_id
+    self.shibboleth_id = session[:shibboleth_data][:uid]
   end
 
 end

@@ -9,11 +9,19 @@ Dmponline3::Application.routes.draw do
 
   constraints BlockToken.new do 
     ActiveAdmin.routes(self)
-
+    namespace :admin, defaults: { format: 'json' }, constraints: { format: 'json' } do
+      get 'stats/users' => 'stats#users', :as => 'stats_users'
+      get 'stats/plans' => 'stats#plans', :as => 'stats_plans'
+      get 'stats/templates' => 'stats#templates', :as => 'stats_templates'
+    end
+    
     devise_for :users, {
       :sign_out_via => [ :post, :delete, :get ],
       :path_names => { :sign_in => 'login', :sign_out => "logout" },
-      :controllers => { :registrations => "devise/recaptcha_registrations" }
+      :controllers => { 
+        :registrations => "devise/recaptcha_registrations", 
+        :omniauth_callbacks => "users/omniauth_callbacks",
+        },
       }
 
     get 'pages/:slug' => 'pages#show', :as => 'pages_slug'

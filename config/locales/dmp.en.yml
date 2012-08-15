@@ -156,6 +156,7 @@ en:
       current_pass: "Current Password"
       current_password_hint: "Please confirm your current password to make changes"
       change_email: "Change my email address"
+      sign_in_with_shib: "Sign in with your institution's credentials"
 
     admin:
       title: 'Admin Area'

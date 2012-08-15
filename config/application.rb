@@ -43,7 +43,7 @@ module Dmponline3
     config.assets.enabled = true
 
     # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '3.0.rc1'
+    config.assets.version = '3.2.0'
     
     # Set the default host for mailer URLs
     config.action_mailer.default_url_options = { :host => 'dmponline.example.com' }
@@ -58,5 +58,10 @@ module Dmponline3
     # Do we want to use reCaptcha for user sign-up or not
     # As default this is disabled since we already have email address confirmation
     config.recaptcha_enabled = false
+    
+    # Enable shibboleth as an alternative authentication method
+    # Requires server configuration and omniauth shibboleth provider configuration
+    # See config/initializers/omniauth.rb
+    config.shibboleth_enabled = false
   end
 end

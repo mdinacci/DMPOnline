@@ -4,9 +4,10 @@ gem 'rails', '3.1.3'
 
 gem "mysql2", "0.3.11"
 gem "haml-rails", :group => :development
-gem "devise", "1.4.9"
+gem "devise", "1.5.3"
 gem "cancan", "1.6.7"
-gem "omniauth", "0.3.2"
+gem "omniauth", "1.1.0"
+gem "omniauth-shibboleth", "1.0.6"
 gem "recaptcha", "0.3.4"
 
 gem "activeadmin", "0.4.4"

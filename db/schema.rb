@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120809163000) do
+ActiveRecord::Schema.define(:version => 20120814123000) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",                       :null => false
@@ -250,7 +250,7 @@ ActiveRecord::Schema.define(:version => 20120809163000) do
   create_table "template_instance_rights", :force => true do |t|
     t.integer  "template_instance_id"
     t.string   "email_mask"
-    t.integer  "role_flags"
+    t.integer  "role_flags",           :default => 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end

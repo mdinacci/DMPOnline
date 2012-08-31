@@ -1,7 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  helper_method :current_organisation, :dcc_organisation, :supported_locales
+  helper_method :current_organisation, :dcc_organisation, :supported_locales,
+                :using_shibboleth?, :shibboleth_enabled?, :shibboleth_user?
 
   unless Rails.application.config.consider_all_requests_local
     rescue_from Exception, :with => :render_error
@@ -11,8 +12,8 @@ class ApplicationController < ActionController::Base
     rescue_from ActionController::UnknownAction, :with => :render_not_found
   end
   rescue_from CanCan::AccessDenied do |exception|
-    if current_user.is_admin? && controller_path.split('/').first == 'admin'
-      redirect_to admin_dashboard_path, :alert => exception.message
+    if current_user.try(:is_admin?) && controller_path.split('/').first == 'admin'
+      redirect_to admin_dashboard_path, :alert => exception.message and return
     else
       render_access_denied
     end
@@ -41,17 +42,37 @@ class ApplicationController < ActionController::Base
     Rails.application.config.supported_locales || ['en']
   end
  
+  def using_shibboleth?
+    status = false
+    if Rails.application.config.shibboleth_enabled
+      if current_user.try(:shibboleth_id).present?
+        status = true
+      elsif !session[:shibboleth_data].blank?
+        status = true 
+      end
+    end
+    
+    status
+  end
+
+  def shibboleth_enabled?
+    Rails.application.config.shibboleth_enabled
+  end
+
+  def shibboleth_user?
+    Rails.application.config.shibboleth_enabled && current_user.try(:shibboleth_id).present?
+  end
 
   private
   
   def render_not_found(exception)
-    render :template => "errors/404", :status => 404, :layout => "application"
+    render :template => "errors/404", :status => 404, :layout => "application" and return
   end
   
   def render_error(exception)
     logger.warn exception
     ExceptionNotifier::Notifier.exception_notification(request.env, exception).deliver
-    render :template => "errors/500", :status => 500, :layout => "application"
+    render :template => "errors/500", :status => 500, :layout => "application" and return
   end
   
   def render_access_denied
@@ -93,5 +114,4 @@ class ApplicationController < ActionController::Base
     end
   end
   
-
 end

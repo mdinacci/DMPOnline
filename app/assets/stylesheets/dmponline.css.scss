@@ -100,7 +100,6 @@
   }
 }
 
-
 form {
   input[type=submit], button[type=submit] {
     box-sizing: content-box;
@@ -286,16 +285,10 @@ span.disabled_link {
 .buttons.indent {
   padding-left: 15%;
 }
-.front {
-  float: left;
-  margin-right: 400px;
-  ul.menuitem {
-    padding-top: 2em;
-  }
-}
 .front, .session {
   ul.menuitem {
     list-style: none;
+    margin-bottom: 0;
     
     li {
       font-size: 150%;
@@ -306,6 +299,25 @@ span.disabled_link {
     }
   }
 }
+.front {
+  float: left;
+  margin-right: 400px;
+  ul.menuitem {
+    padding-top: 2em;
+  }
+}
+.session {
+  ul.menuitem {
+    padding-top: 0em;
+    padding-bottom: 1em;
+  }
+  &.notice {
+    font-weight: bold;
+    padding-bottom: 1em;
+    font-size: 120%;
+  }
+}
+
 
 #sidebar {
   float: right;
@@ -656,7 +668,7 @@ ul.news {
     .input, select, textarea, button { font-size: 1em; }
     @include shadow(0, 1px, 8px);
   }
-  .ui-widget-content { border: 1px solid $orange; background: #000 url(jquery_ui/ui-bg_highlight-soft_100_000000_1x100.png) 50% top repeat-x; color: $offwhite; }
+  .ui-widget-content { border: 1px solid $orange; background: #111111 url(jquery_ui/ui-bg_highlight-soft_100_000000_1x100.png) 50% top repeat-x; color: $offwhite; }
   .ui-widget-content a { color: $orange; }
   .ui-widget-header { border: 1px solid #e78f08; background: #f6a828 url(jquery_ui/ui-bg_gloss-wave_35_f6a828_500x100.png) 50% 50% repeat-x; color: #ffffff; font-weight: bold; }
   .ui-widget-header a { color: #ffffff; }
@@ -1122,7 +1134,7 @@ form.user {
   background: #ff0000;
 }
 
-fieldset.inputs fieldset.buttons {
+fieldset.inputs.rel fieldset.buttons {
   float: right;
   margin-top: 0;
   margin-bottom: 0;
@@ -1132,4 +1144,12 @@ form .terms {
   font-weight: bold;
   padding: 0.7em 0.7em;
   border: $grey 3px solid;  
+}
+
+.inputs.rel {
+  padding-bottom: 25px;
+}
+.left-indent {
+  left: 14%;
+  position: absolute;
 }

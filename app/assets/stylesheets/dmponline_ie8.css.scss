@@ -17,3 +17,10 @@
 fieldset.inputs li.input.stringish {
   padding-bottom: 1em;
 }
+
+fieldset.inputs.rel fieldset.buttons {
+  float: left !important;
+  ol {
+    padding-left: 0;
+  }
+}

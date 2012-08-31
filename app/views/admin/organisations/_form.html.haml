@@ -1,0 +1,17 @@
+= semantic_form_for([:admin, @organisation], :html => {:multipart => true}) do |f|
+  = f.inputs I18n.t('dmp.admin.details') do
+    = f.input :short_name
+    = f.input :full_name
+    = f.input :url
+    = f.input :organisation_type
+    = f.input :logo
+    = f.input :branded, :as => :select
+
+  #branding_collapsible
+    = f.inputs I18n.t('dmp.admin.branding_options') do
+      = f.input :domain
+      = f.input :stylesheet
+      - if shibboleth_enabled? 
+        = f.input :wayfless_entity, :hint => t('dmp.admin.wayfless_entity_hint')
+
+  = f.buttons

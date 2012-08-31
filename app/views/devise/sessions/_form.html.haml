@@ -1,12 +1,12 @@
 = semantic_form_for :user, :url => new_user_session_path do |f|
-  = f.inputs do
+  = f.inputs class: "inputs rel" do
     = f.input :email
     = f.input :password
 
-    %li.right
+    %li.left-indent
       = f.buttons class: "buttons" do
         = f.commit_button t('dmp.auth.sign_in')
 
-    = f.input :remember_me, :as => :boolean, wrapper_html: {class: "left half"}
+    = f.input :remember_me, :as => :boolean, wrapper_html: {class: "right half"}
 
 = render :partial => "devise/shared/links"

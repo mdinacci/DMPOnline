@@ -18,7 +18,7 @@
     = javascript_include_tag 'application'
 
     - unless no_rss_feed
-      = auto_discovery_link_tag(:rss, :controller => 'posts', :action => 'index', :format => :rss) 
+      = auto_discovery_link_tag(:rss, :controller => '/posts', :action => 'index', :format => :rss) 
     = csrf_meta_tag 
     
   %body{:class => user_signed_in? ? 'logged_in' : 'logged_out'}

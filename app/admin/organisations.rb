@@ -6,20 +6,7 @@ ActiveAdmin.register Organisation do
   
   controller.authorize_resource
 
-  form(:html => {:multipart => true}) do |f|
-    f.inputs do
-      f.input :short_name
-      f.input :full_name
-      f.input :url
-      f.input :organisation_type
-      f.input :branded, :as => :select
-      f.input :domain
-      f.input :logo
-      f.input :stylesheet
-    end
-    
-    f.buttons
-  end
+  form :title => :full_name, :partial => "form"
   
   index do 
     column :logo do |organisation|
@@ -43,13 +30,20 @@ ActiveAdmin.register Organisation do
       row :full_name
       row :url
       row :organisation_type
-      row :branded
-      row :domain
       row :logo do
-        image_tag(organisation.logo.url(:template), :align => :left, :border => 0)
+        if organisation.logo.file?
+          image_tag(organisation.logo.url(:template), :align => :left, :border => 0)
+        end
       end
       row :logo_file_size
+      row :branded do |organisation|
+        organisation.branded ? I18n.t('dmp.boolean_yes') : I18n.t('dmp.boolean_no')
+      end
+      row :domain
       row :stylesheet_file_name
+      if shibboleth_enabled?
+        row :wayfless_entity
+      end
     end
     # active_admin_comments
   end

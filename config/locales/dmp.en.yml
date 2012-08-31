@@ -158,8 +158,13 @@ en:
       current_pass: "Current Password"
       current_password_hint: "Please confirm your current password to make changes"
       change_email: "Change my email address"
-      sign_in_with_shib: "Sign in with your institution's credentials"
+      sign_in_with_shib: "Or, sign in with your institution credentials"
       acceptance_statement: "By signing up to use this service you are agreeing to the terms laid out in the Privacy Statement"
+      email_required: "Email address required"
+      password_reset_shib: "Your account has been reset to use your institution credentials for sign in"
+      associate_with_shibboleth: "Associate an existing account with your institution credentials instead"
+      creating_with_shibboleth: "You are creating a new account linked to your institution credentials"
+      change_to_shibboleth: "Change your account to sign in with your institution credentials"
 
     admin:
       title: 'Admin Area'
@@ -243,7 +248,8 @@ en:
       has_boilerplate: "Responses: %{number}"
       is_active_warning: "This version is currently in use.  Changing things now may cause the loss of users' data."
       mappings_active: "This field cannot be changed while there are mappings in place"
-      
+      wayfless_entity_hint: "The entityId needed for WAYFless URLs"
+            
       status:
         active: "Active"
         published: "Published"

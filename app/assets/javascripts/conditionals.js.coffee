@@ -22,6 +22,9 @@ jQuery ->
   conditional_show('#question_kind', '#mapping_collapsible', ['m'])
   conditional_show('#question_kind', '#question_default_value_input', ['t'])
 
+  # Admin Organisation page  
+  conditional_show('#organisation_branded', '#branding_collapsible', ['true'])
+
   # Plan completion
   window.plan_conditionals = () ->
     $('table.plan tbody tr').each ->

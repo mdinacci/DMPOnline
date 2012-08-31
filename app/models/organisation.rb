@@ -11,7 +11,8 @@ class Organisation < ActiveRecord::Base
   
   validates_format_of :domain, :with => /\A[a-z\.]{6,}\Z/
   
-  attr_accessible :full_name, :domain, :url, :organisation_type_id, :default_locale, :dcc_edition_id, :short_name, :logo
+  attr_accessible :full_name, :domain, :url, :organisation_type_id, :default_locale, :dcc_edition_id,
+                  :short_name, :logo, :stylesheet, :branded, :wayfless_entity
   scope :dcc, where(:domain => 'dcc.ac.uk')
   
 end

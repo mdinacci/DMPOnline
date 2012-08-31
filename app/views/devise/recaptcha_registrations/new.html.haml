@@ -6,14 +6,25 @@
   = f.inputs do
     = f.input :email
     = f.input :email_confirmation, :label => t('dmp.auth.confirm_email')
-    = f.input :password
-    = f.input :password_confirmation
+    - unless using_shibboleth?
+      = f.input :password
+      = f.input :password_confirmation
+
+  - if shibboleth_enabled?
+    - if using_shibboleth? 
+      .session.omniauth.notice
+        = I18n.t('dmp.auth.creating_with_shibboleth')
+    - if !user_signed_in?
+      .session.omniauth
+        %ul.menuitem
+          %li= link_to "#{t('dmp.auth.associate_with_shibboleth')}", user_shibboleth_assoc_path
+
 
   = render :partial => 'profile', locals: {f: f}
 
   .terms= t('dmp.auth.acceptance_statement')
   
-  - if Rails.application.config.recaptcha_enabled
+  - if Rails.application.config.recaptcha_enabled && !using_shibboleth?
     = recaptcha_tags
     
   = f.buttons do

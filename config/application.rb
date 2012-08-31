@@ -63,5 +63,8 @@ module Dmponline3
     # Requires server configuration and omniauth shibboleth provider configuration
     # See config/initializers/omniauth.rb
     config.shibboleth_enabled = false
+    
+    # Absolute path to Shibboleth SSO Login
+    config.shibboleth_login = '/Shibboleth.sso/Login'
   end
 end

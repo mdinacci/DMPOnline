@@ -17,12 +17,15 @@ Dmponline3::Application.routes.draw do
     
     devise_for :users, {
       :sign_out_via => [ :post, :delete, :get ],
-      :path_names => { :sign_in => 'login', :sign_out => "logout" },
+      :path_names => { :sign_in => 'login', :sign_out => 'logout' },
       :controllers => { 
-        :registrations => "devise/recaptcha_registrations", 
-        :omniauth_callbacks => "users/omniauth_callbacks",
+        :registrations => 'devise/recaptcha_registrations', 
+        :omniauth_callbacks => 'users/omniauth_callbacks',
         },
       }
+    # WAYFless access point - use query param idp
+    get 'auth/shibboleth' => 'users/omniauth_shibboleth_request#redirect', :as => 'user_omniauth_shibboleth'
+    get 'auth/shibboleth/assoc' => 'users/omniauth_shibboleth_request#associate', :as => 'user_shibboleth_assoc'
 
     get 'pages/:slug' => 'pages#show', :as => 'pages_slug'
     get '' => 'pages#frontpage', :as => 'frontpage'

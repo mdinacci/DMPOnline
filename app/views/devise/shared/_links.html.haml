@@ -1,15 +1,20 @@
-- if Rails.application.config.shibboleth_enabled && current_user.try(:shibboleth_id).blank?
-  .session.omniauth
-    %ul.menuitem
-      %li= link_to "#{t('dmp.auth.sign_in_with_shib')}", user_omniauth_callback_path(:shibboleth)
+- if shibboleth_enabled? 
+  - if !using_shibboleth?
+    .session.omniauth
+      %ul.menuitem
+        %li= link_to "#{t('dmp.auth.sign_in_with_shib')}", user_omniauth_shibboleth_path
+  - elsif user_signed_in? && !shibboleth_user?
+    .session.omniauth
+      %ul.menuitem
+        %li= link_to "#{t('dmp.auth.change_to_shibboleth')}", user_shibboleth_assoc_path
+    
 
-- if !Rails.application.config.shibboleth_enabled || current_user.try(:shibboleth_id).blank?
+- if !shibboleth_user?
   - if controller_name != 'recaptcha_registrations'
     .session= link_to t('dmp.auth.register'), new_registration_path(:user), class: 'nav_link'
   
-  - if controller_name != 'passwords'
+  - if controller_name != 'passwords' && controller_name != 'recaptcha_registrations'
     .session= link_to t('dmp.auth.forgot_pass'), new_password_path(:user)
   
-  - if controller_name != 'confirmations'
-    .session= link_to t('dmp.auth.no_confirmation'), new_confirmation_path(:user)
-  
+- if controller_name != 'confirmations' && controller_name != 'recaptcha_registrations'
+  .session= link_to t('dmp.auth.no_confirmation'), new_confirmation_path(:user)

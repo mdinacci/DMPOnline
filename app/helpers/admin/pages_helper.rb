@@ -7,5 +7,12 @@ module Admin::PagesHelper
     end
     h
   end
+  
+  def page_type_options
+    { 
+      I18n.t('dmp.admin.page_type_landing') => 'landing',
+      I18n.t('dmp.admin.page_type_menu') => 'menu'
+    }
+  end
 
 end

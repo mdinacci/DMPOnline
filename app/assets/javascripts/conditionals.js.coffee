@@ -25,6 +25,16 @@ jQuery ->
   # Admin Organisation page  
   conditional_show('#organisation_branded', '#branding_collapsible', ['true'])
 
+  # Admin Pages page
+  conditional_show('#page_page_type', '#page_title_input', ['landing', 'menu'])
+  conditional_show('#page_page_type', '#page_menu_input', ['landing', 'menu'])
+  conditional_show('#page_page_type', '#page_position_input', ['landing', 'menu'])
+  conditional_show('#page_page_type', '#page_organisation_input', ['landing', 'menu'])
+  conditional_show('#page_page_type', '#page_locale_input', ['landing', 'menu'])
+  conditional_show('#page_page_type', '#page_body_input', ['landing'])
+  conditional_show('#page_page_type', '#page_slug_input', ['landing'])
+  conditional_show('#page_page_type', '#page_target_url_input', ['menu'])
+
   # Plan completion
   window.plan_conditionals = () ->
     $('table.plan tbody tr').each ->

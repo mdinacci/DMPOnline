@@ -1,5 +1,9 @@
+
 = semantic_form_for [:admin, @page] do |f|
   = f.inputs I18n.t('dmp.admin.details') do
+    = f.input :page_type, :as => :select, 
+          collection: options_for_select(page_type_options, selected: (@page.target_url.blank? ? 'landing' : 'menu')), 
+          hint: I18n.t('dmp.admin.pages_type_hint'), required: true, include_blank: false
     = f.input :title, :hint => t('dmp.admin.pages_title_hint')
     = f.input :body, :input_html => { :class => 'wysiwyg' }, :hint => t('dmp.admin.pages_body_hint')
     = f.input :slug, :hint => t('dmp.admin.pages_slug_hint')

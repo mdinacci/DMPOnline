@@ -53,7 +53,8 @@ ActiveAdmin.register Post do
       row :locale
       row :organisation
     end
-    # active_admin_comments
+    
+    active_admin_comments
   end
 
   index do |post|

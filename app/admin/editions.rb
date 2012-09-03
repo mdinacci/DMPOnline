@@ -116,7 +116,8 @@ ActiveAdmin.register Edition do
     end
 
     div t('dmp.admin.add_edition_questions')
-    # active_admin_comments
+    
+    active_admin_comments
   end
   
   member_action :copy do

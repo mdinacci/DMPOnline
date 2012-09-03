@@ -59,7 +59,8 @@ ActiveAdmin.register Page do
       row :organisation
       row :locale
     end
-    # active_admin_comments
+    
+    active_admin_comments
   end
 
   index do 

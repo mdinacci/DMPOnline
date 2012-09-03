@@ -41,7 +41,7 @@ ActiveAdmin.register Currency do
       row :iso_code
       row :symbol
     end
-    # active_admin_comments
+    active_admin_comments
   end
 
   index do 

@@ -46,7 +46,8 @@ ActiveAdmin.register OrganisationType do
   
   show :title => :title do
     attributes_table :title, :description, :position
-    # active_admin_comments
+    
+    active_admin_comments
   end
  
 end

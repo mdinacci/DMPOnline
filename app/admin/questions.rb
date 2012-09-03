@@ -37,7 +37,8 @@ ActiveAdmin.register Question do
       end
       row :default_value
     end
-    # active_admin_comments
+    
+    active_admin_comments
   end
 
   controller do

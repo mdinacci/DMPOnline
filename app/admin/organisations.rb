@@ -67,7 +67,8 @@ ActiveAdmin.register Organisation do
         row :wayfless_entity
       end
     end
-    # active_admin_comments
+    
+    active_admin_comments
   end
 
 end

@@ -135,6 +135,7 @@ ActiveAdmin.register Template do
       end
     end
 
+    active_admin_comments
   end
 
   form :title => :name, :partial => "form"

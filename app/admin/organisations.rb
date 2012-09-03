@@ -4,7 +4,29 @@ ActiveAdmin.register Organisation do
   
   filter :organisation_type
   
-  controller.authorize_resource
+  controller do 
+    authorize_resource
+
+    def show
+      if params[:version] && params[:version].to_i > 0
+        @organisation = Organisation.find(params[:id]).versions[params[:version].to_i - 1].try(:reify)
+      end
+      show!
+    end
+  end
+
+  sidebar :versions, partial: 'admin/shared/version', :only => :show
+  member_action :history do
+    @organisation = Organisation.find(params[:id])
+    @page_title = I18n.t('dmp.admin.item_history', item: @organisation.full_name)
+    render "admin/shared/history"
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.edit_model', model: I18n.t('activerecord.models.organisation.one')), edit_admin_organisation_path(organisation)
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.details', model: I18n.t('activerecord.models.organisation.one')), admin_organisation_path(organisation)
+  end
 
   form :title => :full_name, :partial => "form"
   

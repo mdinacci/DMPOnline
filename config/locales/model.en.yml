@@ -56,6 +56,9 @@ en:
       guidance:
         one: "Guidance"
         other: "Guidance"
+      version:
+        one: "Version"
+        other: "Versions"
 
   attributes:
     created_at: "Created"
@@ -122,6 +125,7 @@ en:
     table: "Database Table"
     row_id: "Row"
     event: "Event"
+    object_changes: "Changes Made"
     ip_address: "IP Address"
     sword_sd_uri: "SWORD Service Document URI"
     sword_col_uri: "SWORD Collection URI"

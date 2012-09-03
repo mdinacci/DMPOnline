@@ -1,7 +1,30 @@
 ActiveAdmin.register Currency do
-  menu :if => proc{ current_user.is_dccadmin? }, :priority => 1
-  controller.authorize_resource
-  
+  menu if: proc{ current_user.is_dccadmin? }, priority: 2
+
+  controller do 
+    authorize_resource
+
+    def show
+      if params[:version] && params[:version].to_i > 0
+        @currency = Currency.find(params[:id]).versions[params[:version].to_i - 1].try(:reify)
+      end
+      show!
+    end
+  end
+
+  sidebar :versions, partial: 'admin/shared/version', :only => :show  
+  member_action :history do
+    @currency = Currency.find(params[:id])
+    @page_title = I18n.t('dmp.admin.item_history', item: @currency.name)
+    render "admin/shared/history"
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.edit_model', model: I18n.t('activerecord.models.currency.one')), edit_admin_currency_path(currency)
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.details', model: I18n.t('activerecord.models.currency.one')), admin_currency_path(currency)
+  end
+
   form do |f|
     f.inputs do
       f.input :name

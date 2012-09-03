@@ -21,9 +21,29 @@ ActiveAdmin.register Role do
          format.html { redirect_to admin_roles_path } 
       end 
     end 
+
+    def show
+      if params[:version] && params[:version].to_i > 0
+        @role = Role.find(params[:id]).versions[params[:version].to_i - 1].try(:reify)
+      end
+      show!
+    end
   end 
-  
-  
+
+  sidebar :versions, partial: 'admin/shared/version', :only => :show
+  member_action :history do
+    @role = Role.find(params[:id])
+    roles = @role.assigned.collect{ |a| I18n.t("dmp.admin.roles.#{a}") }.join(', ')
+    @page_title = I18n.t('dmp.admin.item_history', item: "#{@role.user.email} (#{roles})")
+    render "admin/shared/history"
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.edit_model', model: I18n.t('activerecord.models.role.one')), edit_admin_role_path(role)
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.details', model: I18n.t('activerecord.models.role.one')), admin_role_path(role)
+  end
+
   form :partial => "form"
 
   show :title => :user_email do |role|

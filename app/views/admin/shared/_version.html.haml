@@ -1,0 +1,44 @@
+- widget = eval("@#{controller_name.singularize}")
+
+- if widget.live?
+  %h3= "#{I18n.t('dmp.admin.live_version')}"
+
+  %ul.figures
+    %li 
+      = I18n.t('attributes.updated_at')
+      %span.figure= widget.updated_at.to_s :medium
+
+    %li 
+      = I18n.t('dmp.admin.stats.user')
+      %span.figure= User.where(id: widget.try(:originator).to_i).first.try(:email) || I18n.t('dmp.admin.unknown_user')
+
+    - unless widget.previous_version.nil?
+      %li
+        = link_to I18n.t('dmp.admin.previous_version'), polymorphic_path([:admin, widget], version: widget.versions.length)
+        %span.figure= widget.previous_version.updated_at.to_s :medium
+
+- else      
+  %h3= "#{I18n.t('dmp.admin.this_is_version', version: widget.version.index + 1)}"
+
+  %ul.figures
+    %li
+      = I18n.t('attributes.updated_at')
+      %span.figure= widget.updated_at.to_s :medium
+
+    %li
+      = I18n.t('dmp.admin.stats.user')
+      %span.figure= User.where(id: widget.version.originator.to_i).first.try(:email) || I18n.t('dmp.admin.unknown_user')
+
+    - unless widget.version.previous.nil?
+      %li
+        = link_to I18n.t('dmp.admin.previous_version'), polymorphic_path([:admin, widget], version: widget.version.index)
+        %span.figure= widget.previous_version.updated_at.to_s :medium
+
+    - unless widget.version.next.nil?
+      %li
+        = link_to I18n.t('dmp.admin.next_version'), polymorphic_path([:admin, widget], version: widget.version.index + 2)
+        %span.figure= widget.next_version.updated_at.to_s :medium
+
+    %li= link_to I18n.t('dmp.admin.go_to_live'), {}, class: 'view_link'
+
+= link_to I18n.t('dmp.admin.model_history', model: controller_name.singularize.titlecase), polymorphic_path([:admin, widget], :action => :history), class: 'view_link'

@@ -1,4 +1,6 @@
 class Phase < ActiveRecord::Base
+  has_paper_trail
+  
   belongs_to :template
   has_many :editions, :dependent => :delete_all
 

@@ -1,4 +1,6 @@
 class Role < ActiveRecord::Base
+  has_paper_trail
+  
   belongs_to :user
   belongs_to :organisation
   belongs_to :edition

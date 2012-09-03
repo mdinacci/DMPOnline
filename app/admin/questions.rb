@@ -6,16 +6,51 @@ ActiveAdmin.register Question do
     # We don't want anyone to reach this...
     controller.redirect_to admin_templates_path
   end
-  show do |question|
-    controller.redirect_to edit_admin_edition_path(question.edition_id)
+
+  sidebar :versions, partial: 'admin/shared/version', only: [:edit, :show]
+  member_action :history do
+    @question = Question.find(params[:id])
+    @page_title = I18n.t('dmp.admin.item_history', item: ActionController::Base.helpers.strip_tags(@question.question).truncate(50))
+    render "admin/shared/history"
   end
-  
+  action_item :only => :history do
+    link_to I18n.t('active_admin.edit_model', model: I18n.t('activerecord.models.question.one')), edit_admin_question_path(question)
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.details', model: I18n.t('activerecord.models.question.one')), admin_question_path(question)
+  end
+
   form :title => :question, :partial => "form"
   
+  show do |question|
+    attributes_table do
+      row :kind do |question|
+        display = translated_types.invert
+        display[question.kind]
+      end
+      row :number_style do |question|
+        display = translated_styles.invert
+        display[question.number_style]
+      end
+      row :question do
+        sanitize question.question
+      end
+      row :default_value
+    end
+    # active_admin_comments
+  end
+
   controller do
     authorize_resource
     helper :questions
     
+    def show
+      if params[:version] && params[:version].to_i > 0
+        @question = Question.find(params[:id]).versions[params[:version].to_i - 1].try(:reify)
+      end
+      show!
+    end
+
     def new
       @edition = Edition.find(params[:edition])
       @question = Question.new

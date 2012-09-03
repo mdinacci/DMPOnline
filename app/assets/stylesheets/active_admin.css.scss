@@ -512,3 +512,23 @@ div.boilerplate {
   font-size: 130%;
   background: #ff0000;
 }
+
+
+#sidebar {
+  ul.figures {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0 0;
+    list-style: none;
+    li {
+      position: relative;
+      width: 100%;
+      border-bottom: 1px solid $grey;
+      padding: 0.2em 0;
+      
+      .figure {
+        float: right;
+      }
+    }
+  }
+}

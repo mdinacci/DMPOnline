@@ -1,4 +1,6 @@
 class Organisation < ActiveRecord::Base
+  has_paper_trail
+  
   belongs_to :organisation_type
   belongs_to :dcc_edition, :class_name => "Edition", :foreign_key => "dcc_edition_id"
   has_many :documents

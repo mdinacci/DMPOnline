@@ -1,10 +1,11 @@
 class Template < ActiveRecord::Base
+  has_paper_trail
+  
   belongs_to :organisation
   has_many :phases, :order => 'position ASC'
   has_many :editions, :through => :phases
   has_many :questions, :through => :editions
   has_many :template_instances
-  has_paper_trail
   
   accepts_nested_attributes_for :phases, :allow_destroy => true, :reject_if => :phase_empty
   attr_accessible :organisation_id, :name, :url, :description, :constraint_limit, :constraint_text, :sword_sd_uri, :phases_attributes

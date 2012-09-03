@@ -1,4 +1,6 @@
 class Document < ActiveRecord::Base
+  has_paper_trail
+  
   belongs_to :organisation
   default_scope order('position')
   has_attached_file :attachment

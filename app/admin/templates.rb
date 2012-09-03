@@ -5,7 +5,29 @@ ActiveAdmin.register Template do
   filter :organisation
   filter :locale
 
-  controller.authorize_resource
+  controller do 
+    authorize_resource
+
+    def show
+      if params[:version] && params[:version].to_i > 0
+        @template = Template.find(params[:id]).versions[params[:version].to_i - 1].try(:reify)
+      end
+      show!
+    end
+  end
+  
+  sidebar :versions, partial: 'admin/shared/version', :only => :show
+  member_action :history do
+    @template = Template.find(params[:id])
+    @page_title = I18n.t('dmp.admin.item_history', item: @template.name)
+    render "admin/shared/history"
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.edit_model', model: I18n.t('activerecord.models.template.one')), edit_admin_template_path(template)
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.details', model: I18n.t('activerecord.models.template.one')), admin_template_path(template)
+  end
 
   index :as => :block do |template|
     div :for => template do
@@ -36,7 +58,6 @@ ActiveAdmin.register Template do
     end
   end
 
-  # TODO: Replace with a redirect to the index layout
   show :title => proc { "#{template.organisation.short_name} #{template.name}" } do |template|
     attributes_table do
       row :name

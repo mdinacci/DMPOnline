@@ -33,6 +33,26 @@ ActiveAdmin.register Edition do
       # Do nothing
       redirect_to admin_templates_path
     end
+
+    def show
+      if params[:version] && params[:version].to_i > 0
+        @edition = Edition.find(params[:id]).versions[params[:version].to_i - 1].try(:reify)
+      end
+      show!
+    end
+  end
+
+  sidebar :versions, partial: 'admin/shared/version', :only => :show
+  member_action :history do
+    @edition = Edition.find(params[:id])
+    @page_title = I18n.t('dmp.admin.item_history', item: "#{@edition.phase.template.name}, #{@edition.phase.phase} (#{@edition.edition})")
+    render "admin/shared/history"
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.edit_model', model: I18n.t('activerecord.models.edition.one')), edit_admin_edition_path(edition)
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.details', model: I18n.t('activerecord.models.edition.one')), admin_edition_path(edition)
   end
 
   form :title => :edition, :partial => "form"

@@ -15,12 +15,32 @@ ActiveAdmin.register Page do
   controller do 
     authorize_resource
 
+    def show
+      if params[:version] && params[:version].to_i > 0
+        @page = Page.find(params[:id]).versions[params[:version].to_i - 1].try(:reify)
+      end
+      show!
+    end
+
     def create 
       create! do |format|
          format.html { redirect_to admin_pages_path } 
       end 
-    end 
+    end
   end 
+
+  sidebar :versions, partial: 'admin/shared/version', :only => :show
+  member_action :history do
+    @page = Page.find(params[:id])
+    @page_title = I18n.t('dmp.admin.item_history', item: @page.title)
+    render "admin/shared/history"
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.edit_model', model: I18n.t('activerecord.models.page.one')), edit_admin_page_path(page)
+  end
+  action_item :only => :history do
+    link_to I18n.t('active_admin.details', model: I18n.t('activerecord.models.page.one')), admin_page_path(page)
+  end
 
   form :title => :title, :partial => "form"
 

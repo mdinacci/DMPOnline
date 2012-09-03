@@ -249,6 +249,15 @@ en:
       is_active_warning: "This version is currently in use.  Changing things now may cause the loss of users' data."
       mappings_active: "This field cannot be changed while there are mappings in place"
       wayfless_entity_hint: "The entityId needed for WAYFless URLs"
+      previous_version: "Previous Version"
+      next_version: "Next Version"
+      this_is_version: "This is previous version %{version}"
+      go_to_live: "Go to live version"
+      live_version: "Live version"
+      unknown_user: "Not known"
+      model_history: "Recent %{model} History"
+      item_history: "Recent Item History: %{item}"
+      actioned: "Actioned"
             
       status:
         active: "Active"

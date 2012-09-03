@@ -1,4 +1,6 @@
 class Edition < ActiveRecord::Base
+  has_paper_trail
+  
   belongs_to :phase
   belongs_to :dcc_edition, :class_name => "Edition", :foreign_key => "dcc_edition_id"
   has_many :phase_edition_instances

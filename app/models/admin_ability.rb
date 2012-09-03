@@ -14,11 +14,11 @@ class AdminAbility
       elsif user.is_admin?
         orgs = user.is_org_admin_for
 
-        can ["show", "index"], ["dashboard", "documents", "organisations", "pages", "posts", "templates"] 
-        can ["new", "create", "show", "edit", "update", "destroy"], ["documents", "pages", "posts", "templates"]
-        can ["show", "edit", "update", "publish", "unpublish"], ["editions"]
+        can ["show", "index", "history"], ["dashboard", "documents", "organisations", "pages", "posts", "templates"] 
+        can ["new", "create", "show", "edit", "update", "destroy", "history"], ["documents", "pages", "posts", "templates"]
+        can ["show", "edit", "update", "publish", "unpublish", "history"], ["editions"]
         can ["edit", "update"], ["mappings"]
-        can ["new", "create", "show", "edit", "update", "destroy", "rebuild"], ["questions"]
+        can ["new", "create", "show", "edit", "update", "destroy", "rebuild", "history"], ["questions"]
 
         can [:read, :update], Organisation, :organisation_id => orgs
         can [:create, :read, :update], [Template, Phase, Edition, Question, Mapping, BoilerplateText], :organisation_id => orgs

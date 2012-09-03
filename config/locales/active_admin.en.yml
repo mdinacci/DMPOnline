@@ -1,5 +1,6 @@
 en:
   active_admin:
+    history: "Recent Item History"
     dashboard: Admin Area
     dashboard_welcome:
       welcome: "Welcome to DMP Online. This is the default administration page."
@@ -38,3 +39,8 @@ en:
     blank_slate:
       content: "There are no %{resource_name} yet."
       link: "Create one"
+      
+      
+    sidebars:
+      versions: "Versions"
+      

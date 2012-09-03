@@ -1,0 +1,22 @@
+model_name = controller_name.singularize
+widget = eval("@#{model_name}") 
+
+panel I18n.t('dmp.admin.model_history', model: model_name.titlecase) do
+  table_for assigns[model_name.to_sym].versions do
+    column I18n.t('attributes.event') do |version|
+      version.event.titlecase
+    end
+    column I18n.t('dmp.admin.actioned') do |version|
+      version.created_at.to_s :medium
+    end 
+    column I18n.t('dmp.admin.stats.user') do |version|
+      User.where(id: version.whodunnit.to_i).first.try(:email) || I18n.t('dmp.admin.unknown_user')
+    end
+    column I18n.t('attributes.object_changes') do |version|
+      simple_format version.object_changes
+    end
+    column I18n.t('dmp.admin.actions') do |version|
+      link_to I18n.t('active_admin.details', model: I18n.t('activerecord.models.version.one')), polymorphic_path([:admin, widget], version: version.index + 1), class: 'view_link'
+    end
+  end
+end

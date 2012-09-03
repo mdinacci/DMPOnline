@@ -58,7 +58,7 @@ group :test do
   gem 'turn', :require => false
 end
 
-gem "paper_trail", "2.6.0"
+gem "paper_trail", "2.6.3"
 gem "exception_notification", "2.6.1"
 gem 'letter_opener', :group => :development
 gem 'win32console', :platforms => :mingw

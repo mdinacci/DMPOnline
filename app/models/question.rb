@@ -1,4 +1,6 @@
 class Question < ActiveRecord::Base
+  has_paper_trail
+  
   include TheSortableTree::Scopes
   
   acts_as_nested_set

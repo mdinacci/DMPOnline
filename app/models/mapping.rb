@@ -1,4 +1,6 @@
 class Mapping < ActiveRecord::Base
+  has_paper_trail
+  
   belongs_to :question
   belongs_to :dcc_question, :class_name => "Question", :foreign_key => "dcc_question_id"
   has_one :guide, :as => :guidance, :dependent => :delete

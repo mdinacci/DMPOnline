@@ -1,4 +1,6 @@
 class Page < ActiveRecord::Base
+  has_paper_trail
+  
   belongs_to :organisation
   validates :position, :menu, :organisation_id, :presence => true
 

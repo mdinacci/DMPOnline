@@ -90,6 +90,7 @@ en:
     position: "Position"
     role: "Role"
     roles: "Roles"
+    role_flags: "Role selection"
     short_name: "Short name"
     full_name: "Full name"
     constraint_text: "Constraint Text"

@@ -12,7 +12,9 @@ class Role < ActiveRecord::Base
 
   attr_accessible :user_email, :role_flags, :organisation_id, :edition_id
   attr_accessor :user_email
+  attr_readonly :role_flags
   validates_presence_of :user, message: nil
+  validates_uniqueness_of :role_flags, scope: [:user_id, :organisation_id]
   before_validation :set_user
   after_initialize :load_user
   

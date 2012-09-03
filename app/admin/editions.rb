@@ -115,6 +115,7 @@ ActiveAdmin.register Edition do
       end
     end
 
+    div t('dmp.admin.add_edition_questions')
     # active_admin_comments
   end
   

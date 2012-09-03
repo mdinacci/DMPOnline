@@ -25,6 +25,10 @@ jQuery ->
   # Admin Organisation page  
   conditional_show('#organisation_branded', '#branding_collapsible', ['true'])
 
+  # Admin Roles page
+  conditional_show('#role_role_flags', '#role_organisation_input', ['4'])
+  conditional_show('#role_role_flags', '#role_edition_input', ['8'])
+  
   # Admin Pages page
   conditional_show('#page_page_type', '#page_title_input', ['landing', 'menu'])
   conditional_show('#page_page_type', '#page_menu_input', ['landing', 'menu'])

@@ -5,5 +5,4 @@
     %ol
       %li.root_create_link= link_to t('dmp.admin.add_question'), new_admin_question_path(:edition => @edition), :class => 'create_link'
       - if @edition.questions.empty? && !@edition.phase.template.checklist
-        %li= link_to t('dmp.admin.from_checklist'), dcc_build_admin_questions_path(:edition => @edition), :class => 'create_link', :method => :post
-    
+        %li.right= link_to t('dmp.admin.from_checklist'), dcc_build_admin_questions_path(:edition => @edition), :class => 'create_link', :method => :post

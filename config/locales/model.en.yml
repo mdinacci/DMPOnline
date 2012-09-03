@@ -26,12 +26,12 @@ en:
         one: "Document"
         other: "Documents"
       role:
-        one: "Role"
-        other: "Roles"
+        one: "User Role"
+        other: "User Roles"
       template:
         one: "Template"
         other: "Templates"
-      template_instance: 
+      template_instance:
         one: "Template selection"
         other: "Template selections"
       template_instance_right: 
@@ -61,6 +61,9 @@ en:
       version:
         one: "Version"
         other: "Versions"
+      currency:
+        one: "Currency"
+        other: "Currencies"
 
   attributes:
     created_at: "Created"

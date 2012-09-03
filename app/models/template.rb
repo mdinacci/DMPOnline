@@ -10,7 +10,7 @@ class Template < ActiveRecord::Base
   accepts_nested_attributes_for :phases, :allow_destroy => true, :reject_if => :phase_empty
   attr_accessible :organisation_id, :name, :url, :description, :constraint_limit, :constraint_text, :sword_sd_uri, :phases_attributes
   validates :name, :organisation, :presence => true
-  validates_presence_of :phases, :message => I18n.t('dmp.require_phase')
+  validates_presence_of :phases
    
   def self.dcc_checklist
     where(:checklist => true)

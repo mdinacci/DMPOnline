@@ -13,6 +13,8 @@ class Organisation < ActiveRecord::Base
   has_attached_file :stylesheet
   
   validates_format_of :domain, :with => /\A[a-z\.]{6,}\Z/
+  validates_presence_of :short_name, :full_name, :organisation_type
+  validates_inclusion_of :branded, :in => [true, false]
   
   attr_accessible :full_name, :domain, :url, :organisation_type_id, :default_locale, :dcc_edition_id,
                   :short_name, :logo, :stylesheet, :branded, :wayfless_entity

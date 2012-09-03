@@ -12,7 +12,7 @@ class Role < ActiveRecord::Base
 
   attr_accessible :user_email, :role_flags, :organisation_id, :edition_id
   attr_accessor :user_email
-  validates_presence_of :user
+  validates_presence_of :user, message: nil
   before_validation :set_user
   after_initialize :load_user
   
@@ -37,6 +37,9 @@ class Role < ActiveRecord::Base
   def set_user
     u = User.find_by_email(self.user_email)
     self.user_id = u.try(:id)
+    if self.user_id.nil?
+      self.errors.add(:user_email, I18n.t('dmp.validation.address_not_found'))
+    end
   end
   
 end

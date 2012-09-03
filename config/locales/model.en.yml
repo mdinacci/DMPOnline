@@ -3,6 +3,8 @@ en:
     errors:
       messages:
         record_invalid: "Validation failed: %{errors}"
+        blank: "required"
+        inclusion: "must be selected from the list"
 
     models:
       organisation_type: 

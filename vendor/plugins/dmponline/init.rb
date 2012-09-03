@@ -6,6 +6,7 @@ require 'active_admin_application'
 require 'active_admin_resourcecontroller'
 require 'active_admin_views_dashboard_section'
 require 'active_admin_railtie'
+require 'active_admin_inputs_filter_base.rb'
 
 # Devise error output formatting
 require 'dmponline_failure_app'

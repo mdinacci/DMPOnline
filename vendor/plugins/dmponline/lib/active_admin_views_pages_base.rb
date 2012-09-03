@@ -49,6 +49,30 @@ class ActiveAdmin::Views::Pages::Base < Arbre::HTML::Document
     end
   end
 
+  def build_flash_messages
+    if flash.keys.any?
+      div :class => 'flashes' do
+        flash.each do |type, message|
+          div message, :class => "flash flash_#{type}"
+        end
+      end
+    end
+    
+    if (controller.action_name == 'update' || controller.action_name == 'create') && resource.errors.any? 
+      div class: 'flash flash_error' do
+        para I18n.t('dmp.errors', :count => resource.errors.count)
+        ul do
+          resource.errors.full_messages.each do |msg|
+            li msg
+          end
+        end
+      end
+    end
+  end
+
+
+
+
 end 
 
 # Raw tag element to allow the insertion of IE conditional tags.

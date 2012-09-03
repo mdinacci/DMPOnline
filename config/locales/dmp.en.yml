@@ -129,6 +129,9 @@ en:
     simple_share: "Simple"
     advanced_share: "Advanced"
     external_write: "This plan can be amended by others"
+    
+    validation:
+      address_not_found: "address not found"
 
     auth:
       sign_in: "Sign in"

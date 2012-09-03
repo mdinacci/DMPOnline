@@ -1,4 +1,6 @@
 ActiveAdmin.register Page do
+  menu :priority => 6
+  
   # Limit list according to access rights
   scope_to :current_user
   

@@ -1,4 +1,5 @@
 ActiveAdmin.register Template do 
+  menu :priority => 5
   # Limit list according to access rights
   scope_to :current_user
 

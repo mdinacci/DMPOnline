@@ -1,4 +1,6 @@
 ActiveAdmin.register Organisation do
+  menu :priority => 4
+  
   # Limit list according to access rights
   scope_to :current_user
   

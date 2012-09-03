@@ -1,4 +1,6 @@
 ActiveAdmin.register Document do
+  menu :priority => 8
+
   # Limit list according to access rights
   scope_to :current_user
 

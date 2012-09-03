@@ -1,5 +1,5 @@
 ActiveAdmin.register Role do
-  menu :if => proc{ current_user.is_dccadmin? }
+  menu if: proc{ current_user.is_dccadmin? }, priority: 9
 
   scope :system_admins, :default => true do |roles|
     roles.with_role(:sysadmin)

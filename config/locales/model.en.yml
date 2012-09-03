@@ -20,8 +20,8 @@ en:
         one: "User"
         other: "Users"
       post:
-        one: "Article"
-        other: "Articles"
+        one: "News Article"
+        other: "News Articles"
       document:
         one: "Document"
         other: "Documents"

@@ -1,4 +1,6 @@
 ActiveAdmin.register Post do
+  menu :priority => 7
+
   # Limit list according to access rights
   scope_to :current_user
   

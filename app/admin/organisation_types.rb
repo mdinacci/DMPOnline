@@ -1,5 +1,5 @@
 ActiveAdmin.register OrganisationType do
-  menu :if => proc{ current_user.is_dccadmin? }, :priority => 1
+  menu :if => proc{ current_user.is_dccadmin? }, :priority => 3
 
   config.clear_sidebar_sections!
 

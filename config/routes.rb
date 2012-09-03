@@ -9,11 +9,6 @@ Dmponline3::Application.routes.draw do
 
   constraints BlockToken.new do 
     ActiveAdmin.routes(self)
-    namespace :admin, defaults: { format: 'json' }, constraints: { format: 'json' } do
-      get 'stats/users' => 'stats#users', :as => 'stats_users'
-      get 'stats/plans' => 'stats#plans', :as => 'stats_plans'
-      get 'stats/templates' => 'stats#templates', :as => 'stats_templates'
-    end
     
     devise_for :users, {
       :sign_out_via => [ :post, :delete, :get ],

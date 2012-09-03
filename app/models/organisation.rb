@@ -7,6 +7,7 @@ class Organisation < ActiveRecord::Base
   has_many :pages
   has_many :roles
   has_many :templates
+  has_many :users
   
   has_attached_file :logo, :styles => {home: '320x92>', template: '256x72>', thumb: '48x48>'}
   has_attached_file :stylesheet

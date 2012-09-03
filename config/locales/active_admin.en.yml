@@ -1,7 +1,7 @@
 en:
   active_admin:
     history: "Recent Item History"
-    dashboard: Admin Area
+    dashboard: "Dashboard"
     dashboard_welcome:
       welcome: "Welcome to DMP Online. This is the default administration page."
       call_to_action: "Organisation administrators should contact the DCC."
@@ -10,7 +10,9 @@ en:
     delete: "Delete"
     delete_confirmation: "Are you sure you want to delete this?"
     new_model: "New %{model}"
+    create_model: "New %{model}"
     edit_model: "Edit %{model}"
+    update_model: "Edit %{model}"
     delete_model: "Delete %{model}"
     details: "%{model} Details"
     cancel: "Cancel"
@@ -40,6 +42,11 @@ en:
       content: "There are no %{resource_name} yet."
       link: "Create one"
       
+    sections:
+      reporting: "Reporting"
+      published_templates: "Published Templates"
+      activity: "Activity"
+      paper_trail: "Recent Content Updates"
       
     sidebars:
       versions: "Versions"

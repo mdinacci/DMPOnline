@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   # dccadmin: can manage the DCC Questions and manage organisations
   # orgadmin: per organisation, can update organisations and dependent templates
   # APPEND ONLY - DO NOT CHANGE ORDER
-  ROLES = %w[sysadmin dccadmin orgadmin apifull]
+  ROLES = %w[sysadmin dccadmin orgadmin apifull invisible]
   CATEGORIES = %w[researcher support other]
 
   before_save :user_default_organisation

@@ -10,6 +10,9 @@ ActiveAdmin.register Role do
   scope :api_access do |roles|
     roles.with_role(:apifull)
   end
+  scope :invisible do |roles|
+    roles.with_role(:invisible)
+  end
 
   filter :organisation
 

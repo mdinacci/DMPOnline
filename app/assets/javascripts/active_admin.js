@@ -9,3 +9,5 @@
 //= require tinymce-jquery
 //= require wysiwyg
 //= require conditionals
+//= require highcharts
+//= require highcharts/modules/exporting

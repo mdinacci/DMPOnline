@@ -513,6 +513,49 @@ div.boilerplate {
   background: #ff0000;
 }
 
+body.admin_dashboard {
+  div.dashboard_section {
+    width: 47%;
+    float: left;
+    clear: left;
+    margin-right: 20px;
+  }
+  div.region {
+    margin-right: -20px;
+    & > :nth-child(even) {
+      float: right;
+      clear: right;
+    }
+  }
+
+  ul.figures {
+    margin-left: 25%;
+    margin-right: 25%;
+    list-style: none;
+    li {
+      position: relative;
+      width: 100%;
+      border-bottom: 1px solid $grey;
+      padding: 0.2em 0;
+      
+      .figure {
+        float: right;
+      }
+    }
+  }
+
+  ul.instruction {
+    margin: 0 0;
+    li {
+      font-style: italic;
+      color: $grey;
+    }
+  }
+  
+  dl.checklist {
+    font-size: 120%;
+  }
+}
 
 #sidebar {
   ul.figures {

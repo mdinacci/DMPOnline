@@ -757,6 +757,16 @@ td.input-area {
       width: 30%;
     }
   }
+  .radio.list ol.choices-group {
+    li {
+      display: block;
+      float: none;
+      padding-top: 0;
+      label {
+        text-align: left;
+      }
+    }
+  }
 }
 
 .output {

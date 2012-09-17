@@ -266,7 +266,8 @@ en:
       actioned: "Actioned"
       unknown_object: "Unknown object"
       deleted_object: "Deleted object"
-            
+      question_options: "Enter each option to be presented on its own line.  If you want to store a different value to that which is displayed, separate the name|value pairs with a pipe symbol"
+      
       status:
         active: "Active"
         published: "Published"
@@ -319,6 +320,8 @@ en:
       boolean: "Yes/No"
       heading: "Heading"
       uri: "URI"
+      select: "Multiple Selection"
+      radio: "Radio Options"
       
     roles:
       none: "None"

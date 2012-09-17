@@ -21,6 +21,7 @@
     = f.input :number_style, :as => :select, :collection => translated_styles, required: true
     = f.input :question, required: true, :input_html => { :class => 'wysiwyg' }
     = f.input :default_value, :rows => 3, :hint => t('dmp.admin.token_hint', :tokens => Answer::TOKENS.join('], ['))
+    = f.input :options, :rows => 4, :hint => t('dmp.admin.question_options')
 
     - d1 = dependency_question_options(@question)
     - d2 = dependency_dcc_question_options(@question)

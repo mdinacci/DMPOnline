@@ -6,13 +6,14 @@
     - q_id = q.id
     - q_dependency_value = q.dependency_value
     - q_number = q.number_display
+    - q_options = q.options
   - else
     - dependency = Question.find(dcc_q.id).dependency
     - q_kind = dcc_q.kind
     - q_id = dcc_q.id
     - q_dependency_value = dcc_q.dependency_value
     - q_number = "DCC #{dcc_q_numbering[dcc_q.id]}"
-
+    - q_options = dcc_q.options 
 
   - d = "tr#answer_row_#{dependency.try(:id)} .input-area #{dependency.try(:form_source)}"
   %tr{id: "answer_row_#{q_id}", data: {dependency: d, being: q_dependency_value}}
@@ -37,6 +38,11 @@
             = a.input :answer, :as => :text, :input_html => {class: 'wysiwyg_opt monitor'}, :label => false, :rows => 3
           - when 'u'
             = a.input :answer, :as => :url, :label => false, :input_html => {class: 'monitor'}
+          - when 's'
+            = a.input :answer, :as => :select, :collection => question_options(q_options), :label => false, :wrapper_html => {class: 'monitor'}
+          - when 'r'
+            = a.input :answer, :as => :radio, :collection => question_options(q_options), :label => false, :wrapper_html => {class: 'monitor list'}
+            
       = boilerplate_list(a.object)
     %td.guidance-area
       = template_reference_list(a.object, q_number)

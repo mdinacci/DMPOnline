@@ -155,4 +155,16 @@ module QuestionsHelper
     truncate(strip_tags(q.question), :length => 200)
   end
 
+  def question_options(q_options)
+    opts = {}
+    q_options.split(/[\r\n]/).each do |opt|
+      next if opt.blank?
+      name, val = opt.split('|')
+      val ||= name
+      opts.merge!(name => val) unless name.blank?
+    end
+
+    opts
+  end
+  
 end

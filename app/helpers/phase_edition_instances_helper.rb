@@ -66,6 +66,13 @@ module PhaseEditionInstancesHelper
             else
               export_answer[:response] = ''
             end
+          elsif q.kind == 's' || q.kind == 'r'
+            if d.answered
+              opts = question_options(q.options).invert
+              export_answer[:response] = d.answer.nil? ? '' : (opts[d.answer].dup || d.answer).force_encoding('UTF-8')
+            else
+              export_answer[:response] = ''
+            end            
           else
             export_answer[:response] = d.answer.nil? ? '' : d.answer.force_encoding('UTF-8')
           end
@@ -92,6 +99,13 @@ module PhaseEditionInstancesHelper
               else
                 export_answer[:response] = ''
               end
+            elsif d.dcc_question.kind == 's' || d.dcc_question.kind == 'r'
+              if d.answered
+                opts = question_options(d.dcc_question.options).invert
+                export_answer[:response] = d.answer.nil? ? '' : (opts[d.answer].dup || d.answer).force_encoding('UTF-8')
+              else
+                export_answer[:response] = ''
+              end            
             else
               export_answer[:response] = d.answer.nil? ? '' : d.answer.force_encoding('UTF-8')
             end

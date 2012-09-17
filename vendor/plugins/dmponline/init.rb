@@ -1,3 +1,6 @@
+# Check Ruby version
+require 'ruby_version_check'
+
 # Modifications to the ActiveAdmin classes
 require 'active_admin_views_pages_base'
 require 'active_admin_views_pages_dashboard'

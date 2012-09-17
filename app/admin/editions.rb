@@ -84,6 +84,8 @@ ActiveAdmin.register Edition do
     number_questions(q_set)
     dcc_numbers = dcc_numbering(edition)
 
+    div t('dmp.admin.add_edition_questions')
+    
     table_for(q_set) do |q|
       q.column(t('dmp.admin.number'), :number_display)
       q.column(t('dmp.template_question')) {|question| sanitize question.question }
@@ -115,8 +117,6 @@ ActiveAdmin.register Edition do
       end
     end
 
-    div t('dmp.admin.add_edition_questions')
-    
     active_admin_comments
   end
   

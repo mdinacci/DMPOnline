@@ -125,7 +125,7 @@ jQuery ->
   $("form.phase_edition_instance").livequery ->
     $(this).dirtyForms()
   $(".hide_opt").livequery ->
-    $(this).after('<a class="hide-link" href="#">[Hide]</a>').next("a").on "click", ->
+    $(this).after('<a class="hide-link" href="#">[Remove]</a>').next("a").on "click", ->
       $(this).prev().find("input[type=hidden]").val("1")
       $(this).closest("form").setDirty()
       $(this).closest("tr").slideUp()

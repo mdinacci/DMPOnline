@@ -1,12 +1,13 @@
 .top
-  - if ti.template.organisation.logo.file?
+  - if (ti.template.organisation.logo.file? && ti.template.organisation_id != current_organisation.id) || ti.template.description.present?
     .description
-      = image_tag ti.template.organisation.logo.url(:template), alt: ti.template.organisation.full_name, class: 'org-logo'
+      - if ti.template.organisation.logo.file? && ti.template.organisation_id != current_organisation.id
+        = image_tag ti.template.organisation.logo.url(:template), alt: ti.template.organisation.full_name, class: 'org-logo'
 
-    - unless ti.template.description.blank?
-      = sanitize ti.template.description
-      - unless ti.template.url.blank?
-        .website= link_to t('dmp.further_details'), ti.template.url
+      - unless ti.template.description.blank?
+        = sanitize ti.template.description
+        - unless ti.template.url.blank?
+          .website= link_to t('dmp.further_details'), ti.template.url
     
   - qs = number_questions(ti.current_edition.sorted_sections)
   - section_id = params[:sid].to_i

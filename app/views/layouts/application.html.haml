@@ -3,7 +3,7 @@
   %head
     %meta{:content => 'text/html; charset=utf-8', 'http-equiv' => 'Content-Type'}
     %title= "#{t('dmp.title')} - #{content_for?(:title) ? yield(:title) : t('dmp.strapline')}"
-    = stylesheet_link_tag 'application'
+    = organisation_stylesheet
     = stylesheet_link_tag 'print', media: 'print'
     /[if IE 6]
       = stylesheet_link_tag 'formtastic_ie6'
@@ -13,7 +13,6 @@
       = stylesheet_link_tag 'dmponline_ie7'
     /[if IE 8]
       = stylesheet_link_tag 'dmponline_ie8'
-    = organisation_stylesheet
       
     = javascript_include_tag 'application'
 
@@ -26,9 +25,9 @@
     #wrapper
       #header
         = render :partial => 'layouts/utilitynav'
+        = render :partial => 'layouts/helpmenu'
         = link_to organisation_logo, frontpage_path
         = render :partial => 'layouts/navmenu'
-        = render :partial => 'layouts/helpmenu'
       .notices
         - flash.each do |type, message|
           = content_tag :div, message, :class => "flash flash_#{type}"
@@ -38,7 +37,7 @@
       .outer_wrapper
         %h1.heading= content_for?(:title) ? yield(:title) : t('dmp.title')
         #main= yield
-  
+
         = render :partial => 'layouts/footer'
     - unless user_signed_in?
       = render :partial => 'layouts/loginform'

@@ -8,6 +8,7 @@ ActiveAdmin.register Organisation do
   
   controller do 
     authorize_resource
+    helper :questions
 
     def show
       if params[:version] && params[:version].to_i > 0

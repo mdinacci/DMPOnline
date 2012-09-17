@@ -100,18 +100,21 @@ class ApplicationController < ActionController::Base
     end
     
     match = /(www\.)?[a-z0-9]\.(.+)/.match(host) || []
-    domain = match[2] || user_domain || ''
+    domain = match[2] || ''
 
-    if domain.blank?
-      dcc_organisation || Organisation.first
-    else
+    if domain.present?
       org = Organisation.find_by_domain(domain)
-      if org.try(:branded)
-        org
-      else
-        dcc_organisation || Organisation.first
-      end      
     end
+    
+    if org.blank? || org.id = dcc_organisation.try(:id)
+      org = Organisation.find_by_domain(user_domain)
+    end
+    
+    if org.try(:branded)
+      org
+    else
+      dcc_organisation || Organisation.first
+    end      
   end
   
 end

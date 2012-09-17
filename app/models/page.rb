@@ -20,7 +20,7 @@ class Page < ActiveRecord::Base
   protected
   
   def check_page_type
-    self.target_url = '' if self.page_type = 'landing'
+    self.target_url = '' if self.page_type == 'landing'
   end
   
 end

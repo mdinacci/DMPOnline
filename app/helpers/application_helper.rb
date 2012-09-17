@@ -12,15 +12,17 @@ module ApplicationHelper
   end
   
   def organisation_stylesheet
-    unless current_organisation.blank? || !current_organisation.stylesheet.file?
-      stylesheet_link_tag current_organisation.stylesheet.url
+    if current_organisation.blank? || !current_organisation.branded || !current_organisation.stylesheet.file?
+      stylesheet_link_tag 'application'
     else
-      ''
+      stylesheet_link_tag current_organisation.stylesheet.url
     end
   end
   
   def organisation_logo
-    unless current_organisation.blank? || !current_organisation.logo.file?
+    if current_organisation.present? && current_organisation.banner.file?
+      image_tag(current_organisation.banner.url(:home), :alt => t('dmp.title') + ' - ' + t('dmp.strapline'))
+    elsif current_organisation.present? && current_organisation.logo.file?
       image_tag(current_organisation.logo.url(:home), :alt => t('dmp.title') + ' - ' + t('dmp.strapline'))
     else
       image_tag('dmp_logo.png', :alt => t('dmp.title') + ' - ' + t('dmp.strapline'))

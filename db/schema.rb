@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120823160000) do
+ActiveRecord::Schema.define(:version => 20120914160000) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",                       :null => false
@@ -147,6 +147,10 @@ ActiveRecord::Schema.define(:version => 20120823160000) do
     t.string   "short_name"
     t.boolean  "branded",                 :default => false, :null => false
     t.string   "wayfless_entity"
+    t.string   "banner_file_name"
+    t.string   "banner_content_type"
+    t.string   "banner_file_size"
+    t.string   "banner_updated_at"
   end
 
   add_index "organisations", ["dcc_edition_id"], :name => "index_organisations_on_dcc_edition_id"
@@ -230,6 +234,7 @@ ActiveRecord::Schema.define(:version => 20120823160000) do
     t.integer  "parent_id"
     t.integer  "lft"
     t.integer  "rgt"
+    t.text     "options"
   end
 
   add_index "questions", ["dependency_question_id"], :name => "index_questions_on_dependency_question_id"

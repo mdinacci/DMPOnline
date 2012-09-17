@@ -86,7 +86,7 @@ class User < ActiveRecord::Base
         .where('editions.status' => Edition::STATUS.index('published'))
         .where('organisations.organisation_type_id <> ? OR templates.organisation_id = ?', org.organisation_type_id, org.id)
         .where('editions.dcc_edition_id' => org.dcc_edition_id)
-        .select('templates.*, organisations.full_name as organisation_name, organisations.organisation_type_id, organisation_types.title as organisation_type_title')
+        .select('DISTINCT templates.*, organisations.full_name as organisation_name, organisations.organisation_type_id, organisation_types.title as organisation_type_title')
         .order('organisation_types.position ASC, organisations.full_name ASC, templates.name ASC')
         .all
     end

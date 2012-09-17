@@ -11,6 +11,7 @@ class Template < ActiveRecord::Base
   attr_accessible :organisation_id, :name, :url, :description, :constraint_limit, :constraint_text, :sword_sd_uri, :phases_attributes
   validates :name, :organisation, :presence => true
   validates_presence_of :phases
+  validate :eligible_organisation
    
   def self.dcc_checklist
     where(:checklist => true)
@@ -30,6 +31,10 @@ class Template < ActiveRecord::Base
   
   def phase_empty(attributes)
     Sanitize.clean(attributes['phase']).blank?
+  end
+  
+  def eligible_organisation
+    errors.add(:organisation_id, I18n.t('dmp.admin.bad_selection')) unless current_user.org_list.includes?(organisation)
   end
 
 end

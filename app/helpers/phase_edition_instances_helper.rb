@@ -75,6 +75,17 @@ module PhaseEditionInstancesHelper
             else
               export_answer[:response] = ''
             end            
+          elsif q.kind == 'l'
+            if d.answered && d.answer.present?
+              opts = question_options(q.options).invert
+              responses = ''
+              d.answer.split('|').each do |s|
+                responses += content_tag(:li, opts[s] || s)
+              end
+              export_answer[:response] = content_tag(:ul, responses, nil, false).force_encoding('UTF-8')
+            else
+              export_answer[:response] = ''
+            end            
           else
             export_answer[:response] = d.answer.nil? ? '' : d.answer.force_encoding('UTF-8')
           end
@@ -108,6 +119,17 @@ module PhaseEditionInstancesHelper
               else
                 export_answer[:response] = ''
               end            
+            elsif d.dcc_question.kind == 'l'
+              if d.answered && d.answer.present?
+                opts = question_options(d.dcc_question.options).invert
+                responses = ''
+                d.answer.split('|').each do |s|
+                  responses += content_tag(:li, opts[s] || s)
+                end
+                export_answer[:response] = content_tag(:ul, responses, nil, false).force_encoding('UTF-8')
+              else
+                export_answer[:response] = ''
+              end
             else
               export_answer[:response] = d.answer.nil? ? '' : d.answer.force_encoding('UTF-8')
             end

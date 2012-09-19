@@ -172,13 +172,15 @@ module QuestionsHelper
 
   def question_options(q_options)
     opts = {}
-    q_options.split(/[\r\n]/).each do |opt|
-      next if opt.blank?
-      name, val = opt.split('|')
-      val ||= name
-      opts.merge!(name => val) unless name.blank?
+    if q_options.present?
+      q_options.split(/[\r\n]/).each do |opt|
+        next if opt.blank?
+        name, val = opt.split('|')
+        val ||= name
+        opts.merge!(name => val) unless name.blank?
+      end
     end
-
+    
     opts
   end
   

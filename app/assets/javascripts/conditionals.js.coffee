@@ -20,8 +20,8 @@ jQuery ->
   # Admin Question page  
   conditional_show('#question_kind', '#boilerplate_collapsible', ['t'])
   conditional_show('#question_kind', '#mapping_collapsible', ['m'])
-  conditional_show('#question_kind', '#question_default_value_input', ['t', 'r', 's'])
-  conditional_show('#question_kind', '#question_options', ['r', 's'])
+  conditional_show('#question_kind', '#question_default_value_input', ['t', 'r', 's', 'l'])
+  conditional_show('#question_kind', '#question_options', ['r', 's', 'l'])
 
   # Admin Organisation page  
   conditional_show('#organisation_branded', '#branding_collapsible', ['true'])

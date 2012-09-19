@@ -322,7 +322,8 @@ en:
       boolean: "Yes/No"
       heading: "Heading"
       uri: "URI"
-      select: "Multiple Selection"
+      select: "Select drop-down"
+      multiselect: "Check boxes"
       radio: "Radio Options"
       
     roles:

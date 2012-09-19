@@ -30,6 +30,7 @@ class Question < ActiveRecord::Base
             'heading' => 'h',
             'uri' => 'u',
             'select' => 's',
+            'multiselect' => 'l',
             'radio' => 'r' }
 
   # Number style

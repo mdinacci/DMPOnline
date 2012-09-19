@@ -146,4 +146,5 @@ en:
     template_instances: "Template selection"
     branded: "Branded?"
     wayfless_entity: "Shibboleth IdP"
+    options: "Response options"
     start_numbering: "Start numbering from"

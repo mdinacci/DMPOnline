@@ -6,6 +6,7 @@ class Answer < ActiveRecord::Base
   attr_accessible :answer, :hidden, :position, :question_id, :dcc_question_id
   attr_readonly :question_id, :dcc_question_id
   validate :not_locked
+  before_validation :check_array_values
   after_validation :set_default_value
   before_create :get_initial_value
   before_save :set_answered_flag
@@ -96,6 +97,12 @@ class Answer < ActiveRecord::Base
         self.answer = d.answer
         self.answered = d.answered
       end
+    end
+  end
+  
+  def check_array_values
+    if self.answer.is_a? Array
+      self.answer = self.answer.delete_if{ |x| x.blank? }.join('|')
     end
   end
   

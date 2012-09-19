@@ -42,6 +42,9 @@
             = a.input :answer, :as => :select, :collection => question_options(q_options), :label => false, :wrapper_html => {class: 'monitor'}
           - when 'r'
             = a.input :answer, :as => :radio, :collection => question_options(q_options), :label => false, :wrapper_html => {class: 'monitor list'}
+          - when 'l'
+            - a.object.answer = a.object.answer.split('|') unless a.object.answer.blank?
+            = a.input :answer, :as => :check_boxes, :collection => question_options(q_options), :label => false, :wrapper_html => {class: 'monitor list'}
             
       = boilerplate_list(a.object)
     %td.guidance-area

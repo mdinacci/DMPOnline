@@ -131,6 +131,12 @@ en:
     advanced_share: "Advanced"
     external_write: "This plan can be amended by others"
     
+    notify:
+      send: "Send notification"
+      plan_shared: "Data Management Plan shared with you"
+      sent: "Notification of shared plan sent to %{email}"
+      not_sent: "%{email} is not a valid email.  No notification sent."
+      
     validation:
       address_not_found: "address not found"
 

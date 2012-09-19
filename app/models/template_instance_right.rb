@@ -21,6 +21,13 @@ class TemplateInstanceRight < ActiveRecord::Base
     self.template_instance.plan_id
   end
 
+  def display_email_mask
+    if self.email_mask.present?
+      self.email_mask.gsub(/\\/, '').tr('%', '*')
+    end
+  end
+  
+
 
   protected
   

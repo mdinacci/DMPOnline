@@ -45,21 +45,28 @@
       %h3= t('dmp.project_access')
       .panel_contents
         .attributes_table
-          - if @plan.user_list.blank?
+          - if @plan.template_instance_rights.empty?
             = t('dmp.not_shared')
           - else
             %table
               %thead
                 %tr
-                  %th= t('dmp.email')
+                  %th.wide= t('dmp.email')
                   %th= t('dmp.access')
               %tbody
-                - @plan.user_list.each do |u_email, u_rights|
+                - @plan.user_list.each do |u_email, u_info|
                   %tr
+                    %td.wide
+                      = u_email
+                      - if can? :manage, @plan
+                        - unless u_email =~ /[*%]/
+                          .notify
+                            = link_to t('dmp.notify.send'), notify_plan_path(@plan, template_instance_right_id: u_info[:id]), method: :put
                     %td
-                      = display_email_mask(u_email)
-                    %td
-                      = t("dmp.roles.#{u_rights}")
+                      - roles = []
+                      - u_info[:rights].each do |r| 
+                        - roles << t("dmp.roles.#{r}")
+                      = roles.join(', ')
             - if @plan.external_writable
               .external-write= t('dmp.external_write')
     .link_spacing.top

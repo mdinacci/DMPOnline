@@ -41,6 +41,7 @@ Dmponline3::Application.routes.draw do
         put 'phase/:edition_id/set', :action => 'change_phase', :as => 'change_phase', :edition_id => /\d+/
         get 'rights'
         put 'update_rights'
+        put 'notify/:template_instance_right_id', :action => 'notify', :as => 'notify', :template_instance_right_id => /\d+/
       end
   
       resources :phase_edition_instances, :only => [:edit, :update], :as => "layer", :path => 'layer' do

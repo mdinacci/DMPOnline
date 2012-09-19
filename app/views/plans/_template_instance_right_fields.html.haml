@@ -5,7 +5,7 @@
   
 %li.nested-fields
   = f.inputs do
-    - f.object.email_mask = display_email_mask(f.object.email_mask)
+    - f.object.email_mask = f.object.display_email_mask
     = f.input :email_mask, :as => :string, :label => false, :input_html => { :disabled => locked }
     = f.input :role_flags, :as => :radio, :collection => plan_rights_list, :label => false, :input_html => { :disabled => locked }
     - unless locked

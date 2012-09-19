@@ -97,12 +97,6 @@ module PlansHelper
     end
   end
   
-  def display_email_mask(mask)
-    unless mask.nil?
-      mask.gsub(/\\/, '').tr('%', '*')
-    end
-  end
-  
   def plan_created_by(plan)
     if plan.user_id == current_user.id
       ''

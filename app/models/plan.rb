@@ -26,7 +26,9 @@ class Plan < ActiveRecord::Base
   def self.for_user(user)
     # Check all template instances for access rights for provided user
     user ||= User.new
-    includes(:template_instance_rights).where("plans.user_id = ? OR ? LIKE email_mask", user.id, user.email)
+    includes(:template_instance_rights)
+      .where("plans.user_id = ? OR ? LIKE email_mask", user.id, user.email)
+      .where("role_flags > 0")
   end
 
   def question_counts
@@ -46,14 +48,17 @@ class Plan < ActiveRecord::Base
   end
 
   def user_list
-    self.template_instance_rights.inject({}) do |hash, tir|
-      hash.merge!(tir.email_mask => TemplateInstance::ROLES[tir.role_flags.to_i]) do |key, oldval, newval| 
-        combo = []
-        combo << oldval
+    refs = {}
+    rights = {}
+    self.template_instance_rights.each do |tir|
+      rights.merge!(tir.display_email_mask => [TemplateInstance::ROLES[tir.role_flags.to_i]]) do |key, oldval, newval| 
+        combo = oldval || []
         combo << newval
-        combo.uniq.join(", ")
+        combo.uniq
       end
+      refs.merge!(tir.display_email_mask => {id: tir.id, rights: rights[tir.display_email_mask]})
     end
+    refs
   end
 
   def common_rights

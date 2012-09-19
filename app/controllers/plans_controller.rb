@@ -230,6 +230,21 @@ EOSQL
     end
   end
 
+  # PUT /plan/1/notify/1
+  def notify
+#    @plan = Plan.for_user(current_user).find(params[:id])
+
+    @tir = @plan.template_instance_rights.find(params[:template_instance_right_id])
+    unless @tir.blank? || @tir.email_mask =~ /[%*]/
+      email = @tir.display_email_mask
+      Notifier.plan_shared(email, current_user.email, @plan).deliver
+      flash[:notice] = I18n.t('dmp.notify.sent', email: email)
+    else
+      flash[:warning] = I18n.t('dmp.notify.not_sent', email: email)
+    end
+
+    redirect_to plan_path(@plan)
+  end
   
   
   

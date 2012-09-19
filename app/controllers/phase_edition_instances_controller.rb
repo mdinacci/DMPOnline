@@ -184,7 +184,8 @@ class PhaseEditionInstancesController < ApplicationController
         xml_data = render_to_string 'export.xml'
         docx = Tempfile.new("dmp")
         docx.close
-        OfficeOpenXML.transform(xml_data, docx.path, @doc[:layout])
+        media_logo = current_organisation.media_logo.file? ? current_organisation.media_logo.path : ''
+        OfficeOpenXML.transform(xml_data, docx.path, @doc[:layout], media_logo)
         send_file docx.path, :type => :docx, :filename => @doc[:filename]
       end
 

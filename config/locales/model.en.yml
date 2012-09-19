@@ -146,5 +146,8 @@ en:
     template_instances: "Template selection"
     branded: "Branded?"
     wayfless_entity: "Shibboleth IdP"
+    object_changes: "Object changes"
+    banner: "Banner image for branded site"
     options: "Response options"
+    media_logo: "Logo for export media"
     start_numbering: "Start numbering from"

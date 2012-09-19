@@ -22,9 +22,9 @@
       %tr
         %td.logo
           - if @doc[:format] == 'pdf'
-            = wicked_pdf_image_tag("dmp_logo.png", :align => :left, :border => 0, :width => 218, :height => 66)
+            = branded_logo(:path, {:align => :left, :border => 0, :width => 218, :height => 66})
           - else
-            = image_tag("dmp_logo.png", :align => :left, :border => 0, :width => 218, :height => 66)
+            = branded_logo(:url, {:align => :left, :border => 0, :width => 218, :height => 66})
         %td
           %h3= plan_display(@plan, :project)
           - if @doc[:project_status]

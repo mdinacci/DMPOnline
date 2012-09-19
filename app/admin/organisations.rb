@@ -65,7 +65,20 @@ ActiveAdmin.register Organisation do
         organisation.branded ? I18n.t('dmp.boolean_yes') : I18n.t('dmp.boolean_no')
       end
       row :domain
+      row :banner do
+        if organisation.banner.file?
+          image_tag(organisation.banner.url(:template), :align => :left, :border => 0)
+        end
+      end
+      row :banner_file_size
       row :stylesheet_file_name
+      row :stylesheet_file_size
+      row :media_logo do
+        if organisation.media_logo.file?
+          image_tag(organisation.media_logo.url(:template), :align => :left, :border => 0)
+        end
+      end
+      row :media_logo_file_size
       if shibboleth_enabled?
         row :wayfless_entity
       end

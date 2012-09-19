@@ -13,6 +13,7 @@
       = f.input :dcc_edition, as: :select, collection: dcc_checklist_editions
       = f.input :stylesheet
       = f.input :banner
+      = f.input :media_logo
       - if shibboleth_enabled? 
         = f.input :wayfless_entity, :hint => t('dmp.admin.wayfless_entity_hint')
 

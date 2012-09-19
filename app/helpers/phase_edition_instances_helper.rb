@@ -180,5 +180,18 @@ module PhaseEditionInstancesHelper
     end
   end
 
+  def branded_logo(action, options)
+    if current_organisation.branded? && current_organisation.media_logo.file?
+      path = current_organisation.media_logo.send(action)
+      image_tag path, options
+    else
+      case action
+      when :url
+        image_tag 'dmp_logo.png', options
+      when :path
+        wicked_pdf_image_tag 'dmp_logo.png', options
+      end
+    end
+  end
 
 end

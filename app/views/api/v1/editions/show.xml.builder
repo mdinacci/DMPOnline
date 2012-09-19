@@ -6,7 +6,7 @@ xml.dmponline do
 
   xml.template_edition("edition_key" => @edition.id) do 
     dcc_numbers = dcc_numbering(@edition)
-    qs = number_questions(@edition.sorted_questions)
+    qs = number_questions(@edition.sorted_questions, @edition.start_numbering)
     q_kinds = Question::TYPES.invert
 
     qs.each do |q|

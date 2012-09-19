@@ -59,7 +59,7 @@ module PlansHelper
   end
 
   def get_numbered_section_questions(edition, section_id)
-    qs = number_questions(edition.section_questions(section_id))
+    qs = number_questions(edition.section_questions(section_id), edition.start_numbering)
     qs.delete_if { |q| q.id != section_id && q.parent_id.blank? }
   end
 

@@ -17,7 +17,7 @@ xml.dmponline do
         ti.phase_edition_instances.each do |pei|
           xml.template_instance("instance_key" => pei.id, "edition_key" => pei.edition_id) do
             qs = pei.report_questions
-            number_questions(qs)
+            number_questions(qs, pei.edition.start_numbering)
             unless params[:question_key].blank?
               apply_selection(qs, [params[:question_key].to_i])
             end

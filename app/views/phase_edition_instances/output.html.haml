@@ -69,7 +69,7 @@
                 %td= t('dmp.include_dcc_questions')
   
     - unless @eqs.blank?
-      - number_questions(@eqs)
+      - number_questions(@eqs, @output_all ? 1 : @phase_edition_instance.edition.start_numbering)
       %fieldset#output_order.panel.collapsible
         %legend
           %span= t('dmp.reorder_questions')

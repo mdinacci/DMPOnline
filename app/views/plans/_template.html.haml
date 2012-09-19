@@ -8,8 +8,8 @@
         = sanitize ti.template.description
         - unless ti.template.url.blank?
           .website= link_to t('dmp.further_details'), ti.template.url
-    
-  - qs = number_questions(ti.current_edition.sorted_sections)
+
+  - qs = number_questions(ti.current_edition.sorted_sections, ti.current_edition.start_numbering)
   - section_id = params[:sid].to_i
   - section_id = qs.first.id unless qs.collect{ |q| q.id }.include?(section_id)
   .sections

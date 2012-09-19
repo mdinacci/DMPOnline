@@ -1,44 +1,59 @@
 module QuestionsHelper
 
-  def number_part(number = -1, style = '')
-    return '' if number < 1
+  def number_part(number, style = '')
+    neg = (number < 0) ? -1 : 1
+    number *= neg
     
-    case style.to_sym
+    output = case style.to_sym
     when :I
-      number.to_s_roman.upcase
+      number == 0 ? 'N' : number.to_s_roman.upcase
     when :i
-      number.to_s_roman.downcase
+      number == 0 ? 'n' : number.to_s_roman.downcase
     when :A
-      return 'A' if number == 1
-      number -= 1
-      c = []
-      while number > 0
-        d = number.divmod(26)
-        c << (65 + d[1])
-        number = d[0]
+      case number
+      when 0
+        '_'
+      when 1
+        'A'
+      else
+        number -= 1
+        c = []
+        while number > 0
+          d = number.divmod(26)
+          c << (65 + d[1])
+          number = d[0]
+        end
+        c.pack('c*')
       end
-      c.pack('c*')
     when :a
-      return 'a' if number == 1
-      number -= 1
-      c = []
-      while number > 0
-        d = number.divmod(26)
-        c << (97 + d[1])
-        number = d[0]
+      case number
+      when 0
+        '_'
+      when 1
+        'a'
+      else
+        number -= 1
+        c = []
+        while number > 0
+          d = number.divmod(26)
+          c << (97 + d[1])
+          number = d[0]
+        end
+        c.pack('c*')
       end
-      c.pack('c*')
     when :X
-      ''
+      nil
     else
       number
     end
+    
+    return (neg < 0) ? "-#{output}" : output
   end
   
-  def number_questions(questions)
+  def number_questions(questions, start_numbering)
     previous = [0]
     level = 0
-    numbering = []
+    numbering = [start_numbering - 1]
     display = []
     questions.each do |q|
       level = previous.index(q.parent_id.to_i)
@@ -51,11 +66,11 @@ module QuestionsHelper
       
       numbering[level] ||= 0
       numbering[level] += 1
-      display[level] = number_part(numbering[level], q.number_style) || ''
-      numbering[level] -= 1 if display[level] == ''
+      display[level] = number_part(numbering[level], q.number_style)
+      numbering[level] -= 1 if display[level].nil?
       number_display = ''
       level.times do |i|
-        if display[i] == ''
+        if display[i].blank?
           number_display = ''
         else
           number_display += "#{display[i]}."
@@ -105,7 +120,7 @@ module QuestionsHelper
     if dcc.blank?
       []
     else
-      number_questions(dcc.sorted_questions)
+      number_questions(dcc.sorted_questions, dcc.start_numbering)
     end
   end
   
@@ -133,12 +148,12 @@ module QuestionsHelper
   
   def dependency_question_options(question)
     qs = Question.questions_in_edition(question)
-    display_numbered_questions(number_questions(qs), [question.id])
+    display_numbered_questions(number_questions(qs, question.edition.start_numbering), [question.id])
   end
   def dependency_dcc_question_options(question)
     q = Question.new(:edition_id => question.edition.dcc_edition_id.to_i)
     qs = Question.questions_in_edition(q)
-    display_numbered_questions(number_questions(qs), [question.id])
+    display_numbered_questions(number_questions(qs, question.edition.start_numbering), [question.id])
   end
 
   def display_numbered_questions(c, omit = [])

@@ -9,7 +9,7 @@ class Edition < ActiveRecord::Base
   has_many :template_instances, :through => :phase_edition_instances
   has_many :answers, :through => :phase_edition_instances
 
-  attr_accessible :edition, :dcc_edition_id
+  attr_accessible :edition, :dcc_edition_id, :start_numbering
 
   STATUS = %w[unpublished published active old]
   

@@ -6,7 +6,7 @@ xml.dmponline do
 
   xml.template_instance("instance_key" => @phase_edition_instance.id, "edition_key" => @phase_edition_instance.edition_id) do
     qs = @phase_edition_instance.report_questions
-    number_questions(qs)
+    number_questions(qs, @phase_edition_instance.edition.start_numbering)
     unless params[:question_key].blank?
       apply_selection(qs, [params[:question_key].to_i])
     end

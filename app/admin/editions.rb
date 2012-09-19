@@ -78,10 +78,11 @@ ActiveAdmin.register Edition do
       row :status do
         status_tag(edition.state.to_s)
       end
+      row :start_numbering
     end
 
     q_set = edition.questions.nested_set.all
-    number_questions(q_set)
+    number_questions(q_set, edition.start_numbering)
     dcc_numbers = dcc_numbering(edition)
 
     div t('dmp.admin.add_edition_questions')

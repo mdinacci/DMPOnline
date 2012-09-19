@@ -15,9 +15,13 @@
 
       = f.input :dcc_edition, as: :select, collection: dcc_checklist_editions, required: true, hint: hint.html_safe, input_html: {disabled: @edition.checklist_locked?}
 
-  = sortable_tree @edition.questions.nested_set.all, klass: "question", rebuild_url: rebuild_admin_questions_path, path: 'admin/questions/sortable/base', :max_levels => 3, :admin => current_user.is_dccadmin?
-
+    = f.input :start_numbering, required: true
 
   = f.buttons do
     %li.button= link_to t('dmp.go_back'), admin_edition_path(@edition), class: 'cancel_link'
     = f.commit_button
+
+  = sortable_tree @edition.questions.nested_set.all, klass: "question", rebuild_url: rebuild_admin_questions_path, path: 'admin/questions/sortable/base', :max_levels => 3, :admin => current_user.is_dccadmin?
+
+  = f.buttons do
+    %li.button= link_to t('dmp.go_back'), admin_edition_path(@edition), class: 'cancel_link'

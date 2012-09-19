@@ -8,19 +8,21 @@ module PhaseEditionInstancesHelper
     export_section[:template_clauses] = []
     export_section[:q_id] = 0
     export_question = {}
-      
+
+    if pei.is_a?(Plan)
+      dcc_q_numbering = dcc_numbering(pei.template_instances.first.current_edition)
+      start_numbering = 1 
+    else
+      dcc_q_numbering = dcc_numbering(pei.edition)
+      start_numbering = pei.edition.start_numbering
+    end
+    
     qs = pei.report_questions
     if selection.empty?
       selection = exclude_conditionals(qs, pei)
     end
     apply_selection(qs, selection)
-    number_questions(qs)
-    if pei.is_a?(Plan)
-      dcc_q_numbering = dcc_numbering(pei.template_instances.first.current_edition) 
-    else
-      dcc_q_numbering = dcc_numbering(pei.edition)
-    end
-    
+    number_questions(qs, start_numbering)
     export_section = {}
     export_section[:number] = ''
     export_section[:heading] = ''

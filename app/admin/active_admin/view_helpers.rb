@@ -225,18 +225,21 @@ module ActiveAdmin::ViewHelpers
   protected
   
   def cumulative_by_month(start, hash)
-    tally_date = Date.new(start.year, start.month, 1)
-    range_end = Date.today
-    total = 0
     data = []
     
-    loop do
-      total += hash["#{tally_date.month}#{tally_date.year}"].to_i
+    if start.present?
+      tally_date = Date.new(start.year, start.month, 1)
+      range_end = Date.today
+      total = 0
       
-      tally_date += 1.month
-      data << [Date.civil(tally_date.year, tally_date.month, 1).to_time.to_i * 1000 + 12 * 3600 * 1000, total]
-      
-      break if tally_date + 1.month > range_end
+      loop do
+        total += hash["#{tally_date.month}#{tally_date.year}"].to_i
+        
+        tally_date += 1.month
+        data << [Date.civil(tally_date.year, tally_date.month, 1).to_time.to_i * 1000 + 12 * 3600 * 1000, total]
+        
+        break if tally_date + 1.month > range_end
+      end
     end
     
     data

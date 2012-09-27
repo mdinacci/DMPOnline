@@ -195,7 +195,7 @@ ActiveAdmin::Dashboards.build do
       column I18n.t('dmp.admin.stats.type') do |v| "#{v.event.titlecase} #{v.item_type.underscore.humanize}" end
       column I18n.t('dmp.admin.stats.item') do |v| object_detail(v.item) end
       column I18n.t('dmp.admin.stats.modified_at') do |v| v.created_at.to_s :medium end
-      column I18n.t('dmp.admin.stats.user') do |v| User.find(v.whodunnit).email end
+      column I18n.t('dmp.admin.stats.user') do |v| User.where(id: v.whodunnit).first.try(:email) end
     end
   end
 

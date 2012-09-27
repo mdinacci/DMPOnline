@@ -2,29 +2,29 @@
 
 include Rails.application.routes.url_helpers
 
-OrganisationType.create(:title => 'Funding Bodies')
-institution = OrganisationType.create(:title => 'Institutions')
-OrganisationType.create(:title => 'Disciplines')
+OrganisationType.create!(:title => 'Funding Bodies')
+institution = OrganisationType.create!(:title => 'Institutions')
+OrganisationType.create!(:title => 'Disciplines')
  
-dcc = Organisation.create(
+dcc = Organisation.create!(
   :full_name => "Digital Curation Centre",
   :short_name => "DCC",
   :domain => "dcc.ac.uk",
+  :organisation_type_id => institution.id,
   :url => "www.dcc.ac.uk",
   :default_locale => 'en'
 )
-
-org = Organisation.create(
+org = Organisation.create!(
   :full_name => "The University of Edinburgh",
   :short_name => "UoE",
   :domain => "ed.ac.uk",
   :url => "www.ed.ac.uk",
-  :organisation_type => institution,
+  :organisation_type_id => institution.id,
   :default_locale => 'en'
 )
 
 #
-# t = Template.create(
+# t = Template.create!(
 #   :organisation_id => dcc.id,
 #   :name => "DCC Checklist",
 #   :phases_attributes => [{:phase => "Checklist", :position => 1 }]
@@ -41,13 +41,14 @@ sql.split("\n").each do |line|
   conn.execute line
 end
 
-Page.create([
+Page.create!([
   {
-    :title => "Welcome to the DMPOnline",
+    :title => "Welcome to DMP Online",
     :body => "This is the default homepage",
     :slug => "home",
     :position => 0,
     :menu => Page::MENU.index('none'),
+    :page_type => 'landing',
     :organisation_id => dcc.id
   },
   {
@@ -56,6 +57,7 @@ Page.create([
     :slug => "terms",
     :position => 1,
     :menu => Page::MENU.index('help'),
+    :page_type => 'landing',
     :organisation_id => dcc.id
   },
   {
@@ -64,6 +66,7 @@ Page.create([
     :slug => "help",
     :position => 2,
     :menu => Page::MENU.index('help'),
+    :page_type => 'landing',
     :organisation_id => dcc.id
   },
   {
@@ -71,6 +74,7 @@ Page.create([
     :menu => Page::MENU.index('navigation'),
     :position => -10,
     :target_url => root_path,
+    :page_type => 'menu',
     :organisation_id => dcc.id
   },
   {
@@ -78,6 +82,7 @@ Page.create([
     :menu => Page::MENU.index('navigation'),
     :position => 10,
     :target_url => plans_path,
+    :page_type => 'menu',
     :organisation_id => dcc.id
   },
   {
@@ -85,11 +90,12 @@ Page.create([
     :menu => Page::MENU.index('navigation'),
     :position => 10,
     :target_url => shared_plans_path,
+    :page_type => 'menu',
     :organisation_id => dcc.id
   }
 ])
 
-Currency.create([
+Currency.create!([
   {
     :name => "Pound Sterling",
     :symbol => "£",

@@ -5,29 +5,30 @@
   - else
     - data << d
 
-- @chart_id = (@chart_id || 0) + 1
-- x_interval = nil if data[0][:data].length > 8
-
-- chart = Highcharts.new
-- chart.chart({renderTo: "graph_#{@chart_id}", type: chart_type, zoomType: zoom_type})
-- chart.title(report_title)
-- chart.xAxis([{title: x_axis_title, type: x_type, tickInterval: x_interval, categories: categories}])
-- chart.yAxis([{title: y_axis_title, type: y_type, min: 0}])
-- chart.series(data)
-- legend = {enabled: (series.count > 1)}
-- if legend_side
-  - legend[:align] = 'right'
-  - legend[:verticalAlign] = 'top'
-  - legend[:layout] = 'vertical'
-- chart.legend(legend)
-
-= chart
-%div{id: "graph_#{@chart_id}"}
-%ul.instruction
-  %li= I18n.t("dmp.admin.stats.zoom_instructions")
-  - if chart_type == 'line'
-    %li= I18n.t("dmp.admin.stats.hover_line_instructions")
-  - else
-    %li= I18n.t("dmp.admin.stats.hover_column_instructions")
-  - if legend[:enabled]
-    %li= I18n.t("dmp.admin.stats.legend_instructions")
+- if data.present? && data[0][:data].present?
+  - @chart_id = (@chart_id || 0) + 1
+  - x_interval = nil if data[0][:data].length > 8
+  
+  - chart = Highcharts.new
+  - chart.chart({renderTo: "graph_#{@chart_id}", type: chart_type, zoomType: zoom_type})
+  - chart.title(report_title)
+  - chart.xAxis([{title: x_axis_title, type: x_type, tickInterval: x_interval, categories: categories}])
+  - chart.yAxis([{title: y_axis_title, type: y_type, min: 0}])
+  - chart.series(data)
+  - legend = {enabled: (series.count > 1)}
+  - if legend_side
+    - legend[:align] = 'right'
+    - legend[:verticalAlign] = 'top'
+    - legend[:layout] = 'vertical'
+  - chart.legend(legend)
+  
+  = chart
+  %div{id: "graph_#{@chart_id}"}
+  %ul.instruction
+    %li= I18n.t("dmp.admin.stats.zoom_instructions")
+    - if chart_type == 'line'
+      %li= I18n.t("dmp.admin.stats.hover_line_instructions")
+    - else
+      %li= I18n.t("dmp.admin.stats.hover_column_instructions")
+    - if legend[:enabled]
+      %li= I18n.t("dmp.admin.stats.legend_instructions")

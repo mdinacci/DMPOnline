@@ -1,6 +1,6 @@
 = DMPOnline
 
-DMPOnline is the DCC's data management planning tool, available at ((<https://dmponline.dcc.ac.uk>))
+DMPOnline is the DCC's data management planning tool, available at https://dmponline.dcc.ac.uk
 
 Development of the DMPOnline by the Digital Curation Centre has been funded by JISC.  JISC inspires UK colleges and universities in the innovative use of digital technologies, helping to maintain the UK's position as a global leader in education. www.jisc.ac.uk
 
@@ -13,22 +13,22 @@ The tool has three main functions
 
 == Documentation & Support
 
-* Please read the documentation on the wiki at ((<https://github.com/DigitalCurationCentre/DMPOnline/wiki>)) 
+* Please read the documentation on the wiki at https://github.com/DigitalCurationCentre/DMPOnline/wiki
 * You can contact us by email, dmponline@dcc.ac.uk, but we can only provide limited support for your installation
 
 == Bugs & Feature Requests
 
-* Bug Reports & Feature Requests: ((<https://github.com/DigitalCurationCentre/DMPOnline/issues>))
+* Bug Reports & Feature Requests: https://github.com/DigitalCurationCentre/DMPOnline/issues
 
 == Prerequisites
 
 DMPOnline is a Ruby on Rails application and you'll need to have Ruby 1.9.2 or greater installed on your server and a MySQL server v5.0 or greater.
 
-Further details on how to install Ruby on Rails applications are available from the ((<Ruby on Rails site|URL:http://rubyonrails.org>)).  
+Further details on how to install Ruby on Rails applications are available from the Ruby on Rails site, http://rubyonrails.org  
 
-While not a prerequisite, we are running this using ((<Phusion Passenger 3|URL:http://www.modrails.com/>)) with an Apache webserver on Red Hat Enterprise Linux v5.
+While not a prerequisite, we are running this using Phusion Passenger 3 (http://www.modrails.com) with an Apache webserver on Red Hat Enterprise Linux v5.
 
-For the PDF conversion we use the shell utility ((<wkhtmltopdf|URL:http://code.google.com/p/wkhtmltopdf/>)) which will need to be installed on your server.  
+For the PDF conversion we use the shell utility wkhtmltopdf (http://code.google.com/p/wkhtmltopdf) which will need to be installed on your server.  
 
 == Getting Started
 

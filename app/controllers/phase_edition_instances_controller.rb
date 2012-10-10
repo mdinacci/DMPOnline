@@ -14,15 +14,19 @@ class PhaseEditionInstancesController < ApplicationController
   # PUT /plans/1/layer/1
   # Checking to see whether submission of plan answers or update of the pei table
   def update
-    success = @phase_edition_instance.update_attributes(params[:phase_edition_instance])
-    if params[:phase_edition_instance][:answers_attributes].blank?
-      if success
-        redirect_to plan_path(@plan), notice: I18n.t('dmp.details_updated')
+    if params[:phase_edition_instance].present?
+      success = @phase_edition_instance.update_attributes(params[:phase_edition_instance])
+      if params[:phase_edition_instance][:answers_attributes].blank?
+        if success
+          redirect_to plan_path(@plan), notice: I18n.t('dmp.details_updated')
+        else
+          render :edit
+        end
       else
-        render :edit
+        redirect_to complete_plan_path(@plan, tid: params[:tid].to_i, sid: params[:sid].to_i)
       end
     else
-      redirect_to complete_plan_path(@plan, tid: params[:tid].to_i, sid: params[:sid].to_i)
+      redirect_to plan_path(@plan), error: I18n.t('dmp.update_failed')
     end
   end
 

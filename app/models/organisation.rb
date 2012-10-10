@@ -14,7 +14,7 @@ class Organisation < ActiveRecord::Base
   has_attached_file :media_logo, :styles => {docx: ['320x92#', :png], template: '256x72>'}
   has_attached_file :stylesheet
   
-  validates_format_of :domain, :with => /\A[a-z\.]{6,}\Z/
+  validates_format_of :domain, :with => /\A([a-z\.]{2,}\.[a-z]{2,})?\Z/
   validates_presence_of :short_name, :full_name, :organisation_type
   validates_inclusion_of :branded, :in => [true, false]
   

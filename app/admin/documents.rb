@@ -23,6 +23,38 @@ ActiveAdmin.register Document do
       end
       show!
     end
+
+    def create
+      @document = Document.new
+      @document.assign_attributes(params[:document])
+      
+      if eligible_organisation(@document)
+        create!
+      else
+        edit!
+      end
+    end
+    
+    def update
+      if eligible_organisation(resource)
+        update!
+      else
+        @document.assign_attributes(params[:document])
+        edit!
+      end
+    end
+
+    private
+    
+    def eligible_organisation(document)
+      ok = true
+      
+      if !current_user.org_list.collect(&:id).include?(params[:document][:organisation_id].to_i)
+        ok = false
+        document.errors.add(:organisation_id, I18n.t('dmp.admin.bad_selection'))
+      end
+      ok
+    end
   end
 
   sidebar :versions, partial: 'admin/shared/version', :only => :show

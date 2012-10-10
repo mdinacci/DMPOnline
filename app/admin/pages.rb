@@ -24,10 +24,38 @@ ActiveAdmin.register Page do
       show!
     end
 
-    def create 
-      create! do |format|
-         format.html { redirect_to admin_pages_path } 
-      end 
+    def create
+      @page = Page.new
+      @page.assign_attributes(params[:page])
+      
+      if eligible_organisation(@page)
+        create! do |format|
+          format.html { redirect_to admin_pages_path } 
+        end 
+      else
+        edit!
+      end
+    end
+    
+    def update
+      if eligible_organisation(resource)
+        update!
+      else
+        @page.assign_attributes(params[:page])
+        edit!
+      end
+    end
+
+    private
+    
+    def eligible_organisation(page)
+      ok = true
+      
+      if !current_user.org_list.collect(&:id).include?(params[:page][:organisation_id].to_i)
+        ok = false
+        page.errors.add(:organisation_id, I18n.t('dmp.admin.bad_selection'))
+      end
+      ok
     end
   end 
 

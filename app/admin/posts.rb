@@ -17,17 +17,45 @@ ActiveAdmin.register Post do
   controller do 
     authorize_resource
 
-    def create 
-      create! do |format|
-         format.html { redirect_to admin_posts_path } 
-      end 
-    end 
-
     def show
       if params[:version] && params[:version].to_i > 0
         @post = Post.find(params[:id]).versions[params[:version].to_i - 1].try(:reify)
       end
       show!
+    end
+
+    def create
+      @post = Post.new
+      @post.assign_attributes(params[:post])
+      
+      if eligible_organisation(@post)
+        create! do |format|
+          format.html { redirect_to admin_posts_path } 
+        end 
+      else
+        edit!
+      end
+    end
+    
+    def update
+      if eligible_organisation(resource)
+        update!
+      else
+        @post.assign_attributes(params[:post])
+        edit!
+      end
+    end
+
+    private
+    
+    def eligible_organisation(post)
+      ok = true
+      
+      if !current_user.org_list.collect(&:id).include?(params[:post][:organisation_id].to_i)
+        ok = false
+        post.errors.add(:organisation_id, I18n.t('dmp.admin.bad_selection'))
+      end
+      ok
     end
   end
 

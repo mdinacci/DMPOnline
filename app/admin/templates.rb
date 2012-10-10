@@ -6,7 +6,7 @@ ActiveAdmin.register Template do
   filter :organisation
   filter :locale
 
-  controller do 
+  controller do
     authorize_resource
 
     def show
@@ -14,6 +14,38 @@ ActiveAdmin.register Template do
         @template = Template.find(params[:id]).versions[params[:version].to_i - 1].try(:reify)
       end
       show!
+    end
+    
+    def create
+      @template = Template.new
+      @template.assign_attributes(params[:template])
+      
+      if eligible_organisation(@template)
+        create!
+      else
+        edit!
+      end
+    end
+    
+    def update
+      if eligible_organisation(resource)
+        update!
+      else
+        @template.assign_attributes(params[:template])
+        edit!
+      end
+    end
+
+    private
+    
+    def eligible_organisation(template)
+      ok = true
+      
+      if !current_user.org_list.collect(&:id).include?(params[:template][:organisation_id].to_i)
+        ok = false
+        template.errors.add(:organisation_id, I18n.t('dmp.admin.bad_selection'))
+      end
+      ok
     end
   end
   

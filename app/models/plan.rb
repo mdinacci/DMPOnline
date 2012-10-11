@@ -27,8 +27,7 @@ class Plan < ActiveRecord::Base
     # Check all template instances for access rights for provided user
     user ||= User.new
     includes(:template_instance_rights)
-      .where("plans.user_id = ? OR ? LIKE email_mask", user.id, user.email)
-      .where("role_flags > 0")
+      .where("plans.user_id = ? OR (? LIKE email_mask AND role_flags > 0)", user.id, user.email)
   end
 
   def question_counts

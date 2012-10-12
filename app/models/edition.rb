@@ -4,7 +4,7 @@ class Edition < ActiveRecord::Base
   belongs_to :phase
   belongs_to :dcc_edition, :class_name => "Edition", :foreign_key => "dcc_edition_id"
   has_many :phase_edition_instances
-  has_many :questions
+  has_many :questions, :dependent => :restrict
   has_many :mappings, :through => :questions
   has_many :template_instances, :through => :phase_edition_instances
   has_many :answers, :through => :phase_edition_instances
@@ -14,7 +14,12 @@ class Edition < ActiveRecord::Base
   STATUS = %w[unpublished published active old]
   
   validates :edition, :phase_id, :status, :presence => true
-  before_destroy :not_in_use? 
+  after_destroy do
+    if self.phase.editions.empty?
+      self.phase.delete
+    end
+  end
+  
 
 
   # NB done as class method instead of using scope since Arel will break db migrations for co-developers/third party installs
@@ -117,12 +122,26 @@ class Edition < ActiveRecord::Base
     .all
   end
   
+  def destroy
+    if not_in_use?
+      super
+    else
+      false
+    end
+  end
+  
+  
   private
  
   def not_in_use?
-    if self.state != :unpublished && self.state != :old
+    if phase_edition_instances.present?
+      errors.add :base, I18n.t('dmp.admin.edition_in_use')
+    elsif questions.present?
+      errors.add :base, I18n.t('dmp.admin.edition_built')
+    elsif self.state != :unpublished && self.state != :old
       errors.add :base, I18n.t('dmp.admin.not_unpublished') 
     end
+    
     errors.blank?
   end
 

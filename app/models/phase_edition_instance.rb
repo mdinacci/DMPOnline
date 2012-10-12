@@ -1,7 +1,7 @@
 class PhaseEditionInstance < ActiveRecord::Base
   belongs_to :template_instance
   belongs_to :edition
-  has_many :answers
+  has_many :answers, :dependent => :delete_all
   has_many :questions, :through => :answers
   has_many :template_instance_rights, :through => :template_instance
 

@@ -3,7 +3,7 @@ class Plan < ActiveRecord::Base
   belongs_to :user
   # Lead organisation currently just plain text field
   # belongs_to :organisation
-  has_many :template_instances
+  has_many :template_instances, :dependent => :destroy
   has_many :template_instance_rights, :through => :template_instances
   has_many :templates, :through => :template_instances
   has_many :phase_edition_instances, :through => :template_instances

@@ -2,10 +2,10 @@ class TemplateInstance < ActiveRecord::Base
   belongs_to :template
   belongs_to :plan
   belongs_to :current_edition, :class_name => "Edition", :foreign_key => "current_edition_id"
-  has_many :phase_edition_instances
+  has_many :phase_edition_instances, :dependent => :destroy
   has_many :answers, :through => :phase_edition_instances, :conditions => "template_instances.current_edition_id = phase_edition_instances.edition_id"
   has_many :questions, :through => :answers
-  has_many :template_instance_rights
+  has_many :template_instance_rights, :dependent => :delete_all
   has_many :editions, :through => :phase_edition_instances
   has_many :phases, :through => :editions, :order => 'position ASC, id ASC'
   

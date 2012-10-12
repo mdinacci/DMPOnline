@@ -35,6 +35,20 @@ ActiveAdmin.register Template do
         edit!
       end
     end
+    
+    def destroy
+      @template = Template.find(params[:id])
+      @template.destroy
+      respond_to do |format| 
+        if @template.errors[:base].present?
+          flash.now[:error] = @template.errors[:base].to_sentence
+          format.html { render action: 'show' }
+        else
+          flash[:notice] = I18n.t('dmp.admin.model_destroyed', model: I18n.t('activerecord.models.template.one'))
+          format.html { redirect_to admin_templates_url }
+        end
+      end
+    end
 
     private
     
@@ -60,6 +74,9 @@ ActiveAdmin.register Template do
   end
   action_item :only => :history do
     link_to I18n.t('active_admin.details', model: I18n.t('activerecord.models.template.one')), admin_template_path(template)
+  end
+  action_item :only => :edit do
+    link_to I18n.t('active_admin.delete_model', model: I18n.t('activerecord.models.template.one')), admin_template_path(template), :method => :delete, :confirm => I18n.t('dmp.admin.delete_confirm')
   end
 
   index :as => :block do |template|

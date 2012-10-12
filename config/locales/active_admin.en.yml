@@ -14,6 +14,7 @@ en:
     edit_model: "Edit %{model}"
     update_model: "Edit %{model}"
     delete_model: "Delete %{model}"
+    destroy_model: "Delete %{model}"
     details: "%{model} Details"
     cancel: "Cancel"
     empty: "Empty"

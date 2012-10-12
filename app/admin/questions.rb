@@ -19,6 +19,9 @@ ActiveAdmin.register Question do
   action_item :only => :history do
     link_to I18n.t('active_admin.details', model: I18n.t('activerecord.models.question.one')), admin_question_path(question)
   end
+  action_item :only => :edit do
+    link_to I18n.t('active_admin.delete_model', model: I18n.t('activerecord.models.question.one')), admin_question_path(question), :method => :delete, :confirm => I18n.t('dmp.admin.delete_confirm')
+  end
 
   form :title => :question, :partial => "form"
   
@@ -100,8 +103,15 @@ ActiveAdmin.register Question do
       @question = Question.find(params[:id])
       @edition = @question.edition_id
       @question.destroy
-      
-      redirect_to edit_admin_edition_path(@edition)      
+
+      respond_to do |format| 
+        if @question.errors[:base].present?
+          flash[:error] = @question.errors[:base].to_sentence
+        else
+          flash[:notice] = I18n.t('dmp.admin.model_destroyed', model: I18n.t('activerecord.models.question.one'))
+        end
+        format.html { redirect_to edit_admin_edition_path(@edition) }
+      end
     end
         
   end

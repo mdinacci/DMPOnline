@@ -8,8 +8,8 @@ class Question < ActiveRecord::Base
   belongs_to :edition
 #  has_many :dependents, :class_name => "Question"
   belongs_to :dependency, :class_name => "Question", :foreign_key => "dependency_question_id"
-  has_many :mappings, :order => 'position ASC'
-  has_many :answers
+  has_many :mappings, :order => 'position ASC', :dependent => :destroy
+  has_many :answers, :dependent => :restrict
   has_many :dcc_questions, :class_name => "Question", :through => :mappings, :foreign_key => "dcc_question_id"
   has_one :guide, :as => :guidance, :dependent => :delete
   has_many :boilerplate_texts, :as => :boilerplate, :dependent => :delete_all
@@ -92,6 +92,14 @@ class Question < ActiveRecord::Base
     .all
   end
 
+  def destroy
+    if not_in_use?
+      super
+    else
+      false
+    end
+  end
+  
   private
   
   def remove_blank_entries
@@ -128,5 +136,14 @@ class Question < ActiveRecord::Base
     end
   end
 
-
+  def not_in_use?
+    if answers.present?
+      errors.add :base, I18n.t('dmp.admin.question_in_use')
+    elsif descendants.present?
+      errors.add :base, I18n.t('dmp.admin.question_nested')
+    end
+    
+    errors.blank?
+  end
+  
 end

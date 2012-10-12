@@ -2,11 +2,12 @@ class Phase < ActiveRecord::Base
   has_paper_trail
   
   belongs_to :template
-  has_many :editions, :dependent => :delete_all
+  has_many :editions, :dependent => :destroy
+  has_many :questions, :through => :editions, :dependent => :restrict
 
   attr_accessible :phase, :position
   validates :phase, :presence => true
-  
+
   acts_as_list :scope => :template_id
   default_scope order(:position)
   
@@ -16,10 +17,28 @@ class Phase < ActiveRecord::Base
   end
   
   attr_accessor :delete_phase
-  after_commit do |phase|
+  before_save do |phase|
     if phase.delete_phase
-      phase.delete!
+      phase.destroy
     end
   end
-
+  
+  def destroy
+    if not_in_use?
+      super
+    else
+      false
+    end
+  end
+  
+  protected
+  
+  def not_in_use?
+    if questions.present?
+      errors.add :base, I18n.t('dmp.admin.phase_in_use')
+    end
+    
+    errors.blank?
+  end
+  
 end

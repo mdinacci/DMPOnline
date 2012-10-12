@@ -4,24 +4,27 @@ ActiveAdmin.register Edition do
   config.clear_action_items!
   scope_to :current_user
   
+  action_item :only => [:show, :edit, :destroy] do
+    link_to I18n.t('activerecord.models.template.one'), admin_template_path(edition.phase.template)
+  end 
+  
   action_item :only => :show do
-    link_to(I18n.t('dmp.admin.edit_edition_sort_questions'), edit_admin_edition_path(edition))
+    link_to I18n.t('dmp.admin.edit_edition_sort_questions'), edit_admin_edition_path(edition)
   end
 
   action_item :only => :edit do
-    link_to(I18n.t('dmp.admin.edition_detail'), admin_edition_path(edition))
+    link_to I18n.t('dmp.admin.edition_detail'), admin_edition_path(edition)
   end
   
-  action_item :only => :show do
+  action_item :only => [:show, :destroy] do
     case edition.state
     when :unpublished
-      link_to(I18n.t('dmp.admin.publish'), publish_admin_edition_path(edition))
+      link_to I18n.t('dmp.admin.publish'), publish_admin_edition_path(edition)
     when :published
-      link_to(I18n.t('dmp.admin.unpublish'), unpublish_admin_edition_path(edition))
+      link_to I18n.t('dmp.admin.unpublish'), unpublish_admin_edition_path(edition)
     end
   end
 
-  
   controller do
     authorize_resource
 
@@ -40,6 +43,21 @@ ActiveAdmin.register Edition do
       end
       show!
     end
+    
+    def destroy
+      @edition = Edition.find(params[:id])
+      @edition.destroy
+      respond_to do |format| 
+        if @edition.errors[:base].present?
+          flash.now[:error] = @edition.errors[:base].to_sentence
+          format.html { render action: 'edit' }
+        else
+          flash[:notice] = I18n.t('dmp.admin.model_destroyed', model: I18n.t('activerecord.models.edition.one'))
+          format.html { redirect_to admin_template_url(@edition.phase.template) }
+        end
+      end
+    end
+
   end
 
   sidebar :versions, partial: 'admin/shared/version', :only => :show
@@ -61,9 +79,9 @@ ActiveAdmin.register Edition do
     # We don't want anyone to reach this...
     controller.redirect_to admin_templates_path
   end
-  
-  show :title => proc { "#{edition.phase.template.organisation.full_name}" } do |edition|
-    h2 "#{edition.phase.template.name} - #{edition.phase.phase}" 
+
+  show :title => proc { "#{edition.phase.template.organisation.short_name} #{edition.phase.template.name}" } do |edition|
+    h2 "#{edition.phase.phase}" 
     attributes_table do 
       row :edition
       row :dcc_edition do

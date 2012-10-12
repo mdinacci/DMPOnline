@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   has_many :posts
-  has_many :plans
-  has_many :roles
+  has_many :plans, :dependent => :destroy
+  has_many :roles, :dependent => :destroy
   belongs_to :organisation
   
   # Include default devise modules. Others available are:

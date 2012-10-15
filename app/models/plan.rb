@@ -52,8 +52,7 @@ class Plan < ActiveRecord::Base
     self.template_instance_rights.each do |tir|
       rights.merge!(tir.display_email_mask => [TemplateInstance::ROLES[tir.role_flags.to_i]]) do |key, oldval, newval| 
         combo = oldval || []
-        combo << newval
-        combo.uniq
+        combo |= newval
       end
       refs.merge!(tir.display_email_mask => {id: tir.id, rights: rights[tir.display_email_mask]})
     end

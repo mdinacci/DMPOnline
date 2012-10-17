@@ -63,7 +63,7 @@ module ActiveAdmin::ViewHelpers
   
       when :role
         t = "dmp.admin.roles.#{item.assigned.first.to_s}"
-        link_to "#{item.user.email}: #{I18n.t(t)}", admin_role_path(item)
+        link_to "#{item.user.try(:email)}: #{I18n.t(t)}", admin_role_path(item)
       
       else
         I18n.t('dmp.admin.unknown_object')

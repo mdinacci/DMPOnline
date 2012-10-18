@@ -39,15 +39,19 @@ ActiveAdmin::Dashboards.build do
       dt "#{I18n.t("dmp.admin.stats.current_checklist")}: "
 
       c = Template.dcc_checklist
-      v = c.editions.where(:status => Edition::STATUS.index('published')).first
-    
-      dd do
-        span "#{c.name} (#{c.organisation.full_name})"
-        if v.nil?
-          span I18n.t('dmp.admin.none'), class: "empty"
-        else
-          span link_to v.edition, admin_edition_path(v)
+      if c.present?
+        v = c.editions.where(:status => Edition::STATUS.index('published')).first
+      
+        dd do
+          span "#{c.name} (#{c.organisation.full_name})"
+          if v.nil?
+            span I18n.t('dmp.admin.none'), class: "empty"
+          else
+            span link_to v.edition, admin_edition_path(v)
+          end
         end
+      else
+        dd I18n.t('active_admin.empty'), class: "warning_message"
       end
     end
 

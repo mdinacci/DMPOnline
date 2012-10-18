@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
   end
     
   def dcc_organisation
-    @dcc_organisation ||= Organisation.dcc.first 
+    @dcc_organisation ||= derive_checklist_organisation 
   end
     
   def supported_locales
@@ -106,7 +106,7 @@ class ApplicationController < ActionController::Base
       org = Organisation.find_by_domain(domain)
     end
     
-    if org.blank? || org.id = dcc_organisation.try(:id)
+    if org.blank? || org.id == dcc_organisation.try(:id)
       org = Organisation.find_by_domain(user_domain)
     end
     
@@ -117,4 +117,7 @@ class ApplicationController < ActionController::Base
     end      
   end
   
+  def derive_checklist_organisation
+    OrganisationType.for_checklist.try(:organisations).try(:first) || Organisation.dcc.first
+  end
 end

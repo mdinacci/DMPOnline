@@ -4,13 +4,13 @@
     = f.input :full_name
     = f.input :url
     = f.input :organisation_type
+    = f.input :dcc_edition, as: :select, collection: dcc_checklist_editions
     = f.input :logo
     = f.input :branded, :as => :select
 
   #branding_collapsible
     = f.inputs I18n.t('dmp.admin.branding_options') do
       = f.input :domain
-      = f.input :dcc_edition, as: :select, collection: dcc_checklist_editions
       = f.input :stylesheet
       = f.input :banner
       = f.input :media_logo

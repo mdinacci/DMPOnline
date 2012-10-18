@@ -7,10 +7,10 @@
   = f.inputs I18n.t('dmp.admin.details') do
     = f.input :edition
 
-    - unless @edition.phase.template.checklist
+    - unless @edition.phase.template.checklist || dcc_checklist_editions.blank?
       - org_checklist = edition.phase.template.organisation.dcc_edition_id || dcc_organisation.dcc_edition_id
       - hint = @edition.checklist_locked? ? I18n.t('dmp.admin.mappings_active') : ''
-      - if @edition.dcc_edition_id != org_checklist && @edition.dcc_edition.state != :published
+      - if @edition.dcc_edition_id != org_checklist && @edition.dcc_edition.try(:state) != :published
         - hint += content_tag(:span, I18n.t('dmp.admin.warn_checklist_not_published'), class: "warning")
 
       = f.input :dcc_edition, as: :select, collection: dcc_checklist_editions, required: true, hint: hint.html_safe, input_html: {disabled: @edition.checklist_locked?}

@@ -5,12 +5,14 @@ include Rails.application.routes.url_helpers
 OrganisationType.create!(:title => 'Funding Bodies')
 institution = OrganisationType.create!(:title => 'Institutions')
 OrganisationType.create!(:title => 'Disciplines')
+checklist_owner = OrganisationType.create!(:title => 'Checklist Owner', :description => "Special organisation type used to define the default organisation")
+checklist_owner.make_checklist_owner
  
 dcc = Organisation.create!(
   :full_name => "Digital Curation Centre",
   :short_name => "DCC",
   :domain => "dcc.ac.uk",
-  :organisation_type_id => institution.id,
+  :organisation_type_id => checklist_owner.id,
   :url => "www.dcc.ac.uk",
   :default_locale => 'en'
 )
@@ -20,6 +22,7 @@ org = Organisation.create!(
   :domain => "ed.ac.uk",
   :url => "www.ed.ac.uk",
   :organisation_type_id => institution.id,
+  :dcc_edition_id => 49,
   :default_locale => 'en'
 )
 

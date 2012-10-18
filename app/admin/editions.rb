@@ -88,7 +88,9 @@ ActiveAdmin.register Edition do
         checklist = edition.dcc_edition.try(:edition) || ''
         warn = ''
         org_checklist = edition.phase.template.organisation.dcc_edition_id || dcc_organisation.dcc_edition_id
-        if edition.dcc_edition_id != org_checklist && edition.dcc_edition.state != :published
+        if edition.phase.template.checklist
+          warn = content_tag(:span, I18n.t('dmp.admin.warn_is_checklist'), class: "warning").html_safe
+        elsif edition.dcc_edition_id != org_checklist && edition.dcc_edition.try(:state) != :published
           warn = content_tag(:span, I18n.t('dmp.admin.warn_checklist_not_published'), class: "warning").html_safe
         end
         sanitize checklist + warn

@@ -69,6 +69,11 @@ ActiveAdmin.register Organisation do
       row :full_name
       row :url
       row :organisation_type
+      row :dcc_edition do
+        if organisation.dcc_edition.present?
+          link_to organisation.dcc_edition.edition, admin_edition_path(organisation.dcc_edition)
+        end
+      end
       row :logo do
         if organisation.logo.file?
           image_tag(organisation.logo.url(:template), :align => :left, :border => 0)

@@ -41,6 +41,24 @@ ActiveAdmin.register OrganisationType do
   action_item :only => :history do
     link_to I18n.t('active_admin.details', model: I18n.t('activerecord.models.organisation_type.one')), admin_currency_path(organisation_type)
   end
+  action_item :only => [:show, :edit] do
+    if !organisation_type.checklist_owner && current_user.is_sysadmin?
+      link_to I18n.t('dmp.admin.make_checklist_owner'), checklist_admin_organisation_type_path(organisation_type), :method => :put
+    end
+  end
+
+  member_action :checklist, :method => :put do
+    organisation_type = OrganisationType.find(params[:id])
+    organisation_type.make_checklist_owner
+    if organisation_type.errors[:base].present?
+      flash[:error] = organisation_type.errors[:base].to_sentence
+      redirect_to :back
+    else
+      flash[:notice] = I18n.t('dmp.admin.checklist_owner_set')
+      redirect_to admin_organisation_type_path(organisation_type)
+    end
+  end
+
 
   form do |f|
     f.inputs do
@@ -56,6 +74,7 @@ ActiveAdmin.register OrganisationType do
     column :title
     column :description
     column :position
+    column :checklist_owner
     default_actions
   end
   

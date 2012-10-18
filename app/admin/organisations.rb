@@ -16,6 +16,20 @@ ActiveAdmin.register Organisation do
       end
       show!
     end
+
+    def destroy
+      @organisation = Organisation.find(params[:id])
+      @organisation.destroy
+      respond_to do |format| 
+        if @organisation.errors[:base].present?
+          flash.now[:error] = @organisation.errors[:base].to_sentence
+          format.html { render action: 'show' }
+        else
+          flash[:notice] = I18n.t('dmp.admin.model_destroyed', model: I18n.t('activerecord.models.organisation.one'))
+          format.html { redirect_to admin_organisations_url }
+        end
+      end
+    end
   end
 
   sidebar :versions, partial: 'admin/shared/version', :only => :show

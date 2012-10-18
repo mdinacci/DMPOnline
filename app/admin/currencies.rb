@@ -10,6 +10,21 @@ ActiveAdmin.register Currency do
       end
       show!
     end
+
+    def destroy
+      @currency = Currency.find(params[:id])
+      @currency.destroy
+      respond_to do |format| 
+        if @currency.errors[:base].present?
+          flash.now[:error] = @currency.errors[:base].to_sentence
+          format.html { render action: 'show' }
+        else
+          flash[:notice] = I18n.t('dmp.admin.model_destroyed', model: I18n.t('activerecord.models.currency.one'))
+          format.html { redirect_to admin_currencies_url }
+        end
+      end
+    end
+    
   end
 
   sidebar :versions, partial: 'admin/shared/version', :only => :show  

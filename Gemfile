@@ -24,7 +24,7 @@ gem 'sass-rails', "3.1.4"
 
 gem 'jquery-rails', "1.0.19"
 gem "rails3-jquery-autocomplete", "1.0.7"
-gem "paperclip", "2.4.5"
+gem "paperclip", "2.8.0"
 gem "formtastic", "2.1.1"
 gem "cocoon", "1.0.22"
 gem "rack-pjax", "0.5.7"

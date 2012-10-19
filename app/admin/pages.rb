@@ -37,15 +37,6 @@ ActiveAdmin.register Page do
       end
     end
     
-    def update
-      if eligible_organisation(resource)
-        update!
-      else
-        @page.assign_attributes(params[:page])
-        edit!
-      end
-    end
-
     private
     
     def eligible_organisation(page)

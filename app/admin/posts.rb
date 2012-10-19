@@ -36,15 +36,6 @@ ActiveAdmin.register Post do
         edit!
       end
     end
-    
-    def update
-      if eligible_organisation(resource)
-        update!
-      else
-        @post.assign_attributes(params[:post])
-        edit!
-      end
-    end
 
     private
     

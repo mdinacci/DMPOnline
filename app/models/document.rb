@@ -15,6 +15,6 @@ class Document < ActiveRecord::Base
     where(:organisation_id => organisation)
   end
 
-  attr_accessible :name, :edition, :description, :visible, :position, :organisation_id, :locale
+  attr_accessible :name, :edition, :description, :visible, :position, :organisation_id, :locale, :attachment, :icon
   attr_readonly :organisation_id
 end

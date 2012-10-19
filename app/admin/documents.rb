@@ -35,15 +35,6 @@ ActiveAdmin.register Document do
       end
     end
     
-    def update
-      if eligible_organisation(resource)
-        update!
-      else
-        @document.assign_attributes(params[:document])
-        edit!
-      end
-    end
-
     private
     
     def eligible_organisation(document)

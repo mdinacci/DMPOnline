@@ -1,4 +1,4 @@
-- if @edition.dcc_edition_id.nil? && !@edition.phase.template.checklist
+- if @edition.dcc_edition_id.nil? && !@edition.phase.template.checklist && dcc_checklist_editions.present?
   %p= t('dmp.admin.select_checklist_first')
 -else
   %fieldset.buttons

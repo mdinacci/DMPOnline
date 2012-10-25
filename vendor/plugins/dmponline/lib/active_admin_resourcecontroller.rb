@@ -9,7 +9,6 @@ class ActiveAdmin::ResourceController < ActiveAdmin::BaseController
   end
   
   def admin_authorize!
-    Rails.logger.debug "ACTION: #{action_name.inspect} #{controller_name.inspect}"
     current_ability.authorize!(action_name, controller_name)
   end
 

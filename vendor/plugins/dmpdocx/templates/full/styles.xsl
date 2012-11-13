@@ -475,6 +475,20 @@
           </w:sz>
         </w:rPr>
       </w:style>
+      <w:style w:type="paragraph" w:styleId="ListParagraph">
+        <w:name w:val="List Paragraph"/>
+        <w:basedOn w:val="Normal"/>
+        <w:uiPriority w:val="34"/>
+        <w:qFormat/>
+        <w:rsid w:val="00514D98"/>
+        <w:pPr>
+          <w:tabs>
+            <w:tab w:val="left" w:pos="320"/>
+          </w:tabs>
+          <w:ind w:left="320" w:hanging="320"/>
+          <w:contextualSpacing/>
+        </w:pPr>
+      </w:style>
     </w:styles>
   </xsl:template>
 </xsl:stylesheet>

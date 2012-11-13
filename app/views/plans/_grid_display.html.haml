@@ -1,0 +1,46 @@
+- qs = number_questions(pei.child_questions(q.id), 1)
+
+%a{name: "grid_#{q.id}"}
+%table.grid_answer
+  %thead
+    - qs.each do |col|
+      %th
+        %span.number
+          = col.number_display
+        %span.text
+          = sanitize col.question
+    %th
+
+  %tbody
+    - i = 0
+    - r = grid_row(q.id)
+    - editing = false
+    - if pei.child_answered(q.id)
+      - responses = grid_responses(qs, pei)
+      - grid_new_row(q.id, responses.length + 1)
+      - responses.each do |row|
+        - i += 1
+        - if i == r
+          - css = 'current'
+          - editing = true
+        - else
+          - css = ''
+
+        %tr{class: css}
+          - row.each do |response|
+            %td= response_html_format(response)
+          %td
+            = hidden_field_tag "row[#{q.id}]", r
+            - unless css == 'current'
+              = link_to t('dmp.grid_edit_row'), complete_plan_path(@plan, sid: sid, tid: ti.template_id, row: grid_row_list(q.id, i), anchor: "grid_#{q.id}"), class: 'edit_link'
+            = link_to t('dmp.grid_delete_row'), drop_row_plan_layer_path(plan_id: pei.template_instance.plan_id, id: pei.id, question_id: q.id, drop_row: r), method: :delete
+
+- if editing 
+  .grid_add_button
+    = link_to t('dmp.grid_add_row'), complete_plan_path(@plan, sid: sid, tid: ti.template_id, row: grid_row_list(q.id, 0), anchor: "grid_#{q.id}"), class: 'edit_link'
+
+.grid_status
+  - if editing
+    = t('dmp.grid_editing_row')
+  - else
+    = t('dmp.grid_adding_row')

@@ -34,10 +34,10 @@ class PhaseEditionInstance < ActiveRecord::Base
                 .where(:answered => true, :dcc_question_id => m.dcc_question_id, :phase_edition_instances => {:template_instances => {:plan_id => pvi.template_instance.plan_id}})
                 .order('updated_at DESC')
                 .first
-          pvi.answers.create!(:question_id => q.id, :dcc_question_id => m.dcc_question_id, :answer => d.try(:answer))        
+          pvi.answers.create!(question_id: q.id, dcc_question_id: m.dcc_question_id, position: m.position, answer: d.try(:answer))
         end
       else
-        pvi.answers.create!(:question_id => q.id) unless q.is_heading?
+        pvi.answers.create!(question_id: q.id) if q.has_answer?
       end
     end
 
@@ -56,6 +56,28 @@ class PhaseEditionInstance < ActiveRecord::Base
       .where(:hidden => false)
       .order('answers.position')
       .all
+  end
+  
+  def child_questions(q_id)
+    self.questions
+      .where(parent_id: q_id)
+      .order('answers.position')
+      .all
+  end
+  
+  def child_answers(q_id)
+    columns = child_questions(q_id).collect(&:id)
+    self.answers
+      .where(question_id: columns)
+      .order('answers.position')
+      .all
+  end
+  
+  def child_answered(q_id)
+    !self.questions
+      .where(parent_id: q_id, 'answers.answered' => true)
+      .all
+      .empty?
   end
   
   def report_questions

@@ -33,24 +33,36 @@ xml.dmp do
   qs = export_questions(@pei, @doc[:selection])
   qs.each do |s|
     xml.section("number" => s[:number]) do
-      xml.heading(strip_tags(s[:heading]))
-      s[:questions] ||= []
-      s[:questions].each do |q|
-        xml.template_clause do
-          xml.question(strip_tags(q[:dmp_clause]), "number" => q[:dmp_clause_number])
-          xml.response(q[:response])
-        end
-      end
+      xml.heading(clean_html(s[:heading]))
       s[:template_clauses] ||= []
-      s[:template_clauses].each do |q| 
-        xml.template_clause do
-          xml.question(strip_tags(q[:question]), "number" => q[:number])
-          q[:answers].each do |a|
-            xml.dcc_clause do
-              dcc_number = @doc[:dcc_question_numbers] ? a[:dmp_number].slice(4..-1) : ''
-              dcc_clause = @doc[:include_dcc_questions] ? strip_tags(a[:dmp_clause]) : ''
-              xml.question(dcc_clause, "number" => dcc_number)
-              xml.response(a[:response])
+      s[:template_clauses].each do |q|
+        if q[:grid] == 0 || q[:is_grid]
+          xml.template_clause do
+            xml.question(clean_html(q[:question]), "number" => q[:number], "is_grid" => q[:is_grid], "is_mapped" => q[:is_mapped])
+            if q[:is_grid]
+              grid = number_questions(@pei.child_questions(q[:grid]), 1)
+              grid.each do |col|
+                xml.question(clean_html(col.question), "number" => col.number_display, "is_grid" => false)
+              end
+              responses = grid_responses(grid, @pei)
+              responses.each do |row|
+                xml.row do
+                  row.each do |response|
+                    xml.column do
+                      response_xml_format(xml, response)
+                    end
+                  end
+                end
+              end
+            else
+              q[:answers].each do |a|
+                xml.dcc_clause do
+                  dcc_number = @doc[:dcc_question_numbers] ? a[:dmp_number].slice(4..-1) : ''
+                  dcc_clause = @doc[:include_dcc_questions] ? clean_html(a[:dmp_clause]) : ''
+                  xml.question(dcc_clause, "number" => dcc_number)
+                  response_xml_format(xml, a[:response])
+                end
+              end
             end
           end
         end

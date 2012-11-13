@@ -26,7 +26,7 @@ class Ability
       can [:read, :ajax_section, :duplicate, :output, :export], Plan, :id => TemplateInstanceRight.matching(user.email).with_role('read').map(&:plan_id)
       can [:read, :update, :complete, :ajax_section, :change_phase, :duplicate, :output, :export], Plan, :id => TemplateInstanceRight.matching(user.email).with_role('write').map(&:plan_id)
       can [:read, :output, :output_all, :export], PhaseEditionInstance, :template_instance_id => TemplateInstanceRight.matching(user.email).with_role('read').map(&:template_instance_id)
-      can [:read, :update, :output, :output_all, :export, :add_answer, :checklist], PhaseEditionInstance, :template_instance_id => TemplateInstanceRight.matching(user.email).with_role('write').map(&:template_instance_id)
+      can [:read, :update, :output, :output_all, :export, :add_answer, :checklist, :drop_row], PhaseEditionInstance, :template_instance_id => TemplateInstanceRight.matching(user.email).with_role('write').map(&:template_instance_id)
 
       can [:rights], Plan, :id => TemplateInstanceRight.matching(user.email).with_role('read').map(&:plan_id)
       can [:rights], Plan, :id => TemplateInstanceRight.matching(user.email).with_role('write').map(&:plan_id)

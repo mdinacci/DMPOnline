@@ -1,6 +1,7 @@
 class @TheSortableTree
-  max_levels  = 3
+  max_levels  = 4
   rebuild_url = '/'
+  rebuild_ok = true
 
   init: ->
     $('ol.sortable').nestedSortable
@@ -17,7 +18,6 @@ class @TheSortableTree
       tolerance: 'pointer'
       toleranceElement: '> div'
 
-    $('ol.sortable').sortable
       update: (event, ui) =>
         parent_id = ui.item.parent().parent().attr('id')
         item_id   = ui.item.attr('id')
@@ -27,9 +27,12 @@ class @TheSortableTree
         @rebuild item_id, parent_id, prev_id, next_id
 
   rebuild: (item_id, parent_id, prev_id, next_id) =>
+    @rebuild_ok = true
+    
     $.ajax
       type:       'POST'
-      dataType:   'script'
+      dataType:   'text'
+      async:      false
       url:        @rebuild_url
       data:
         id:        item_id
@@ -43,5 +46,9 @@ class @TheSortableTree
       success: (data, status, xhr) -> 
         $('.nested_set div.handle').show()
 
-      error: (xhr, status, error) ->
-        alert error
+      error: (xhr, status, error) =>
+        alert xhr.responseText
+        @rebuild_ok = false
+        $('.nested_set div.handle').show()
+    
+    @rebuild_ok

@@ -9,7 +9,7 @@
   }
 }
 
-#header { 
+#header {
   @include gradient($white, $evenrow);
   border-bottom: 1px solid $green;
   position: relative;
@@ -586,7 +586,7 @@ ul.news {
     
     .question {
       padding: 0 20px 0 40px;
-      margin-bottom: 1.5em;
+      margin-bottom: 0.7em;
       font-size: 150%;
       font-weight: bold;
       span.number {
@@ -638,6 +638,9 @@ ul.news {
           }
           input {
             width: 90%;
+          }
+          .check-boxes li {
+            float: none;
           }
         }
         &.guidance-area {
@@ -757,13 +760,20 @@ td.input-area {
       width: 30%;
     }
   }
-  .radio.list ol.choices-group {
-    li {
-      display: block;
-      float: none;
-      padding-top: 0;
-      label {
-        text-align: left;
+  .radio.list, .check_boxes.list {
+    ol.choices-group {
+      width: 99%;
+      li {
+        display: block;
+        float: none;
+        padding-top: 0;
+        width: 99%;
+        label {
+          text-align: left;
+        }
+        input {
+          margin-bottom: 0;
+        }
       }
     }
   }
@@ -1169,4 +1179,58 @@ form .terms {
 }
 table .wide {
   width: 70%;
+}
+
+table.grid_answer {
+  th {
+    background: $evenrow;
+    span.number {
+      color: $grey;
+      padding-right: 2em;
+      display: block;
+      float: left;
+    }
+    span.text {
+      display: inline-block;
+    }
+  }
+  td, th {
+    border: solid 1px $lightgrey;
+    a {
+      line-height: 2.7em;
+    }
+  }
+  tr.current td {
+    background: lighten($green, 50%);
+  } 
+}
+.grid_status {
+  background: lighten($green, 50%);
+  padding: 1em 2em;
+  margin-bottom: 0;
+  font-weight: bold;
+}
+.grid_add_button a {
+  line-height: 3em;
+}
+.accordion .answers .column {
+  border-left: 20px solid lighten($green, 50%);
+  padding-left: 40px;
+  margin-top: 0;
+  margin-bottom: 0;
+  &.answer {
+    table {
+      margin-bottom: 0;
+    }
+    .radio li {
+      padding-top: 0;
+    }
+  }
+  &.question {
+    padding-top: 1em;
+    padding-bottom: 0.5em;
+  }
+}
+form.phase_edition_instance > fieldset.buttons {
+  margin-top: 5em;
 }

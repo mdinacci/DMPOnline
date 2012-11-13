@@ -3,17 +3,9 @@ module PhaseEditionInstancesHelper
   include QuestionsHelper
   
   def export_questions(pei, selection = [])
-    export_dmp = []
-    export_section = {}
-    export_section[:template_clauses] = []
-    export_section[:q_id] = 0
-    export_question = {}
-
     if pei.is_a?(Plan)
-      dcc_q_numbering = dcc_numbering(pei.template_instances.first.current_edition)
       start_numbering = 1 
     else
-      dcc_q_numbering = dcc_numbering(pei.edition)
       start_numbering = pei.edition.start_numbering
     end
     
@@ -23,6 +15,18 @@ module PhaseEditionInstancesHelper
     end
     apply_selection(qs, selection)
     number_questions(qs, start_numbering)
+    export_output(qs, pei)
+  end
+
+  def export_output(qs, pei)
+    if pei.is_a?(Plan)
+      dcc_q_numbering = dcc_numbering(pei.template_instances.first.current_edition)
+    else
+      dcc_q_numbering = dcc_numbering(pei.edition)
+    end
+    
+    mark_table = 0
+    export_dmp = []
     export_section = {}
     export_section[:number] = ''
     export_section[:heading] = ''
@@ -45,11 +49,20 @@ module PhaseEditionInstancesHelper
       export_question[:depth] = q.depth
       export_question[:kind] = q.kind
       export_question[:is_heading] = q.is_heading?
-      export_question[:is_mapped] = q.is_mapped?        
+      export_question[:is_mapped] = q.is_mapped?
+      export_question[:is_grid] = q.is_grid?
+
+      if q.is_grid?
+        export_question[:grid] = mark_table = q.id
+      elsif mark_table == q.parent_id
+        export_question[:grid] = q.parent_id
+      else
+        export_question[:grid] = mark_table = 0
+      end
       export_question[:question] = sanitize q.question.force_encoding('UTF-8')
       export_question[:answers] = []
       
-      if !q.is_mapped? && !q.is_heading?
+      if q.has_answer? || q.is_mapped?
         if pei.is_a?(PhaseEditionInstance)
           q_answers = pei.question_answers(q.id)
         else
@@ -58,86 +71,25 @@ module PhaseEditionInstancesHelper
             q_answers |= p.question_answers(q.id)
           end
         end
-        q_answers.each do |d|
-          export_answer = {}
-          export_answer[:dmp_number] = ''
-          export_answer[:dmp_clause] = t('dmp.no_dcc_equivalent')
-          if q.kind == 'b'
-            if d.answered
-              export_answer[:response] = (d.answer.to_i > 0) ? t('dmp.boolean_yes') : t('dmp.boolean_no')
+
+        if q.has_answer? || q.is_mapped?
+          q_answers.each do |a|
+            opts = {}
+            if a.dcc_question.nil?
+              opts[:dmp_number] = ''
+              opts[:dmp_clause] = t('dmp.no_dcc_equivalent')
+              opts[:kind] = q.kind
+              export_question[:answers] << export_answer(q, a, opts)
             else
-              export_answer[:response] = ''
+              opts[:dmp_number] = "DCC #{dcc_q_numbering[a.dcc_question.id]}"
+              opts[:dmp_clause] = sanitize a.dcc_question.question
+              opts[:kind] = a.dcc_question.kind
+              export_question[:answers] << export_answer(a.dcc_question, a, opts)
             end
-          elsif q.kind == 's' || q.kind == 'r'
-            if d.answered
-              opts = question_options(q.options).invert
-              export_answer[:response] = d.answer.nil? ? '' : (opts[d.answer].try(:dup) || d.answer).force_encoding('UTF-8')
-            else
-              export_answer[:response] = ''
-            end            
-          elsif q.kind == 'l'
-            if d.answered && d.answer.present?
-              opts = question_options(q.options).invert
-              responses = ''
-              d.answer.split('|').each do |s|
-                responses += content_tag(:li, opts[s] || s)
-              end
-              export_answer[:response] = content_tag(:ul, responses, nil, false).force_encoding('UTF-8')
-            else
-              export_answer[:response] = ''
-            end            
-          else
-            export_answer[:response] = d.answer.nil? ? '' : d.answer.force_encoding('UTF-8')
-          end
-          export_question[:answers] << export_answer
-        end
-      elsif q.is_mapped?
-        if pei.is_a?(PhaseEditionInstance)
-          q_answers = pei.question_answers(q.id)
-        else
-          q_answers = []
-          pei.phase_edition_instances.each do |p|
-            q_answers |= p.question_answers(q.id)
-          end
-        end
-        q_answers.each do |d|
-          unless d.dcc_question.nil?
-            export_answer = {}
-            export_answer[:dmp_number] = "DCC #{dcc_q_numbering[d.dcc_question.id]}"
-            export_answer[:dmp_clause] = sanitize d.dcc_question.question
-            export_answer[:kind] = d.dcc_question.kind
-            if d.dcc_question.kind == 'b'
-              if d.answered
-                export_answer[:response] = (d.answer.to_i > 0) ? t('dmp.boolean_yes') : t('dmp.boolean_no')
-              else
-                export_answer[:response] = ''
-              end
-            elsif d.dcc_question.kind == 's' || d.dcc_question.kind == 'r'
-              if d.answered
-                opts = question_options(d.dcc_question.options).invert
-                export_answer[:response] = d.answer.nil? ? '' : (opts[d.answer].try(:dup) || d.answer).force_encoding('UTF-8')
-              else
-                export_answer[:response] = ''
-              end            
-            elsif d.dcc_question.kind == 'l'
-              if d.answered && d.answer.present?
-                opts = question_options(d.dcc_question.options).invert
-                responses = ''
-                d.answer.split('|').each do |s|
-                  responses += content_tag(:li, opts[s] || s)
-                end
-                export_answer[:response] = content_tag(:ul, responses, nil, false).force_encoding('UTF-8')
-              else
-                export_answer[:response] = ''
-              end
-            else
-              export_answer[:response] = d.answer.nil? ? '' : d.answer.force_encoding('UTF-8')
-            end
-            export_question[:answers] << export_answer
           end
         end
       end
-      
+
       # Don't include the heading if it's just a repeat of the section
       unless export_section[:q_id] == q.id && q.is_heading?
         export_section[:template_clauses] << export_question
@@ -151,6 +103,53 @@ module PhaseEditionInstancesHelper
     end
     
     export_dmp
+  end
+
+
+  def export_answer(q, a, answer)
+    answer_list = []
+
+    parts = a.break_up
+    if parts.length > 1
+      parts.shift
+    end
+    parts.each do |d|
+      if q.is_boolean?
+        case d.to_s
+          when '0'
+            answer_list << t('dmp.boolean_no')
+          when '1'
+            answer_list << t('dmp.boolean_yes')
+          else
+            answer_list << ''
+        end
+      elsif q.is_select? || q.is_radio?
+        if d.present?
+          opts = question_options(q.options).invert
+          answer_list << (opts[d].try(:dup) || d).force_encoding('UTF-8')
+        else
+          answer_list << ''
+        end
+      elsif q.is_checkboxes?
+        if d.present?
+          opts = question_options(q.options).invert
+          responses = d.split('|').collect {|x| (opts[x].try(:dup) || x).force_encoding('UTF-8') }
+          answer_list << responses
+        else
+          answer_list << ''
+        end
+      else
+        answer_list << d.force_encoding('UTF-8')
+      end
+    end
+
+    if answer_list.count > 1 || q.is_column?
+      answer[:response] = answer_list
+    else
+      answer[:response] = answer_list.first
+    end
+
+    answer
   end
 
   def exclude_conditionals(qs, pei)
@@ -180,18 +179,52 @@ module PhaseEditionInstancesHelper
     end
   end
 
-  def branded_logo(action, options)
+  def branded_logo(action, options = {})
     if current_organisation.branded? && current_organisation.media_logo.file?
-      path = current_organisation.media_logo.send(action)
-      image_tag path, options
+      case action
+      when :url, :path
+        path = current_organisation.media_logo.send(action)
+        image_tag path, options
+      when :asset
+        current_organisation.media_logo.send(:path)
+      end
     else
       case action
       when :url
         image_tag 'dmp_logo.png', options
       when :path
         wicked_pdf_image_tag 'dmp_logo.png', options
+      when :asset
+        Rails.application.assets.find_asset('dmp_logo.png').pathname.to_s
       end
     end
   end
 
+  def grid_responses(qs, pei)
+    grid = []
+    max_col = 0
+    formatted = export_output(qs, pei)
+    formatted.each do |s|
+      s[:template_clauses].each do |c|
+        col = []
+        c[:answers].each do |a|
+          col = a[:response].is_a?(Array) ? a[:response] : [a[:response].to_s]
+        end
+        max_col = col.length > max_col ? col.length - 1 : max_col
+        grid << col
+      end
+    end
+    # Pad all columns to have same number of rows
+    (0 .. grid.length - 1).each do |i|
+      grid[i].fill('', grid[i].length .. max_col)
+    end
+
+    grid.transpose
+  end
+
+  def grid_new_row(q_id, r)
+    params[:row] ||= {}
+    params[:row][q_id.to_s] ||= r
+  end
+  
 end

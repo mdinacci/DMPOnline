@@ -1,3 +1,4 @@
+# encoding: utf-8
 module QuestionsHelper
 
   def number_part(number, style = '')
@@ -51,29 +52,22 @@ module QuestionsHelper
   end
   
   def number_questions(questions, start_numbering)
-    previous = [0]
-    level = 0
     numbering = [start_numbering - 1]
     display = []
-    questions.each do |q|
-      level = previous.index(q.parent_id.to_i)
-      if level.nil?
-        level = previous.size
-        previous[level] = q.parent_id.to_i
-      end
-      previous = previous.first(level+1)
+    Question.each_with_level(questions) do |q, level|
       numbering = numbering.first(level+1)
-      
       numbering[level] ||= 0
       numbering[level] += 1
       display[level] = number_part(numbering[level], q.number_style)
       numbering[level] -= 1 if display[level].nil?
       number_display = ''
-      level.times do |i|
-        if display[i].blank?
-          number_display = ''
-        else
-          number_display += "#{display[i]}."
+      unless q.is_column?
+        level.times do |i|
+          if display[i].blank?
+            number_display = ''
+          else
+            number_display += "#{display[i]}."
+          end
         end
       end
       q.number_display = "#{number_display}#{display[level]}"
@@ -156,9 +150,10 @@ module QuestionsHelper
     display_numbered_questions(number_questions(qs, question.edition.start_numbering), [question.id])
   end
 
+  # Selected questions for which there is an answer available
   def display_numbered_questions(c, omit = [])
     c.inject({}) do |hash, q|
-      if omit.include?(q.id) || q.is_heading? || q.is_mapped?
+      if omit.include?(q.id) || !q.has_answer?
         hash
       else
         hash.merge!("#{q.number_display} #{abbreviated_question(q)}" => q.id)
@@ -184,4 +179,79 @@ module QuestionsHelper
     opts
   end
   
+  def response_html_format(response)
+    output = ''
+    if response.is_a?(Array)
+      response.each do |part|
+        output += content_tag :li, response_html_format(part)
+      end
+      output = content_tag :ul, output, {}, false
+    else
+      output = simple_format(response.to_s)
+    end
+    
+    output
+  end
+
+  def response_text_format(response)
+    output = ''
+    if response.is_a?(Array)
+      response.each do |part|
+        output += "* #{part.is_a?(Array) ? part.to_sentence : part.to_s}\r\n"
+      end
+    else
+      output = response.to_s
+    end
+    
+    strip_tags(output)
+  end
+
+  def response_xml_format(xml, response)
+    if response.is_a?(Array)
+      response.each do |part|
+        response_xml_format(xml, part)
+      end
+    else
+      xml.response(response)
+    end
+  end
+
+  def response_xlsx_format(response)
+    output = ''
+    if response.is_a?(Array)
+      parts = []
+      response.each do |part|
+        if part.is_a?(Array)
+          part = response_xlsx_format(part)
+        end
+        parts << part
+      end
+      output = parts.to_sentence
+    else
+      output = response.to_s
+    end
+    
+    strip_tags(output)
+  end
+
+  def response_rtf_format(response)
+    output = ''
+    if response.is_a?(Array)
+      response.each do |part|
+        output += "• #{part.is_a?(Array) ? part.to_sentence : part.to_s}\n"
+      end
+    else
+      output = response.to_s
+    end
+
+    strip_tags(output)
+  end
+
+  def clean_html(html)
+    strip_tags(Nokogiri::HTML.fragment(html.to_s).to_s)
+  end
+  
+  def wipe_html(html)
+    strip_tags(html.to_s.gsub(/&[^;\s]+;/, ''))
+  end
 end

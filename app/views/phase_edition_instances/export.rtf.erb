@@ -58,6 +58,14 @@ styles['Answer'] = RTF::CharacterStyle.new
 styles['Answer'].bold = false
 styles['Answer'].font_size = @doc[:font_size] * 2
 
+styles['ColumnHead'] = RTF::CharacterStyle.new
+styles['ColumnHead'].bold = true
+styles['ColumnHead'].font_size = @doc[:font_size] * 2
+
+styles['Cell'] = RTF::CharacterStyle.new
+styles['Cell'].bold = false
+styles['Cell'].font_size = @doc[:font_size] * 2
+
 styles['Running'] = RTF::CharacterStyle.new
 styles['Running'].bold = false
 styles['Running'].font_size = (@doc[:font_size] * 2 * 0.75).to_i
@@ -70,10 +78,9 @@ styles['DMPHeading'].font_size = (@doc[:font_size] * 2 * 1.5).to_i
 headerTable = document.table(1, 2, (tableWidth * 0.40).to_i, (tableWidth * 0.60).to_i)
 headerTable.border_width = 0
 
-asset = Rails.application.assets.find_asset('dmp_logo.png')
-logo = headerTable[0][0].image(asset.pathname.to_s)
-logo.x_scaling = 50
-logo.y_scaling = 50
+logo = headerTable[0][0].image(branded_logo(:asset))
+logo.x_scaling = 70
+logo.y_scaling = 70
 
 headerTable[0][1].apply(styles['DMPHeading']) << plan_display(@plan, :project)
 if @doc[:project_status]
@@ -101,7 +108,7 @@ if @doc[:budget]
   headerTable[0][1].apply(styles['Answer']) << "#{t('attributes.budget')}: #{plan_display(@plan, :budget)}"
 end
 
-document.paragraph 
+document.paragraph
 
 rows = []
 row = {}
@@ -110,68 +117,94 @@ qs = export_questions(@pei, @doc[:selection])
 qs.each do |section|
   row[:style] = 'SectionHeading'
   row[0] = section[:number]
-  row[1] = strip_tags(section[:heading])
+  row[1] = wipe_html(section[:heading])
   rows << row
   row = {}
 
   section[:template_clauses].each do |q|
-    row[0] = q[:number]
-    if q[:is_heading]
-      row[:style] = 'Heading'
-    else
-      row[:style] = 'Question'
-    end
-    row[1] = strip_tags(q[:question])
-    unless q[:is_mapped]
-      q[:answers].each do |a|
-        rows << row
-        row = {}
-        row[:style] = 'Answer'
-        row[0] = ''
-        row[1] = a[:response]
+    if q[:grid] == 0 || q[:is_grid]
+      row[0] = q[:number]
+      if q[:is_heading]
+        row[:style] = 'Heading'
+      else
+        row[:style] = 'Question'
       end
+      row[1] = wipe_html(q[:question])
+      rows << row
+      row = {}
     end
-    rows << row
-    row = {}
 
-    if q[:is_mapped]
-      q[:answers].each do |a|
+    q[:answers].each do |a|
+      if q[:answers].count > 1 || q[:is_mapped]
         if @doc[:dcc_question_numbers] || @doc[:include_dcc_questions]
           row[:style] = 'Question'
           row[0] = ''
-          row[1] = @doc[:dcc_question_numbers] ? "#{a[:dmp_number]}: " : ''
+          row[1] = @doc[:dcc_question_numbers] && a[:dmp_number].present? ? "#{a[:dmp_number]}: " : ''
           if @doc[:include_dcc_questions]
-            row[1] += strip_tags(a[:dmp_clause])
+            row[1] += wipe_html(a[:dmp_clause])
           end
           rows << row
           row = {}
         end
-        row[:style] = 'Answer'
+      end
+      row[:style] = 'Answer'
+      row[0] = ''
+      row[1] = response_rtf_format(a[:response])
+      rows << row
+      row = {}
+    end
+
+    if q[:is_grid]
+      grid = number_questions(@pei.child_questions(q[:grid]), 1)
+      row[:style] = 'ColumnHead'
+      row[0] = ''
+      j = 1
+      grid.each do |col|
+        row[j] = "#{col.number_display}. #{wipe_html(col.question)}"
+        j += 1
+      end
+      rows << row
+      row = {}
+
+      responses = grid_responses(grid, @pei)
+      responses.each do |r|
+        row[:style] = 'Cell'
         row[0] = ''
-        row[1] = a[:response]
+        j = 1
+        r.each do |response|
+          row[j] = response_rtf_format(response)
+          j += 1
+        end
         rows << row
         row = {}
       end
     end
+
   end
 end
-  
-grid = document.table(rows.size, 2, (tableWidth * 0.08).to_i, (tableWidth * 0.92).to_i)
-grid.border_width = 0
 
 0.upto(rows.size - 1).each do |i|
   row = rows[i]
+  cols = row.size - 1
+  opts = [1, cols, (tableWidth * 0.08).to_i]
+  opts.fill((tableWidth * (0.92 / (cols - 1))).to_i, 3, cols - 1)
+  grid = document.table *opts
+  grid.border_width = 0
 
-  grid[i][0].apply(styles[row[:style]]) << row[0]
-  paragraphs = row[1].split(/(\n\s*){2,}/).delete_if{|x| x !~ /\S/}
-  paragraphs.each do |p|
-    lines = p.split(/\n/).delete_if{|x| x !~ /\S/}
-    lines.each do |l|
-      grid[i][1].apply(styles[row[:style]]) << l
-      grid[i][1].line_break unless l == lines.last
+  grid[0][0].apply(styles[row[:style]])
+  0.upto(row.size - 1).each do |j|
+    if row[j].present?
+      paragraphs = row[j].split(/(\n\s*){2,}/).delete_if{|x| x !~ /\S/}
+      paragraphs.each do |p|
+        lines = p.split(/\n/).delete_if{|x| x !~ /\S/}
+        lines.each do |l|
+          grid[0][j].apply(styles[row[:style]]) << l
+          grid[0][j].line_break unless l == lines.last
+        end
+        grid[0][j].line_break unless p == paragraphs.last
+        grid[0][j].line_break unless p == paragraphs.last
+      end
     end
-    grid[i][1].line_break unless p == paragraphs.last
-    grid[i][1].line_break unless p == paragraphs.last
   end
 end
 

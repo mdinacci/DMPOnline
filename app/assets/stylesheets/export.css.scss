@@ -92,3 +92,25 @@ span.dcc_number {
   min-width: 6em;
   padding-right: 0.3em;
 }
+
+table.grid_answer {
+  border-bottom: none;
+  th {
+    text-align: left;
+    vertical-align: top;
+    padding-left: 0.4em;
+    span.number {
+      color: #666666;
+      padding: 0 1em 0 0;
+      display: block;
+      float: left;
+      width: auto;
+    }
+    span.text {
+      display: inline-block;
+    }
+  }
+  td, th {
+    border: solid 1px #000;
+  }
+}

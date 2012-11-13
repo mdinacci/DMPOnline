@@ -52,36 +52,58 @@
     &nbsp;
     %br
     - qs = export_questions(@pei, @doc[:selection])
-    %table{:class => 'export'}    
+    %table{:class => 'export'}
       %tbody
         - qs.each do |section|
           %tr{class: "depth-0 type-h section"}
             %td.number= section[:number]
             %td.heading= section[:heading]
-          
+
           - section[:template_clauses].each do |q|
             %tr{class: "depth-#{q[:depth]} type-#{q[:kind]} #{cycle('odd', 'even')}"}
-              %td.number= q[:number]
-              
+              - if q[:grid] == 0 || q[:is_grid]
+                %td.number= q[:number]
+
               - if q[:is_heading]
                 %td.heading= q[:question]
               - elsif q[:is_mapped]
                 %td.question-heading= q[:question]
-              - else
+              - elsif q[:grid] == 0 || q[:is_grid]
                 %td.question-full= q[:question]
-    
+
             - q[:answers].each do |a|
-              - if q[:is_mapped]
+              - if q[:answers].count > 1 || q[:is_mapped]
                 %tr{class: "mapped depth-#{q[:depth]} type-#{a[:kind]} #{cycle('odd', 'even')}"}
                   %td.spacer
                   %td.question-full
-                    - if @doc[:dcc_question_numbers]
+                    - if @doc[:dcc_question_numbers] && a[:dmp_number].present?
                       %span.dcc_number= "#{a[:dmp_number]}:"
                     - if @doc[:include_dcc_questions]
                       = a[:dmp_clause]
-              %tr{class: "mapped depth-#{q[:depth]} type-#{a[:kind]} #{cycle('odd', 'even')}"}
+              %tr{class: "response depth-#{q[:depth]} type-#{a[:kind]} #{cycle('odd', 'even')}"}
                 %td.spacer
-                %td.answer= simple_format(a[:response])
+                %td.answer= response_html_format(a[:response])
+
+            - if q[:is_grid]
+              %tr{class: "response depth-#{q[:depth]} type-grid #{cycle('odd', 'even')}"}
+                %td.spacer
+                %td.answer
+                  - qs = number_questions(@pei.child_questions(q[:grid]), 1)
+                  %table.grid_answer
+                    %thead
+                      - qs.each do |col|
+                        %th
+                          %span.number
+                            = col.number_display
+                          %span.text
+                            = sanitize col.question
+                    %tbody
+                      - if @pei.child_answered(q[:grid])
+                        - responses = grid_responses(qs, @pei)
+                        - responses.each do |row|
+                          %tr
+                            - row.each do |response|
+                              %td= response_html_format(response)
 
           %tr.spacer
             %td.spacer

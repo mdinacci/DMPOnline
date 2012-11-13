@@ -5,30 +5,34 @@
 .answers
   = semantic_form_for pei, :url => plan_layer_path(plan_id: @plan.id, id: pei.id), :method => :put do |f|
     - section_qs.each do |q|
-      %div{class: "question #{question_type_css(q.kind)}"}
+      %div{class: "question #{question_type_css(q.kind)} #{q.is_column? ? 'column' : ''}"}
         %span.number= q.number_display
         %span.text= sanitize q.question
-          
-        - unless q.guide.try(:guidance).blank? || q.kind != 'h'
+
+        - if q.guide.try(:guidance).present? && (q.is_grid? || q.is_heading?)
           .guidance-area.heading
             = render partial: "guidance", locals: {g: q.guide, popup: nil, org_name: ti.template.organisation.short_name, q_number: q.number_display}
 
-      - unless q.kind == 'h'
-        .answer
+      - if q.is_grid?
+        = render partial: 'grid_display', locals: {pei: pei, q: q, ti: ti, sid: section_id}
+      - elsif !q.is_heading?
+        %div{class: "answer #{q.is_column? ? 'column' : ''}"}
           - answers = pei.question_answers(q.id)
           %table.index_table.plan
             %thead
               %tr
-                %th= t('dmp.dcc_equivalent')
+                - unless q.is_column?
+                  %th= t('dmp.dcc_equivalent')
                 %th= t('dmp.your_input')
                 %th= t('dmp.applies_to')
             %tbody
               = render partial: "answer", collection: answers, locals: {f: f, q: q, dcc_q_numbering: dcc_q_numbering}, layout: false
-        
-          .question-block
-            = f.buttons do 
-              %li.button
-                = link_to t('dmp.admin.add_question'), checklist_plan_layer_path(plan_id: @plan.id, id: pei.id, question_id: q.id), class: "create_link", id: "popup-#{q.id}"
+
+          - unless q.is_column?
+            .question-block
+              = f.buttons do 
+                %li.button
+                  = link_to t('dmp.admin.add_question'), checklist_plan_layer_path(plan_id: @plan.id, id: pei.id, question_id: q.id), class: "create_link", id: "popup-#{q.id}"
     
     = hidden_field_tag 'tid', ti.template_id
     = hidden_field_tag 'sid', section_id

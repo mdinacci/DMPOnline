@@ -3,7 +3,8 @@ class Answer < ActiveRecord::Base
   belongs_to :question
   belongs_to :dcc_question, :class_name => "Question", :foreign_key => "dcc_question_id"
   
-  attr_accessible :answer, :hidden, :position, :question_id, :dcc_question_id
+  attr_accessor :grid_row
+  attr_accessible :answer, :hidden, :position, :question_id, :dcc_question_id, :grid_row
   attr_readonly :question_id, :dcc_question_id
   validate :not_locked
   before_validation :check_array_values
@@ -36,7 +37,26 @@ class Answer < ActiveRecord::Base
       .joins(:boilerplate_texts).where(question_id: self.question_id, dcc_question_id: self.dcc_question_id)
       .all
   end
-   
+
+  # For multi-part answers (split across table rows).  Passed index for a 1-based array.  Zero implies default value for new row
+  def part(p)
+    if p > 0
+      self.break_up[p]
+    else
+      self.default_response
+    end
+  end
+
+  def delete_part(p)
+    if p > 0
+      self.answer = self.break_up.delete_at(p).join("\x1E")
+    end
+  end
+
+  def break_up
+    self.answer.to_s.split("\x1e")
+  end
+
   protected
   
   def not_locked
@@ -48,19 +68,24 @@ class Answer < ActiveRecord::Base
   
   def set_default_value
     if self.answer.blank?
-      dv = self.question.default_value || self.dcc_question.try(:default_value)
-      unless dv.blank?
-        plan = self.phase_edition_instance.template_instance.plan
-        self.answer = dv.gsub(/\[[a-z_]+\]/) {|m| expand_token(m[1..-2], plan)}
-      end
+      self.answer = "#{self.question.is_column? ? "\x1e" : ''}#{self.default_response}"
     end
     true
   end
   
+  def default_response
+    dv = self.dcc_question.try(:default_value) || self.question.default_value
+    unless dv.blank?
+      plan = self.phase_edition_instance.template_instance.plan
+      dv = dv.gsub(/\[[a-z_]+\]/) {|m| expand_token(m[1..-2], plan)}
+    end
+    dv.to_s
+  end
+  
   def set_answered_flag
     stripped = ActionController::Base.helpers.strip_tags(self.answer) || ''
-    stripped.strip!
-    self.answered = !stripped.blank?
+    stripped.sub!(/\x1e/, '')
+    self.answered = stripped.present?
     true
   end
   
@@ -101,9 +126,28 @@ class Answer < ActiveRecord::Base
   end
   
   def check_array_values
-    if self.answer.is_a? Array
-      self.answer = self.answer.delete_if{ |x| x.blank? }.join('|')
+    if self.question.is_column?
+      update_part
+    else
+      self.answer = serialize_options(self.answer)
     end
   end
-  
+
+  def serialize_options(a)
+    if a.is_a? Array
+      a = a.delete_if{ |x| x.blank? }.join('|')
+    end
+    a   
+  end
+
+  def update_part
+    parts = self.answer_was.to_s.split("\x1e")
+    parts[0] = ''
+    if self.grid_row.to_i <= 0 
+      self.grid_row = parts.length
+    end
+    parts[self.grid_row.to_i] = serialize_options(self.answer)
+    self.answer = parts.join("\x1e")
+  end
+
 end

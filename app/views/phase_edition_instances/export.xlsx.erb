@@ -5,7 +5,7 @@ ws = workbook.worksheets[0]
 ws.add_cell(0, 0, @doc[:page_header_text])
 
 ws.add_cell(2, 0, plan_display(@plan, :project))
-r=3
+r = 3
 
 
 if @doc[:project_status]
@@ -38,31 +38,47 @@ r += 1
 qs = export_questions(@pei, @doc[:selection])
 qs.each do |section|
   ws.add_cell(r, 0, section[:number])
-  ws.add_cell(r, 1, strip_tags(section[:heading]))
+  ws.add_cell(r, 1, wipe_html(section[:heading]))
   r += 1
 
   section[:template_clauses].each do |q|
-    ws.add_cell(r, 0, q[:number])
-    if !q[:is_heading]
-      ws.add_cell(r, 1, strip_tags(q[:question]))
-      unless q[:is_mapped]
-        q[:answers].each do |a|
-          ws.add_cell(r, 2, a[:response])
+    if q[:grid] == 0 || q[:is_grid]
+      ws.add_cell(r, 0, q[:number])
+      ws.add_cell(r, 1, wipe_html(q[:question]))
+      if q[:answers].count > 1 || q[:is_mapped]
+        r += 1
+      end
+      q[:answers].each do |a|
+        if q[:answers].count > 1 || q[:is_mapped]
+          dcc_clause = @doc[:dcc_question_numbers] ? "#{a[:dmp_number]} " : ''
+          if @doc[:include_dcc_questions]
+            dcc_clause += wipe_html(a[:dmp_clause])
+          end
+          ws.add_cell(r, 1, dcc_clause)
+        end
+        ws.add_cell(r, 2, response_xlsx_format(a[:response]))
+        r += 1
+      end
+
+      if q[:is_grid]
+        grid = number_questions(@pei.child_questions(q[:grid]), 1)
+        c = 2
+        grid.each do |col|
+          ws.add_cell(r, c, "#{col.number_display}. #{wipe_html(col.question)}")
+          c += 1
+        end
+        r += 1
+        responses = grid_responses(grid, @pei)
+        responses.each do |row|
+          c = 2
+          row.each do |response|
+            ws.add_cell(r, c, response_xlsx_format(response))
+            c += 1
+          end
           r += 1
         end
       end
-    end
 
-    if q[:is_mapped]
-      q[:answers].each do |a|
-        dcc_clause = @doc[:dcc_question_numbers] ? "#{a[:dmp_number]} " : ''
-        if @doc[:include_dcc_questions]
-          dcc_clause += strip_tags(a[:dmp_clause])
-        end 
-        ws.add_cell(r, 1, dcc_clause)
-        ws.add_cell(r, 2, a[:response])
-        r += 1
-      end
     end
   end
 end

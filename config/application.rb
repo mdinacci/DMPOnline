@@ -37,13 +37,13 @@ module Dmponline3
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password]
+    config.filter_parameters += [:password, :password_confirmation, :current_password]
 
     # Enable the asset pipeline
     config.assets.enabled = true
 
     # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '3.2.0'
+    config.assets.version = '3.2.2'
     
     # Set the default host for mailer URLs
     config.action_mailer.default_url_options = { :host => 'dmponline.example.com' }

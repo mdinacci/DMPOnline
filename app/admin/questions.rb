@@ -150,7 +150,7 @@ ActiveAdmin.register Question do
           prev_head_top_q = tq.id
         end
       end
-      unless q.is_mapped? || q.is_heading? || q.depth == 0
+      unless q.is_mapped? || q.is_heading? || q.is_grid? || q.depth == 0
         tm = Mapping.new
         tm.question_id = prev_head_q
         tm.dcc_question_id = q.id
@@ -172,23 +172,23 @@ ActiveAdmin.register Question do
     prev_id   = params[:prev_id].to_i
     next_id   = params[:next_id].to_i
 
-    render :text => "Do nothing" and return if parent_id.zero? && prev_id.zero? && next_id.zero?
-
-    collection = 'questions'
-    variable = collection.singularize
-    klass = variable.classify.constantize
-    variable = "@#{variable}"
-    variable = self.instance_variable_set(variable, klass.find(id))
-
+    render nothing: true and return if parent_id.zero? && prev_id.zero? && next_id.zero?
+    @question = Question.find(id)
+    @question.check_parent = parent_id
+    
     if prev_id.zero? && next_id.zero?
-      variable.move_to_child_of klass.find(parent_id)
+      @question.move_to_child_of Question.find(parent_id)
     elsif !prev_id.zero?
-      variable.move_to_right_of klass.find(prev_id)
+      @question.move_to_right_of Question.find(prev_id)
     elsif !next_id.zero?
-      variable.move_to_left_of klass.find(next_id)
+      @question.move_to_left_of Question.find(next_id)
     end
 
-    render(:nothing => true)
+    if @question.errors.blank?
+      render nothing: true
+    else
+      render status: :forbidden, text: @question.errors[:base].to_sentence 
+    end
 
   end
 end

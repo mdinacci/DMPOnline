@@ -46,6 +46,13 @@ class Plan < ActiveRecord::Base
     col
   end
 
+  def child_questions(q_id)
+    self.questions
+      .where(parent_id: q_id)
+      .order('answers.position')
+      .all
+  end
+
   def user_list
     refs = {}
     rights = {}

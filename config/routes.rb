@@ -1,4 +1,4 @@
-class BlockToken 
+class BlockToken
   def matches?(request) 
     !request.params.has_key?(:api_key) 
   end
@@ -48,6 +48,7 @@ Dmponline3::Application.routes.draw do
         member do
           get 'checklist/:question_id', :question_id => /\d+/, :action => 'checklist', :as => 'checklist'
           post 'add_answer/:question_id', :question_id => /\d+/, :action => 'add_answer', :as => 'add_answer'
+          delete 'drop_row/:question_id/:drop_row', :question_id => /\d+/, :drop_row => /\d+/, :action => 'drop_row', :as => 'drop_row'
           get 'output'
           get 'output_all'
           # Changed to POST - IE apparently not happy with long URLs and plugins

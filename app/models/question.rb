@@ -4,6 +4,7 @@ class Question < ActiveRecord::Base
   include TheSortableTree::Scopes
   
   acts_as_nested_set
+  before_move :table_checks
 
   belongs_to :edition
 #  has_many :dependents, :class_name => "Question"
@@ -20,10 +21,16 @@ class Question < ActiveRecord::Base
                   :guide_attributes, :boilerplate_texts_attributes, :mappings_attributes, 
                   :select_dcc_questions, :default_value, :options
 
-  # Question types available
+  # Question types available:
   # boolean: a special choice type of Yes/No
   # text: a text area
   # mapped: mapped to DCC checklist answers.  Should not be used in DCC checklist.
+  # heading: has no associated answer
+  # uri: text input type for single line
+  # select: dropdown menu of options (single option select)
+  # multiselect: checkbox list of options (can select more than one option)
+  # radio: radio button list of options (only one can be selected)
+  # grid: has no associated answer, nested questions rendered as columns in a table layout
   TYPES = { 'mapped' => 'm',
             'text' => 't',
             'boolean' => 'b',
@@ -31,7 +38,8 @@ class Question < ActiveRecord::Base
             'uri' => 'u',
             'select' => 's',
             'multiselect' => 'l',
-            'radio' => 'r' }
+            'radio' => 'r',
+            'grid' => 'g' }
 
   # Number style
   NUMBER_STYLES = { 'digits' => 'n',
@@ -44,12 +52,13 @@ class Question < ActiveRecord::Base
   attr_accessor :number_display
   attr_accessor :depth
   attr_accessor :select_dcc_questions
+  attr_accessor :check_parent
   after_validation :remove_blank_entries
   after_save :update_mappings
   validates_presence_of :edition
   validates_associated :edition
   validates_inclusion_of :kind, in: TYPES.values
-  validates_inclusion_of :number_style, in: NUMBER_STYLES.values  
+  validates_inclusion_of :number_style, in: NUMBER_STYLES.values
 
   def self.questions_in_edition(q)
     where(:edition_id => q.edition_id)
@@ -69,6 +78,34 @@ class Question < ActiveRecord::Base
     self.kind == 'm'
   end
   
+  def is_boolean?
+    self.kind == 'b'
+  end
+  
+  def is_select?
+    self.kind == 's'
+  end
+  
+  def is_radio?
+    self.kind == 'r'
+  end
+  
+  def is_checkboxes?
+    self.kind == 'l'
+  end
+  
+  def is_grid?
+    self.kind == 'g'
+  end
+  
+  def has_answer?
+    !(self.is_heading? || self.is_grid? || self.is_mapped?)
+  end
+  
+  def is_column?
+    self.parent.try(:is_grid?)
+  end
+  
   def form_source
     case self.kind
     when 'b'
@@ -77,6 +114,12 @@ class Question < ActiveRecord::Base
       "textarea"
     when 'u'
       "input"
+    when 'l'
+      "input:checked"
+    when 'r'
+      "input:checked"
+    when 's'
+      "select"
     else
       ''
     end
@@ -146,4 +189,25 @@ class Question < ActiveRecord::Base
     errors.blank?
   end
   
+  def table_checks
+    unless self.check_parent.to_i.zero?
+      parent = Question.find(self.check_parent)
+      if parent.is_grid? 
+        unless self.has_answer?
+          errors.add :base, I18n.t('dmp.admin.bad_table_column')
+        end
+        unless self.leaf?
+          errors.add :base, I18n.t('dmp.admin.bad_table_nesting')
+        end
+      end
+      parent.ancestors.each do |a|
+        if a.is_grid?
+          errors.add :base, I18n.t('dmp.admin.bad_table_nesting')
+        end
+      end
+    end
+    
+    errors.blank?
+  end
+
 end

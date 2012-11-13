@@ -1,6 +1,7 @@
 # encoding: utf-8
 module PlansHelper
   include QuestionsHelper
+  include PhaseEditionInstancesHelper
   
   def phase_progress(qc, ac)
     if qc.nil?

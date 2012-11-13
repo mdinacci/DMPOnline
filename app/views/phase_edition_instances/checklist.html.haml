@@ -17,7 +17,7 @@
           = q.number_display
         %td.text
           = strip_tags q.question
-        - if q.is_heading? || q.is_mapped?
+        - if !q.has_answer?
           %td
         - else
           %td.action

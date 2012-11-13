@@ -22,9 +22,9 @@
       %tr
         %td.logo
           - if @doc[:format] == 'pdf'
-            = wicked_pdf_image_tag("dmp_logo.png", :align => :left, :border => 0, :width => 218, :height => 66)
+            = branded_logo(:path, {:align => :left, :border => 0, :width => 218, :height => 66})
           - else
-            = image_tag("dmp_logo.png", :align => :left, :border => 0, :width => 218, :height => 66)
+            = branded_logo(:url, {:align => :left, :border => 0, :width => 218, :height => 66})
         %td
           %h3= plan_display(@plan, :project)
           - if @doc[:project_status]
@@ -57,47 +57,67 @@
         - qs.each do |section|
           %tr{class: "depth-0 type-h section"}
             %td.number= section[:number]
-            %td.heading{colspan: 4}= section[:heading]
+            %td.heading{colspan: 5}= section[:heading]
           
           - section[:template_clauses].each do |q|
-            %tr{class: "depth-#{q[:depth]} type-#{q[:kind]} #{cycle('odd', 'even')}"}
-              - q[:depth].to_i.times do |l|
-                %td.spacer
+            - if q[:grid] == 0 || q[:is_grid]
+              %tr{class: "depth-#{q[:depth]} type-#{q[:kind]} #{cycle('odd', 'even')}"}
+                - q[:depth].to_i.times do |l|
+                  %td.spacer
 
-              %td.number= q[:number]
-              
-              - if q[:is_heading]
-                %td.heading{colspan: "#{4-q[:depth]}"}= q[:question]
-              - elsif q[:is_mapped]
-                %td.question-heading{colspan: "#{4-q[:depth]}"}= q[:question]
-              - else
-                %td.question{colspan: "#{3-q[:depth]}"}= q[:question]
-                %td.answer
-                  - q[:answers].each do |a|
-                    .answer= simple_format(a[:response])
-    
-            - if q[:is_mapped]
-              - q[:answers].each do |a|
-                %tr{class: "mapped depth-#{q[:depth]} type-#{a[:kind]} #{cycle('odd', 'even')}"}
-                  - (q[:depth].to_i + 1).times do |l|
-                    %td.spacer
-                  - if @doc[:include_dcc_questions]
-                    %td.question{colspan: "#{3-q[:depth]}"}
-                      - if @doc[:dcc_question_numbers]
-                        %span.dcc_number= a[:dmp_number]
-                      = a[:dmp_clause]
-                    %td.answer= simple_format(a[:response])
-                  - else
-                    %td.answer{colspan: "#{4-q[:depth]}"}= simple_format(a[:response])
-                     
+                %td.number= q[:number]
+
+                - if q[:is_heading]
+                  %td.heading{colspan: "#{5-q[:depth]}"}= q[:question]
+                - elsif q[:is_mapped] || q[:answers].count > 1
+                  %td.question-heading{colspan: "#{5-q[:depth]}"}= q[:question]
+                - else
+                  %td.question{colspan: "#{4-q[:depth]}"}= q[:question]
+                  %td.answer
+                    - if q[:is_grid]
+                      - qs = number_questions(@pei.child_questions(q[:grid]), 1)
+                      %table.grid_answer
+                        %thead
+                          - qs.each do |col|
+                            %th
+                              %span.number
+                                = col.number_display
+                              %span.text
+                                = sanitize col.question
+                        %tbody
+                          - if @pei.child_answered(q[:grid])
+                            - responses = grid_responses(qs, @pei)
+                            - responses.each do |row|
+                              %tr
+                                - row.each do |response|
+                                  %td= response_html_format(response)
+                    - else
+                      - q[:answers].each do |a|
+                        .answer= response_html_format(a[:response])
+
+              - if q[:is_mapped] || q[:answers].count > 1
+                - q[:answers].each do |a|
+                  %tr{class: "mapped response depth-#{q[:depth]} type-#{a[:kind]} #{cycle('odd', 'even')}"}
+                    - (q[:depth].to_i + 1).times do |l|
+                      %td.spacer
+                    - if @doc[:include_dcc_questions]
+                      %td.question{colspan: "#{4-q[:depth]}"}
+                        - if @doc[:dcc_question_numbers]
+                          %span.dcc_number= a[:dmp_number]
+                        = a[:dmp_clause]
+                      %td.answer= response_html_format(a[:response])
+                    - else
+                      %td.answer{colspan: "#{4-q[:depth]}"}= response_html_format(a[:response])
+
+
           %tr.spacer
-            %td{:colspan => 5} &nbsp;
+            %td{colspan: 6} &nbsp;
 
     
     - if @doc[:page_signatures]
       %br/
       %br/
-      %table{:cellpadding => 2}
+      %table{cellpadding: 2}
         %tbody
           - @doc[:page_signatures_count].times do
             %tr

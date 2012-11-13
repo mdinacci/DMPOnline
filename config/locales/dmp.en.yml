@@ -65,6 +65,11 @@ en:
     insert_bp: "Insert standard text"
     selected_section: "Selected Section" # Keep to simple chars!
     details_updated: "Details updated"
+    grid_adding_row: "You are adding a new row to the table"
+    grid_editing_row: "You are editing the selected row in the table"
+    grid_edit_row: "Edit Row"
+    grid_delete_row: "Delete Row"
+    grid_add_row: "Add Row"
 
     sword_repository: "SWORD2 Repository"
     update_url: "Update URL"
@@ -297,6 +302,8 @@ en:
       unknown_object: "Unknown object"
       deleted_object: "Deleted object"
       question_options: "Enter each option to be presented on its own line.  If you want to store a different value to that which is displayed, separate the name|value pairs with a pipe symbol"
+      bad_table_column: "You cannot use that question type as a table column"
+      bad_table_nesting: "You can only go one level below a table container"
       
       status:
         active: "Active"
@@ -353,6 +360,7 @@ en:
       select: "Select drop-down"
       multiselect: "Check boxes"
       radio: "Radio Options"
+      grid: "Table container"
       
     roles:
       none: "None"

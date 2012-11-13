@@ -225,29 +225,73 @@
                     </w:r>
                   </w:p>
                 </w:tc>
-                <w:tc>
-                  <w:tcPr>
-                    <w:tcW w:w="10150" w:type="dxa"/>
-                    <w:gridSpan w:val="3"/>
-                  </w:tcPr>
-                  <w:p w:rsidR="00844F3C" w:rsidRPr="00844F3C" w:rsidRDefault="00844F3C" w:rsidP="00844F3C">
-                    <w:pPr>
-                      <w:rPr>
-                        <w:b/>
-                      </w:rPr>
-                    </w:pPr>
-                    <w:r w:rsidRPr="00844F3C">
-                      <w:rPr>
-                        <w:b/>
-                      </w:rPr>
-                      <w:t>
-                        <xsl:value-of select="question" disable-output-escaping="yes"/>
-                      </w:t>
-                    </w:r>
-                  </w:p>
-                </w:tc>
+                <xsl:choose>
+                  <xsl:when test="question/@is_mapped = 'true' or count(dcc_clause) &gt; 1">
+                    <w:tc>
+                      <w:tcPr>
+                        <w:tcW w:w="10150" w:type="dxa"/>
+                        <w:gridSpan w:val="3"/>
+                      </w:tcPr>
+                      <w:p w:rsidR="00844F3C" w:rsidRPr="00844F3C" w:rsidRDefault="00844F3C" w:rsidP="00844F3C">
+                        <w:pPr>
+                          <w:rPr>
+                            <w:b/>
+                          </w:rPr>
+                        </w:pPr>
+                        <w:r w:rsidRPr="00844F3C">
+                          <w:rPr>
+                            <w:b/>
+                          </w:rPr>
+                          <w:t>
+                            <xsl:value-of select="question" disable-output-escaping="yes"/>
+                          </w:t>
+                        </w:r>
+                      </w:p>
+                    </w:tc>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <w:tc>
+                      <w:tcPr>
+                        <w:tcW w:w="3829" w:type="dxa"/>
+                        <w:gridSpan w:val="2"/>
+                      </w:tcPr>
+                      <w:p w:rsidR="00844F3C" w:rsidRPr="00844F3C" w:rsidRDefault="00844F3C" w:rsidP="00844F3C">
+                        <w:pPr>
+                          <w:rPr>
+                            <w:b/>
+                          </w:rPr>
+                        </w:pPr>
+                        <w:r w:rsidRPr="00844F3C">
+                          <w:rPr>
+                            <w:b/>
+                          </w:rPr>
+                          <w:t>
+                            <xsl:value-of select="question" disable-output-escaping="yes"/>
+                          </w:t>
+                        </w:r>
+                      </w:p>
+                    </w:tc>
+                    <w:tc>
+                      <w:tcPr>
+                        <w:tcW w:w="6321" w:type="dxa"/>
+                      </w:tcPr>
+                      <xsl:for-each select="dcc_clause">
+                        <xsl:choose>
+                          <xsl:when test="count(response) &gt; 1">
+                            <xsl:call-template name="list_format_response"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:call-template name="format_response">
+                              <xsl:with-param name="text" select="response"/>
+                            </xsl:call-template>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </w:tc>
+                  </xsl:otherwise>
+                </xsl:choose>
               </w:tr>
-              <xsl:for-each select="dcc_clause">
+              <xsl:if test="question/@is_grid = 'true'">
                 <w:tr w:rsidR="002646F3" w:rsidTr="00F916ED">
                   <w:tc>
                     <w:tcPr>
@@ -264,38 +308,75 @@
                     <w:tcPr>
                       <w:tcW w:w="717" w:type="dxa"/>
                     </w:tcPr>
-                    <w:p w:rsidR="002646F3" w:rsidRDefault="00844F3C" w:rsidP="00844F3C">
-                      <xsl:if test="string-length(normalize-space(question/@number)) &gt; 0">
-                        <w:r>
-                          <w:t>DCC <xsl:value-of select="question/@number"/>:</w:t>
-                        </w:r>
-                        <w:r w:rsidR="007F0427">
-                          <w:t xml:space="preserve"> </w:t>
-                        </w:r>
-                      </xsl:if>
-                    </w:p>
+                    <w:p w:rsidR="002646F3" w:rsidRDefault="00844F3C" w:rsidP="00844F3C"/>
                   </w:tc>
                   <w:tc>
                     <w:tcPr>
-                      <w:tcW w:w="3112" w:type="dxa"/>
+                      <w:tcW w:w="9443" w:type="dxa"/>
+                      <w:gridSpan w:val="2"/>
                     </w:tcPr>
-                    <w:p w:rsidR="002646F3" w:rsidRDefault="00844F3C" w:rsidP="00844F3C">
-                      <w:r>
-                        <w:t>
-                          <xsl:value-of select="question" disable-output-escaping="yes"/>
-                        </w:t>
-                      </w:r>
-                    </w:p>
-                  </w:tc>
-                  <w:tc>
-                    <w:tcPr>
-                      <w:tcW w:w="6321" w:type="dxa"/>
-                    </w:tcPr>
-                    <xsl:call-template name="format_response">
-                      <xsl:with-param name="text" select="response"/>
-                    </xsl:call-template>
+                    <xsl:call-template name="grid_response"/>
                   </w:tc>
                 </w:tr>
+              </xsl:if>
+              <xsl:for-each select="dcc_clause">
+                <xsl:if test="../question/@is_mapped = 'true' or count(../dcc_clause) &gt; 1">
+                  <w:tr w:rsidR="002646F3" w:rsidTr="00F916ED">
+                    <w:tc>
+                      <w:tcPr>
+                        <w:tcW w:w="532" w:type="dxa"/>
+                        <w:noWrap/>
+                      </w:tcPr>
+                      <w:p w:rsidR="002646F3" w:rsidRPr="00844F3C" w:rsidRDefault="002646F3" w:rsidP="00844F3C">
+                        <w:pPr>
+                          <w:jc w:val="right"/>
+                        </w:pPr>
+                      </w:p>
+                    </w:tc>
+                    <w:tc>
+                      <w:tcPr>
+                        <w:tcW w:w="717" w:type="dxa"/>
+                      </w:tcPr>
+                      <w:p w:rsidR="002646F3" w:rsidRDefault="00844F3C" w:rsidP="00844F3C">
+                        <xsl:if test="string-length(normalize-space(question/@number)) &gt; 0">
+                          <w:r>
+                            <w:t>DCC <xsl:value-of select="question/@number"/>:</w:t>
+                          </w:r>
+                          <w:r w:rsidR="007F0427">
+                            <w:t xml:space="preserve"> </w:t>
+                          </w:r>
+                        </xsl:if>
+                      </w:p>
+                    </w:tc>
+                    <w:tc>
+                      <w:tcPr>
+                        <w:tcW w:w="3112" w:type="dxa"/>
+                      </w:tcPr>
+                      <w:p w:rsidR="002646F3" w:rsidRDefault="00844F3C" w:rsidP="00844F3C">
+                        <w:r>
+                          <w:t>
+                            <xsl:value-of select="question" disable-output-escaping="yes"/>
+                          </w:t>
+                        </w:r>
+                      </w:p>
+                    </w:tc>
+                    <w:tc>
+                      <w:tcPr>
+                        <w:tcW w:w="6321" w:type="dxa"/>
+                      </w:tcPr>
+                      <xsl:choose>
+                        <xsl:when test="count(response) &gt; 1">
+                          <xsl:call-template name="list_format_response"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:call-template name="format_response">
+                            <xsl:with-param name="text" select="response"/>
+                          </xsl:call-template>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </w:tc>
+                  </w:tr>
+                </xsl:if>
               </xsl:for-each>
             </xsl:for-each>
           </w:tbl>
@@ -502,6 +583,7 @@
   <xsl:template name="preserve_line_breaks">
     <xsl:param name="text" select="''"/>
     <xsl:param name="para" select="''"/>
+    <xsl:param name="list" select="0"/>
     <xsl:choose>
       <xsl:when test="string-length(normalize-space($text)) &gt; 0">
         <xsl:variable name="line" select="substring-before($text, '&#10;')"/>
@@ -526,6 +608,7 @@
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="output_para">
+              <xsl:with-param name="list" select="$list"/>
               <xsl:with-param name="text">
                 <xsl:copy-of select="$para"/>
                 <xsl:if test="not(contains($text, '&#10;'))">
@@ -555,15 +638,25 @@
   </xsl:template>
   <xsl:template name="output_para">
     <xsl:param name="text" select="''"/>
+    <xsl:param name="list" select="0"/>
     <xsl:if test="string-length(normalize-space($text)) &gt; 0">
-      <w:p w:rsidR="00387EE1" w:rsidRDefault="00A40A13" w:rsidP="00844F3C" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+      <w:p w:rsidR="00387EE1" w:rsidRDefault="00BA645F" w:rsidP="00844F3C" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+        <xsl:if test="$list &gt; 0">
+          <w:pPr>
+            <w:pStyle w:val="ListParagraph"/>
+            <w:numPr>
+              <w:ilvl w:val="0"/>
+              <w:numId w:val="1"/>
+            </w:numPr>
+          </w:pPr>
+        </xsl:if>
         <xsl:copy-of select="$text"/>
       </w:p>
     </xsl:if>
   </xsl:template>
   <xsl:template name="output_line">
     <xsl:param name="text" select="''"/>
-    <w:r w:rsidR="00387EE1" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+    <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
       <w:t><xsl:value-of select="$text"/></w:t>
     </w:r>
   </xsl:template>
@@ -575,10 +668,12 @@
   <xsl:template name="format_response">
     <xsl:param name="text" select="text()"/>
     <xsl:param name="para" select="''"/>
+    <xsl:param name="list" select="0"/>
     <xsl:variable name="formatted_output">
       <xsl:call-template name="preserve_line_breaks">
         <xsl:with-param name="text" select="$text"/>
         <xsl:with-param name="para" select="''"/>
+        <xsl:with-param name="list" select="$list"/>
       </xsl:call-template>
     </xsl:variable>
     <xsl:if test="string-length(normalize-space($formatted_output)) = 0">
@@ -587,5 +682,99 @@
       </w:p>
     </xsl:if>
     <xsl:copy-of select="$formatted_output"/>
+  </xsl:template>
+  <xsl:template name="list_format_response">
+    <xsl:param name="list" select="1"/>
+    <xsl:for-each select="response">
+      <xsl:call-template name="format_response">
+        <xsl:with-param name="list" select="$list"/>
+      </xsl:call-template>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template name="grid_response">
+    <xsl:variable name="cols" select="count(question[@is_grid != 'true'])"/>
+    <xsl:if test="$cols &gt; 0">
+      <w:tbl xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+        <w:tblPr>
+          <w:tblStyle w:val="TableGrid"/>
+          <w:tblW w:w="0" w:type="auto"/>
+          <w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>
+        </w:tblPr>
+        <xsl:variable name="colwidth" select="floor((9443 - 250) div $cols)"/>
+        <w:tblGrid>
+          <xsl:for-each select="question[@is_grid != 'true']">
+            <w:gridCol>
+              <xsl:attribute name="w:w">
+                <xsl:value-of select="$colwidth"/>
+              </xsl:attribute>
+            </w:gridCol>
+          </xsl:for-each>
+        </w:tblGrid>
+        <w:tr w:rsidR="00622303" w:rsidRPr="00622303" w:rsidTr="00F77408">
+          <xsl:for-each select="question[@is_grid != 'true']">
+            <w:tc>
+              <w:tcPr>
+                <w:tcW>
+                  <xsl:attribute name="w:w">
+                    <xsl:value-of select="$colwidth"/>
+                  </xsl:attribute>
+                  <xsl:attribute name="w:type">dxa</xsl:attribute>
+                </w:tcW>
+                <w:shd w:val="clear" w:color="auto" w:fill="D9D9D9" w:themeFill="background1" w:themeFillShade="D9"/>
+              </w:tcPr>
+              <w:p w:rsidR="00622303" w:rsidRPr="00622303" w:rsidRDefault="00622303" w:rsidP="00844F3C">
+                <w:pPr>
+                  <w:rPr>
+                    <w:b/>
+                  </w:rPr>
+                </w:pPr>
+                <w:r w:rsidRPr="00622303">
+                  <w:rPr>
+                    <w:b/>
+                  </w:rPr>
+                  <w:t>
+                    <xsl:if test="string-length(normalize-space(@number)) &gt; 0"><xsl:value-of select="@number"/>. </xsl:if><xsl:value-of select="text()"/>
+                  </w:t>
+                </w:r>
+              </w:p>
+            </w:tc>
+          </xsl:for-each>
+        </w:tr>
+        <xsl:for-each select="row">
+          <w:tr w:rsidR="00622303" w:rsidTr="00622303">
+            <xsl:for-each select="column">
+              <w:tc>
+                <w:tcPr>
+                  <w:tcW>
+                    <xsl:attribute name="w:w">
+                      <xsl:value-of select="$colwidth"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="w:type">dxa</xsl:attribute>
+                  </w:tcW>
+                </w:tcPr>
+                <xsl:choose>
+                  <xsl:when test="count(response) &gt; 1">
+                    <xsl:call-template name="list_format_response"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:call-template name="format_response">
+                      <xsl:with-param name="text" select="response"/>
+                    </xsl:call-template>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </w:tc>
+            </xsl:for-each>
+          </w:tr>
+        </xsl:for-each>
+      </w:tbl>
+    </xsl:if>
+    <w:p w:rsidR="00000000" w:rsidRDefault="00BA645F" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+      <w:pPr>
+        <w:spacing w:before="0"/>
+        <w:rPr>
+          <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
   </xsl:template>
 </xsl:stylesheet>

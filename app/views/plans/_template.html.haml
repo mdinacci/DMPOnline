@@ -17,9 +17,8 @@
       - qs.each do |q|
         - if q.id == section_id
           %li{class: 'current ui-tabs-selected'}
-            = link_to content_tag(:span, "#{t('dmp.template_section', n: q.number_display)}"), complete_plan_path(@plan, :tid => ti.template_id, :sid => q.id), :title => t('dmp.selected_section')
+            = link_to content_tag(:span, "#{t('dmp.template_section', n: q.number_display)}"), complete_plan_path(@plan, tid: ti.template_id, sid: q.id, row: grid_row_list), title: t('dmp.selected_section')
         - else
-          %li= link_to content_tag(:span, "#{t('dmp.template_section', n: q.number_display)}"), complete_plan_path(@plan, :tid => ti.template_id, :sid => q.id)
+          %li= link_to content_tag(:span, "#{t('dmp.template_section', n: q.number_display)}"), complete_plan_path(@plan, tid: ti.template_id, sid: q.id, row: grid_row_list)
     %div{id: t('dmp.selected_section').tr(' ', '_')}
       = render partial: "section", locals: {section_id: section_id, ti: ti}, layout: false
-    

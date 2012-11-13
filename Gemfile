@@ -29,7 +29,7 @@ gem "formtastic", "2.1.1"
 gem "cocoon", "1.0.22"
 gem "rack-pjax", "0.5.7"
 gem "acts_as_list", "0.1.6"
-gem "awesome_nested_set", "2.1.3"
+gem "awesome_nested_set", "2.1.5"
 gem "the_sortable_tree", "1.9.4" 
 gem "sanitize", "2.0.3"
 

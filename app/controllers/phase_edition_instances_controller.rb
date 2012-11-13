@@ -36,6 +36,19 @@ class PhaseEditionInstancesController < ApplicationController
 
   end
 
+  # PUT /plans/1/layer/1/drop_row/1
+  def drop_row
+    q = Question.find(params[:question_id].to_i)
+    if q.is_grid?
+      @phase_edition_instance.child_answers(q.id).each do |a|
+        a.delete_part(params[:drop_row].to_i)
+        a.save!
+      end
+    end
+    
+    redirect_to complete_plan_path(@plan, tid: params[:tid].to_i, sid: params[:sid].to_i, anchor: "grid_#{params[:question_id].to_i}")
+  end
+  
   # POST /plans/1/layer/1/add_answer?dcc_question=1
   def add_answer
     ok = false

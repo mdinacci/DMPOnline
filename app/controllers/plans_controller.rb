@@ -2,7 +2,7 @@ class PlansController < ApplicationController
   respond_to :html
   before_filter :authenticate_user!
   load_and_authorize_resource
-  helper_method :sort_attribute, :sort_direction
+  helper_method :sort_attribute, :sort_direction, :grid_row, :grid_row_list
   
   # GET /plans
   def index
@@ -257,5 +257,19 @@ EOSQL
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : 'desc'    
   end
-    
+  
+  # Zero value for new row.  Grid rows are a 1-based array
+  def grid_row(q_id)
+    r = grid_row_list
+    r[q_id.to_s].to_i
+  end
+
+  def grid_row_list(q_id = 0, i = 0)
+    r = params[:row].is_a?(HashWithIndifferentAccess) ? params[:row].dup : {}
+    if q_id > 0
+      r[q_id.to_s] = i
+    end
+    r
+  end
+  
 end

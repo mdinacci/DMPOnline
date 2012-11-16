@@ -28,7 +28,9 @@ class Answer < ActiveRecord::Base
     Mapping.where(question_id: self.question_id, dcc_question_id: self.dcc_question_id).first.try(:guide)
   end
   def question_guide
-    self.question.try(:guide)
+    if self.question.try(:has_answer?)
+      self.question.try(:guide)
+    end
   end
 
   def mapped_boilerplates

@@ -61,7 +61,7 @@ en:
     no_dcc_equivalent: "(No DCC Equivalent)"
     dcc_guidance: "DCC Guidance"
     your_input: "Your Input"
-    applies_to: "Templates"
+    applies_to: "Templates & Guidance"
     insert_bp: "Insert standard text"
     selected_section: "Selected Section" # Keep to simple chars!
     details_updated: "Details updated"

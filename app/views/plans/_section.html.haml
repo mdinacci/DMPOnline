@@ -9,7 +9,7 @@
         %span.number= q.number_display
         %span.text= sanitize q.question
 
-        - if q.guide.try(:guidance).present? && (q.is_grid? || q.is_heading?)
+        - if q.guide.try(:guidance).present? && !q.has_answer?
           .guidance-area.heading
             = render partial: "guidance", locals: {g: q.guide, popup: nil, org_name: ti.template.organisation.short_name, q_number: q.number_display}
 

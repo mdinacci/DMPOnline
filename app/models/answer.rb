@@ -72,6 +72,9 @@ class Answer < ActiveRecord::Base
     if self.answer.blank?
       self.answer = "#{self.question.is_column? ? "\x1e" : ''}#{self.default_response}"
     end
+    if self.position.blank?
+      self.position = self.dcc_question.try(:lft) || self.question.lft
+    end
     true
   end
   

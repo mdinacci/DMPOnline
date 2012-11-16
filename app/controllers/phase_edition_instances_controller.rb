@@ -36,7 +36,7 @@ class PhaseEditionInstancesController < ApplicationController
 
   end
 
-  # PUT /plans/1/layer/1/drop_row/1
+  # DELETE /plans/1/layer/1/drop_row/1
   def drop_row
     q = Question.find(params[:question_id].to_i)
     if q.is_grid?

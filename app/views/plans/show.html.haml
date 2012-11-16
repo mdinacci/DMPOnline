@@ -61,7 +61,10 @@
                       - if can? :manage, @plan
                         - unless u_email =~ /[*%]/
                           .notify
-                            = link_to t('dmp.notify.send'), notify_plan_path(@plan, template_instance_right_id: u_info[:id]), method: :put
+                            - if session[:sent_notification][u_info[:id]].blank?
+                              = link_to t('dmp.notify.send'), notify_plan_path(@plan, template_instance_right_id: u_info[:id]), method: :put
+                            - else
+                              %span.email_sent= t('dmp.notify.sent_short')
                     %td
                       - roles = []
                       - u_info[:rights].each do |r| 
@@ -83,10 +86,10 @@
   .right
     - unless @plan.locked 
       - if cannot? :update, @plan
-        %span.disabled_link= t('dmp.admin.lock')
+        %span.disabled_link= t('dmp.lock')
       - else
-        = link_to t('dmp.admin.lock'), lock_plan_path(@plan), :confirm => t('dmp.lock_confirm'), :method => :put, :class => 'lock_link'
-    = link_to t('dmp.admin.duplicate'), duplicate_plan_path(@plan), :method => :post, :class => 'edit_link'
+        = link_to t('dmp.lock'), lock_plan_path(@plan), :confirm => t('dmp.lock_confirm'), :method => :put, :class => 'lock_link'
+    = link_to t('dmp.make_copy'), duplicate_plan_path(@plan), :method => :post, :class => 'edit_link'
     - if cannot? :update, @plan
       %span.disabled_link= t('dmp.admin.delete')
     - else

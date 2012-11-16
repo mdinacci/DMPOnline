@@ -33,6 +33,7 @@ en:
     date_not_current: "date not current"
     end_before_start: "must be after start"
     copy_stamp: "COPY"
+    make_copy: "Duplicate"
     lock: "Lock"
     lock_confirm: "Are you sure you want to lock this?  You can't edit the plan once locked."
     locked: "Locked"
@@ -128,18 +129,21 @@ en:
     not_shared: "This plan is not shared"
     edit_project_access: "Share Plan"
     share_description: "To allow others to use your plans, add their email address to the relevant templates.  Use the big green plus to add an entry.  (You can use the * wildcard to, for example, include everyone at an organisation with *@example.com)"
-    update_rights: "Update rights"
+    update_rights: "Save changes"
     invalid_emailmask: "Invalid email mask"
     share_all: "Share with other email addresses"
     read_only: "You have read-only access to this plan; you cannot make changes."
     simple_share: "Simple"
     advanced_share: "Advanced"
     external_write: "This plan can be amended by others"
+    email: "Email address"
+    access: "Access"
     
     notify:
       send: "Send notification"
       plan_shared: "Data Management Plan shared with you"
       sent: "Notification of shared plan sent to %{email}"
+      sent_short: "(Email sent)"
       not_sent: "%{email} is not a valid email.  No notification sent."
       
     validation:
@@ -382,7 +386,7 @@ en:
       other: "Other"
         
     cancel: "Cancel"
-    finished: "Finished"
+    finished: "Back to project details"
     
     errors:
       one: "There was an error in your submission.  Please fix this before continuing:"

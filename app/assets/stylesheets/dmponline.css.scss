@@ -436,6 +436,15 @@ div.link_spacing {
     float: right;
   }
 }
+div.top_link {
+  text-align: right;
+  padding-bottom: 1em;
+  width: 100%;
+}
+.email_sent {
+  font-style: italic;
+  color: $grey;
+} 
 
 ul.news {
   .title {

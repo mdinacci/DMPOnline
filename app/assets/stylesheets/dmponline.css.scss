@@ -219,31 +219,37 @@ label abbr[title=required] {
 /* the overlayed element */
 #login_overlay { 
   /* initially overlay is hidden */
-  display:none;
-
+  display: none;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  width: 440px;
+  margin-left: -220px;
+  
   /* place overlay on top of other elements */
   z-index: 10000;
   
-  /* growing background image */
-  background-image: url('white.png');
-  
-  /* 
-    width after the growing animation finishes
-    height is automatically calculated
-  */
-  width: 440px;
+  /* White background, rounded corners with shadow */
+  .back {
+    margin: -15px -15px;
+    padding: 15px 15px;
+    background-color: #fff;
+    @include shadow(0, 1px, 24px);
+    @include rounded(10px);
+  }
   
   /* some padding to layout nested elements nicely  */
   padding: 35px;
 
   /* default close button positioned on upper right corner */
-  .close {
+  a.close {
     background-image: url('close.png');
     position: absolute; 
     right: 5px; 
     top: 5px;
     height: 35px;
     width: 35px;
+    z-index: 11000;
   }
   
   input[type=text], input[type=password] {
@@ -735,7 +741,16 @@ table.checklist {
   }
 }
 .sections.ui-tabs {
-  min-height: 200px;
+  min-height: 400px;
+}
+.ui-accordion-content-active { 
+  & > span {
+    display: none;
+  }
+  & > .preloader {
+    position: relative;
+    width: 400px;
+  }
 }
 
 td.question-area {

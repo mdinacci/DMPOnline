@@ -1,8 +1,8 @@
-= DMPOnline
+= DMP Online
 
-DMPOnline is the DCC's data management planning tool, available at https://dmponline.dcc.ac.uk
+DMP Online is the DCC's data management planning tool, available at https://dmponline.dcc.ac.uk
 
-Development of the DMPOnline by the Digital Curation Centre has been funded by JISC.  JISC inspires UK colleges and universities in the innovative use of digital technologies, helping to maintain the UK's position as a global leader in education. www.jisc.ac.uk
+Development of the DMP Online by the Digital Curation Centre has been funded by JISC.  JISC inspires UK colleges and universities in the innovative use of digital technologies, helping to maintain the UK's position as a global leader in education. www.jisc.ac.uk
 
 This is just the application code, none of the accompanying question data available at https://dmponline.dcc.ac.uk is included.
 
@@ -22,7 +22,7 @@ The tool has three main functions
 
 == Prerequisites
 
-DMPOnline is a Ruby on Rails application and you'll need to have Ruby 1.9.2 or greater installed on your server and a MySQL server v5.0 or greater.
+DMP Online is a Ruby on Rails application and you'll need to have Ruby 1.9.2 or greater installed on your server and a MySQL server v5.0 or greater.
 
 Further details on how to install Ruby on Rails applications are available from the Ruby on Rails site, http://rubyonrails.org  
 
@@ -62,7 +62,7 @@ user@example.com:: A normal end user
 The password for each of these is 'password'
 
 == Tools Being Used
-DMPOnline is built using a number of other open source projects, including
+DMP Online is built using a number of other open source projects, including
 
 Active Admin::
   A framework for creating administration-style interfaces.
@@ -70,6 +70,8 @@ Formtastic::
   A DSL for semantically building forms.
 Devise::
   User authentication is done using Devise
+jQuery UI::
+  Library of user interface effects built on the jQuery JavaScript library.  http://jqueryui.com
 Highcharts JS::
   JavaScript library for creating interactive charts.  Not free for commercial use: http://shop.highsoft.com/highcharts.html
 Iconic Icons::

@@ -17,7 +17,7 @@ jQuery ->
       return false
 
 
-
+  # With HTC for rounded corners we run out of memory...
   @ie_disable_tabs = jQuery.browser.msie && (parseInt(jQuery.browser.version) < 9)
   @ie_disable_accordion = jQuery.browser.msie && (parseInt(jQuery.browser.version) < 9)
     
@@ -101,18 +101,19 @@ jQuery ->
 
 
   unless @ie_disable_accordion
-    $("#templates.accordion .panel").accordion 
-      active: ".current", 
+    $("#templates.accordion .panel").accordion
+      active: ".current",
       clearStyle: true,
       autoHeight: false,
       event: '',
-      changestart: (event, ui) => 
+      changestart: (event, ui) =>
+        ui.newHeader.next("div").html($("#templates").data('preloader'))
         href = $(ui.newHeader.find("a")).attr("href") 
         $.get href, (data) ->
           ui.newHeader.next("div").html(data)
 
     $('#templates.accordion .ui-accordion-header a').click ->
-      i = $('#templates.accordion .ui-accordion-header a').index(this) 
+      i = $('#templates.accordion .ui-accordion-header a').index(this)
       
       if $("form.phase_edition_instance").isDirty() && !confirm 'You have unsaved changes.  Are you sure you want to navigate away?'
         return false
@@ -139,14 +140,15 @@ jQuery ->
 
   guidance_blocks()
   # guidance_hovers()
-  plan_conditionals()
 
   if @ie_disable_accordion
     section_id = "#templates .sections"
   else
     section_id = "#templates.accordion .ui-accordion-content-active .sections"
 
-  unless @ie_disable_tabs  
+  if @ie_disable_tabs
+    plan_conditionals()
+  else
     $(section_id).livequery ->
       $(this).tabs
         cache: false
@@ -154,7 +156,9 @@ jQuery ->
           cache: false
         event: ''
         load: (event, ui) -> 
-          $(section_id + " ol a").removeAttr("title")    
+          $(section_id + " ol a").removeAttr("title")
+          plan_conditionals()
+          $("form.phase_edition_instance").cleanDirty()
         spinner: $("#templates").data('preloader')
   
     $(section_id + ' .ui-tabs-nav a').livequery "click", (event) ->
@@ -165,9 +169,7 @@ jQuery ->
       
       $("form.phase_edition_instance").cleanDirty()
       i = $(section_id + ' .ui-tabs-nav a').index(this)
-      $(section_id).tabs( "option", "event", 'click' )
       $(section_id).tabs('select', i)
-      $(section_id).tabs( "option", "event", '' )
       return false
 
 

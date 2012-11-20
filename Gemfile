@@ -22,7 +22,7 @@ group :assets do
 end
 gem 'sass-rails', "3.1.4"
 
-gem 'jquery-rails', "1.0.19"
+gem 'jquery-rails', "2.1.3"
 gem "rails3-jquery-autocomplete", "1.0.7"
 gem "paperclip", "2.8.0"
 gem "formtastic", "2.1.1"

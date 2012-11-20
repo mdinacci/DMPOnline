@@ -1,8 +1,16 @@
 #login_overlay
-  %h2= t('dmp.auth.sign_in')
-  = render :partial => 'devise/sessions/form'
+  %a.close{href: '#'}
+  .back
+    %h2= t('dmp.auth.sign_in')
+    = render :partial => 'devise/sessions/form'
 
--# Apple style popups using jQuery Tools http://flowplayer.org/tools/
+-# Opens login form as an overlay using jQuery UI
 :javascript
-  $("a[rel]").overlay({ effect: 'apple' });
-
+  $("a[rel=#login_overlay]").click(function() {
+    $("#login_overlay").show("scale", {percent: 100}, 500);
+    return false;
+  });
+  $("#login_overlay a.close").click(function() {
+    $("#login_overlay").hide();
+    return false;
+  });

@@ -8,7 +8,6 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require cocoon
-//= require jquery.tools.min
 //= require datepicker
 //= require livequery/jquery.livequery.min
 //= require dirtyforms/jquery.dirtyforms

@@ -12,6 +12,7 @@ class Answer < ActiveRecord::Base
   before_create :get_initial_value
   before_save :set_answered_flag
   after_update :update_other_occurrences
+  after_update :update_dependencies
     
   TOKENS = %w[project budget start_date end_date lead_org other_orgs]
 
@@ -153,6 +154,24 @@ class Answer < ActiveRecord::Base
     end
     parts[self.grid_row.to_i] = serialize_options(self.answer)
     self.answer = parts.join("\x1e")
+  end
+  
+  def update_dependencies
+    # Find answers to all questions in this plan which depend on this answer and set the not_used flag as appropriate.
+    # NB: SQL is MYSQL specific
+    aq = self.dcc_question || self.question
+    condition = ActiveRecord::Base.send(:sanitize_sql_array, ["%s", self.answer.to_s])
+
+    sql = ActiveRecord::Base.connection()
+    sql.execute <<EOSQL
+      UPDATE answers a LEFT OUTER JOIN 
+              questions q ON a.question_id = q.id AND q.dependency_question_id = #{aq.id} LEFT OUTER JOIN 
+              questions d ON d.id = a.dcc_question_id AND d.dependency_question_id = #{aq.id} 
+      SET a.not_used = CASE WHEN d.dependency_value RLIKE '^(.*\\\\|)?#{condition}(\\\\|.*)?$' THEN 0 WHEN q.dependency_value RLIKE '^(.*\\\\|)?#{condition}(\\\\|.*)?$' THEN 0 ELSE 1 END
+      WHERE a.phase_edition_instance_id IN (0#{self.phase_edition_instance.template_instance.plan.current_phase_edition_instance_ids.join(',')})
+            AND (q.id IS NOT NULL OR d.id IS NOT NULL)
+EOSQL
+
   end
 
 end

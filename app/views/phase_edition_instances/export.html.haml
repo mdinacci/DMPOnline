@@ -51,7 +51,7 @@
     %br
     &nbsp;
     %br
-    - qs = export_questions(@pei, @doc[:selection])
+    - qs = export_questions(@pei, @doc[:selection], @doc[:include_conditional], @doc[:exclude_unanswered])
     %table{:class => 'export'}
       %tbody
         - qs.each do |section|
@@ -60,29 +60,29 @@
             %td.heading= section[:heading]
 
           - section[:template_clauses].each do |q|
-            %tr{class: "depth-#{q[:depth]} type-#{q[:kind]} #{cycle('odd', 'even')}"}
-              - if q[:grid] == 0 || q[:is_grid]
+            - if q[:grid] == 0 || q[:is_grid]
+              %tr{class: "depth-#{q[:depth]} type-#{q[:kind]} #{cycle('odd', 'even')}"}
                 %td.number= q[:number]
-
-              - if q[:is_heading]
-                %td.heading= q[:question]
-              - elsif q[:is_mapped]
-                %td.question-heading= q[:question]
-              - elsif q[:grid] == 0 || q[:is_grid]
-                %td.question-full= q[:question]
-
-            - q[:answers].each do |a|
-              - if q[:answers].count > 1 || q[:is_mapped]
-                %tr{class: "mapped depth-#{q[:depth]} type-#{a[:kind]} #{cycle('odd', 'even')}"}
+  
+                - if q[:is_heading]
+                  %td.heading= q[:question]
+                - elsif q[:is_mapped]
+                  %td.question-heading= q[:question]
+                - else
+                  %td.question-full= q[:question]
+  
+              - q[:answers].each do |a|
+                - if q[:answers].count > 1 || q[:is_mapped]
+                  %tr{class: "mapped depth-#{q[:depth]} type-#{a[:kind]} #{cycle('odd', 'even')}"}
+                    %td.spacer
+                    %td.question-full
+                      - if @doc[:dcc_question_numbers] && a[:dmp_number].present?
+                        %span.dcc_number= "#{a[:dmp_number]}:"
+                      - if @doc[:include_dcc_questions]
+                        = a[:dmp_clause]
+                %tr{class: "response depth-#{q[:depth]} type-#{a[:kind]} #{cycle('odd', 'even')}"}
                   %td.spacer
-                  %td.question-full
-                    - if @doc[:dcc_question_numbers] && a[:dmp_number].present?
-                      %span.dcc_number= "#{a[:dmp_number]}:"
-                    - if @doc[:include_dcc_questions]
-                      = a[:dmp_clause]
-              %tr{class: "response depth-#{q[:depth]} type-#{a[:kind]} #{cycle('odd', 'even')}"}
-                %td.spacer
-                %td.answer= response_html_format(a[:response])
+                  %td.answer= response_html_format(a[:response])
 
             - if q[:is_grid]
               %tr{class: "response depth-#{q[:depth]} type-grid #{cycle('odd', 'even')}"}

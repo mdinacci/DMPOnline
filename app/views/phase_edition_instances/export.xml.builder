@@ -30,7 +30,7 @@ xml.dmp do
     xml.budget(plan_display(@plan, :budget))
   end
   
-  qs = export_questions(@pei, @doc[:selection])
+  qs = export_questions(@pei, @doc[:selection], @doc[:include_conditional], @doc[:exclude_unanswered])
   qs.each do |s|
     xml.section("number" => s[:number]) do
       xml.heading(clean_html(s[:heading]))

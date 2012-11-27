@@ -51,7 +51,7 @@
     %br
     &nbsp;
     %br
-    - qs = export_questions(@pei, @doc[:selection])
+    - qs = export_questions(@pei, @doc[:selection], @doc[:include_conditional], @doc[:exclude_unanswered])
     %table{:class => 'export'}    
       %tbody
         - qs.each do |section|

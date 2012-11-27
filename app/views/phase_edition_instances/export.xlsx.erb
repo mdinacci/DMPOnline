@@ -35,7 +35,7 @@ end
 
 r += 1
 
-qs = export_questions(@pei, @doc[:selection])
+qs = export_questions(@pei, @doc[:selection], @doc[:include_conditional], @doc[:exclude_unanswered])
 qs.each do |section|
   ws.add_cell(r, 0, section[:number])
   ws.add_cell(r, 1, wipe_html(section[:heading]))

@@ -2,7 +2,7 @@
 module PhaseEditionInstancesHelper
   include QuestionsHelper
   
-  def export_questions(pei, selection = [])
+  def export_questions(pei, selection = [], conditionals = false, exclude_unanswered = false)
     if pei.is_a?(Plan)
       start_numbering = 1 
     else
@@ -10,15 +10,12 @@ module PhaseEditionInstancesHelper
     end
     
     qs = pei.report_questions
-    if selection.empty?
-      selection = exclude_conditionals(qs, pei)
-    end
     apply_selection(qs, selection)
     number_questions(qs, start_numbering)
-    export_output(qs, pei)
+    export_output(qs, pei, conditionals, exclude_unanswered)
   end
 
-  def export_output(qs, pei)
+  def export_output(qs, pei, conditionals = false, exclude_unanswered = false)
     if pei.is_a?(Plan)
       dcc_q_numbering = dcc_numbering(pei.template_instances.first.current_edition)
     else
@@ -52,12 +49,32 @@ module PhaseEditionInstancesHelper
       export_question[:is_mapped] = q.is_mapped?
       export_question[:is_grid] = q.is_grid?
 
+      if conditionals
+        skip_condition = false
+      else
+        skip_condition = !pei.include_question(q.id)
+      end 
+      
+      if exclude_unanswered
+        if q.has_answer? || q.is_mapped?
+          skip_answered = true
+        elsif q.is_grid?
+          skip_answered = !pei.child_answered(q.id)
+        else
+          skip_answered = false
+        end
+      else
+        skip_answered = false
+      end
+
       if q.is_grid?
         export_question[:grid] = mark_table = q.id
+        skip_grid = skip_condition || skip_answered
       elsif mark_table == q.parent_id
         export_question[:grid] = q.parent_id
       else
         export_question[:grid] = mark_table = 0
+        skip_grid = false
       end
       export_question[:question] = sanitize q.question.force_encoding('UTF-8')
       export_question[:answers] = []
@@ -72,9 +89,9 @@ module PhaseEditionInstancesHelper
           end
         end
 
-        if q.has_answer? || q.is_mapped?
-          q_answers.each do |a|
-            opts = {}
+        q_answers.each do |a|
+          opts = {}
+          if (conditionals || !a.not_used) && (!exclude_unanswered || a.answered)
             if a.dcc_question.nil?
               opts[:dmp_number] = ''
               opts[:dmp_clause] = t('dmp.no_dcc_equivalent')
@@ -86,13 +103,16 @@ module PhaseEditionInstancesHelper
               opts[:kind] = a.dcc_question.kind
               export_question[:answers] << export_answer(a.dcc_question, a, opts)
             end
+            skip_answered = false
           end
         end
       end
 
       # Don't include the heading if it's just a repeat of the section
       unless export_section[:q_id] == q.id && q.is_heading?
-        export_section[:template_clauses] << export_question
+        unless skip_condition || skip_answered || skip_grid
+          export_section[:template_clauses] << export_question
+        end
       end
       
       first = false
@@ -152,23 +172,6 @@ module PhaseEditionInstancesHelper
     answer
   end
 
-  def exclude_conditionals(qs, pei)
-    dv = pei.answers.where(:answered => true).inject({}) do |hash, a|
-      hash.merge!((a.dcc_question_id ? a.dcc_question_id : a.question_id) =>  a.answer)
-    end
-    selection = []
-    qs.each do |q|
-      if q.dependency_question_id 
-        if q.dependency_value.split('|').include?(dv[q.dependency_question_id])
-          selection << q.id
-        end
-      else
-        selection << q.id
-      end
-    end
-    selection
-  end
-        
   def apply_selection(qs, selection)
     qs.delete_if{ |q| !selection.include?(q.id) }
     qs.sort!{ |a,b| selection.index(a.id) <=> selection.index(b.id) }

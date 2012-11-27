@@ -16,24 +16,24 @@
                 %th= t('attributes.project')
                 %td= plan_display(@plan, :project, nil, true)
               %tr
-                %td= check_box_tag "doc[budget]", 1, true
+                %td= check_box_tag "doc[budget]", 1, @plan.budget.present?
                 %th= t('attributes.budget')
                 %td= plan_display(@plan, :budget, nil, true)
               %tr
-                %td= check_box_tag "doc[project_dates]", 1, true
+                %td= check_box_tag "doc[project_dates]", 1, @plan.start_date.present? || @plan.end_date.present?
                 %th= t('dmp.project_dates')
                 %td
                   = plan_display(@plan, :start_date, :long, true)
                   %br
                   = plan_display(@plan, :end_date, :long, true)
               %tr
-                %td= check_box_tag "doc[template_org]", 1, true
+                %td= check_box_tag "doc[template_org]", 1, !@output_all
                 %th= t('dmp.template_org')
                 %td
                   = "#{@phase_edition_instance.template_instance.template.organisation.organisation_type.title}:"
                   = @phase_edition_instance.template_instance.template.organisation.full_name
               %tr
-                %td= check_box_tag "doc[partners]", 1, true
+                %td= check_box_tag "doc[partners]", 1, @plan.lead_org.present? || @plan.other_orgs.present?
                 %th= t('dmp.partner_orgs')
                 %td 
                   = plan_display(@plan, :lead_org, nil, true)
@@ -67,6 +67,14 @@
                 %td= check_box_tag "doc[include_dcc_questions]", 1, true
                 %th= t('dmp.title_dcc_questions')
                 %td= t('dmp.include_dcc_questions')
+              %tr
+                %td= check_box_tag "doc[exclude_unanswered]", 1, false
+                %th= t('dmp.title_exclude_unanswered')
+                %td= t('dmp.hint_exclude_unanswered')
+              %tr
+                %td= check_box_tag "doc[include_conditional]", 1, false
+                %th= t('dmp.title_include_conditional')
+                %td= t('dmp.hint_include_conditional')
   
     - unless @eqs.blank?
       - number_questions(@eqs, @output_all ? 1 : @phase_edition_instance.edition.start_numbering)

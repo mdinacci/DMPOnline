@@ -31,11 +31,11 @@ class Plan < ActiveRecord::Base
   end
 
   def question_counts
-    self.answers.count(group: 'phase_edition_instances.id', conditions: 'answers.hidden = 0')
+    self.answers.count(group: 'phase_edition_instances.id', conditions: 'answers.hidden = 0 AND answers.not_used = 0')
   end
 
   def answered_counts
-    self.answers.count(group: 'phase_edition_instances.id', conditions: 'answers.answered <> 0 AND answers.hidden = 0')
+    self.answers.count(group: 'phase_edition_instances.id', conditions: 'answers.answered <> 0 AND answers.hidden = 0 AND answers.not_used = 0')
   end
   
   def report_questions
@@ -51,6 +51,31 @@ class Plan < ActiveRecord::Base
       .where(parent_id: q_id)
       .order('answers.position')
       .all
+  end
+
+  def child_answered(q_id)
+    !self.questions
+      .where(parent_id: q_id, 'answers.answered' => true)
+      .all
+      .empty?
+  end
+  
+  def include_question(q_id)
+    result = false
+    q = self.questions.where("questions.id" => q_id).first
+    if q.nil?
+      result = true
+    else
+      if q.dependency_question_id
+        a = self.answers.where("answers.question_id = ? OR answers.dcc_question_id = ?", q_id, q_id).first
+        if q.dependency_value.split('|').include? a.try(:answer)
+          result = true
+        end
+      else
+        result = true
+      end
+    end
+    result
   end
 
   def user_list

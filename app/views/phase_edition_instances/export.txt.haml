@@ -21,7 +21,7 @@ DMP Online (Digital Curation Centre)
   = "#{t('attributes.budget')}: #{plan_display(@plan, :budget)}"
 
 
-- qs = export_questions(@pei, @doc[:selection])
+- qs = export_questions(@pei, @doc[:selection], @doc[:include_conditional], @doc[:exclude_unanswered])
 - qs.each do |section|
   - unless section[:heading].blank?
     - t = word_wrap(wipe_html(section[:heading]), :line_width => @doc[:width] - 4).gsub("\n", "\n    ")

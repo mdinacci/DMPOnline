@@ -45,9 +45,10 @@ jQuery ->
     $('table.plan tbody tr').each ->
       dq = $(this).data('dependency')
       dv = $(this).data('being')
-      unless dq == undefined || dv == undefined
+      dt = $(this).data('target')
+      unless dq == undefined || dq == '' || dt == undefined || dt == '' || dv == undefined
         dvl = dv.toString().split('|')
-        conditional_show(dq, '#' + $(this).attr('id'), dvl)
+        conditional_show(dq, dtp, dvl) for dtp in dt.toString().split('|')
 
     $(".ui-tabs-panel:not(.ui-tabs-hide) dl.boilerplate dt").click -> 
       $(this)

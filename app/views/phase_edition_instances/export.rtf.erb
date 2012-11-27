@@ -113,7 +113,7 @@ document.paragraph
 rows = []
 row = {}
 
-qs = export_questions(@pei, @doc[:selection])
+qs = export_questions(@pei, @doc[:selection], @doc[:include_conditional], @doc[:exclude_unanswered])
 qs.each do |section|
   row[:style] = 'SectionHeading'
   row[0] = section[:number]

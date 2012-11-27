@@ -15,8 +15,13 @@
     - q_number = "DCC #{dcc_q_numbering[dcc_q.id]}"
     - q_options = dcc_q.options
 
-  - d = "tr#answer_row_#{dependency.try(:id)} .input-area #{dependency.try(:form_source)}"
-  %tr{id: "answer_row_#{q_id}", data: {dependency: d, being: q_dependency_value}}
+  - d = dependency.try(:form_source).blank? ? '' : "#answer_row_#{dependency.id} .input-area #{dependency.form_source}"
+  - oid = "answer_row_#{q_id}"
+  - dt = "##{oid}"
+  - if q.has_answer? && q.answers.count < 2
+    - dt = "#{dt}|#question_row_#{q.id}"
+    - oid = nil
+  %tr{id: oid, data: {dependency: d, being: q_dependency_value, target: dt}}
     - if q.is_column?
       - a.object.grid_row = grid_row(q.parent.id)
       - a.object.answer = a.object.part(grid_row(q.parent.id))

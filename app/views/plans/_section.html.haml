@@ -5,7 +5,8 @@
 .answers
   = semantic_form_for pei, :url => plan_layer_path(plan_id: @plan.id, id: pei.id), :method => :put do |f|
     - section_qs.each do |q|
-      %div{class: "question #{question_type_css(q.kind)} #{q.is_column? ? 'column' : ''}"}
+      - oid = q.has_answer? ? "question_row_#{q.id}" : nil
+      %div{id: oid, class: "question #{question_type_css(q.kind)} #{q.is_column? ? 'column' : ''}"}
         %span.number= q.number_display
         %span.text= sanitize q.question
 
@@ -16,7 +17,8 @@
       - if q.is_grid?
         = render partial: 'grid_display', locals: {pei: pei, q: q, ti: ti, sid: section_id}
       - elsif !q.is_heading?
-        %div{class: "answer #{q.is_column? ? 'column' : ''}"}
+        - oid = (q.has_answer? && q.answers.count < 2) ? "answer_row_#{q.id}" : nil 
+        %div{id: oid, class: "answer #{q.is_column? ? 'column' : ''}"}
           - answers = pei.question_answers(q.id)
           %table.index_table.plan
             %thead

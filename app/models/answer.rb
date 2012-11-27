@@ -51,8 +51,10 @@ class Answer < ActiveRecord::Base
   end
 
   def delete_part(p)
-    if p > 0
-      self.answer = self.break_up.delete_at(p).join("\x1E")
+    a = self.break_up
+    if p > 0 && p < a.length
+      a.delete_at(p)
+      self.answer = a.join("\x1e")
     end
   end
 

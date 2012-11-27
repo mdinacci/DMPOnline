@@ -132,26 +132,26 @@ qs.each do |section|
       row[1] = wipe_html(q[:question])
       rows << row
       row = {}
-    end
-
-    q[:answers].each do |a|
-      if q[:answers].count > 1 || q[:is_mapped]
-        if @doc[:dcc_question_numbers] || @doc[:include_dcc_questions]
-          row[:style] = 'Question'
-          row[0] = ''
-          row[1] = @doc[:dcc_question_numbers] && a[:dmp_number].present? ? "#{a[:dmp_number]}: " : ''
-          if @doc[:include_dcc_questions]
-            row[1] += wipe_html(a[:dmp_clause])
+  
+      q[:answers].each do |a|
+        if q[:answers].count > 1 || q[:is_mapped]
+          if @doc[:dcc_question_numbers] || @doc[:include_dcc_questions]
+            row[:style] = 'Question'
+            row[0] = ''
+            row[1] = @doc[:dcc_question_numbers] && a[:dmp_number].present? ? "#{a[:dmp_number]}: " : ''
+            if @doc[:include_dcc_questions]
+              row[1] += wipe_html(a[:dmp_clause])
+            end
+            rows << row
+            row = {}
           end
-          rows << row
-          row = {}
         end
+        row[:style] = 'Answer'
+        row[0] = ''
+        row[1] = response_rtf_format(a[:response])
+        rows << row
+        row = {}
       end
-      row[:style] = 'Answer'
-      row[0] = ''
-      row[1] = response_rtf_format(a[:response])
-      rows << row
-      row = {}
     end
 
     if q[:is_grid]
@@ -160,7 +160,8 @@ qs.each do |section|
       row[0] = ''
       j = 1
       grid.each do |col|
-        row[j] = "#{col.number_display}. #{wipe_html(col.question)}"
+        row[j] = col.number_display.present? ? "#{col.number_display} " : ''
+        row[j] += "#{wipe_html(col.question)}"
         j += 1
       end
       rows << row

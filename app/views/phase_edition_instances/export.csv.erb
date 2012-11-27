@@ -7,14 +7,24 @@
       unless section[:heading].blank?
         csv << ["#{section[:number]}  #{wipe_html(section[:heading])}", "", ""]
       end
+      grid_q = ''
       section[:template_clauses].each do |q|
+        if q[:is_grid]
+          grid_q = "#{q[:number]}  #{wipe_html(q[:question])}".lstrip
+        end 
         q[:answers].each do |a|
-          dcc = @doc[:dcc_question_numbers] ? "#{a[:dmp_number]} " : ''
+          dcc = ''
+          if @doc[:dcc_question_numbers] && a[:dmp_number].present?
+            dcc = "#{a[:dmp_number]} "
+          end
           if @doc[:include_dcc_questions]
             dcc += wipe_html(a[:dmp_clause])
           end
-          
-          csv << ["#{q[:number]}  #{wipe_html(q[:question])}", dcc, response_text_format(a[:response])]
+          if q[:grid] == 0
+            csv << ["#{q[:number]}  #{wipe_html(q[:question])}".lstrip, dcc, response_text_format(a[:response])]
+          else
+            csv << [grid_q, "#{q[:number]}  #{wipe_html(q[:question])}".lstrip, response_text_format(a[:response])]
+          end
         end
       end
     end

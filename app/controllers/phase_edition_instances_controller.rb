@@ -48,7 +48,7 @@ class PhaseEditionInstancesController < ApplicationController
     if q.is_grid?
       @phase_edition_instance.child_answers(q.id).each do |a|
         a.delete_part(params[:drop_row].to_i)
-        a.save!
+        a.save!(validate: false)
       end
     end
     

@@ -33,7 +33,7 @@
             = hidden_field_tag "row[#{q.id}]", r
             - unless css == 'current'
               = link_to t('dmp.grid_edit_row'), complete_plan_path(@plan, sid: sid, tid: ti.template_id, row: grid_row_list(q.id, i), anchor: "grid_#{q.id}"), class: 'edit_link'
-            = link_to t('dmp.grid_delete_row'), drop_row_plan_layer_path(plan_id: pei.template_instance.plan_id, id: pei.id, question_id: q.id, drop_row: r), method: :delete
+            = link_to t('dmp.grid_delete_row'), drop_row_plan_layer_path(plan_id: pei.template_instance.plan_id, id: pei.id, question_id: q.id, drop_row: i, sid: sid, tid: ti.template_id), method: :delete
 
 - if editing 
   .grid_add_button

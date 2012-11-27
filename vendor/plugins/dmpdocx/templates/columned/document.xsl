@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:template match="/dmp">
+    <xsl:variable name="extra"><xsl:choose>
+      <xsl:when test="format/orientation = 'landscape'">4932</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose></xsl:variable>
     <w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" mc:Ignorable="w14 wp14">
       <w:body>
         <w:p w:rsidR="00E07559" w:rsidRPr="002646F3" w:rsidRDefault="00B43521" w:rsidP="002646F3">
@@ -150,7 +154,11 @@
               <w:gridCol w:w="532"/>
               <w:gridCol w:w="717"/>
               <w:gridCol w:w="3112"/>
-              <w:gridCol w:w="6321"/>
+              <w:gridCol>
+                <xsl:attribute name="w:w">
+                  <xsl:value-of select="$extra + 6321"/>
+                </xsl:attribute>
+              </w:gridCol>
             </w:tblGrid>
             <xsl:if test="normalize-space(heading)">
               <w:tr w:rsidR="00844F3C" w:rsidRPr="00844F3C" w:rsidTr="00844F3C">
@@ -179,7 +187,12 @@
                 </w:tc>
                 <w:tc>
                   <w:tcPr>
-                    <w:tcW w:w="10150" w:type="dxa"/>
+                    <w:tcW>
+                      <xsl:attribute name="w:w">
+                        <xsl:value-of select="$extra + 10150"/>
+                      </xsl:attribute>
+                      <xsl:attribute name="w:type">dxa</xsl:attribute>
+                    </w:tcW>
                     <w:gridSpan w:val="3"/>
                     <w:shd w:val="clear" w:color="auto" w:fill="000000" w:themeFill="text1"/>
                   </w:tcPr>
@@ -226,10 +239,15 @@
                   </w:p>
                 </w:tc>
                 <xsl:choose>
-                  <xsl:when test="question/@is_mapped = 'true' or count(dcc_clause) &gt; 1">
+                  <xsl:when test="question/@is_mapped = 'true' or question/@is_grid = 'true' or count(dcc_clause) &gt; 1">
                     <w:tc>
                       <w:tcPr>
-                        <w:tcW w:w="10150" w:type="dxa"/>
+                        <w:tcW>
+                          <xsl:attribute name="w:w">
+                            <xsl:value-of select="10150 + $extra"/>
+                          </xsl:attribute>
+                          <xsl:attribute name="w:type">dxa</xsl:attribute>
+                        </w:tcW>
                         <w:gridSpan w:val="3"/>
                       </w:tcPr>
                       <w:p w:rsidR="00844F3C" w:rsidRPr="00844F3C" w:rsidRDefault="00844F3C" w:rsidP="00844F3C">
@@ -273,7 +291,12 @@
                     </w:tc>
                     <w:tc>
                       <w:tcPr>
-                        <w:tcW w:w="6321" w:type="dxa"/>
+                        <w:tcW>
+                          <xsl:attribute name="w:w">
+                            <xsl:value-of select="$extra + 6321"/>
+                          </xsl:attribute>
+                          <xsl:attribute name="w:type">dxa</xsl:attribute>
+                        </w:tcW>
                       </w:tcPr>
                       <xsl:for-each select="dcc_clause">
                         <xsl:choose>
@@ -312,10 +335,17 @@
                   </w:tc>
                   <w:tc>
                     <w:tcPr>
-                      <w:tcW w:w="9443" w:type="dxa"/>
+                      <w:tcW>
+                        <xsl:attribute name="w:w">
+                          <xsl:value-of select="$extra + 9443"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="w:type">dxa</xsl:attribute>
+                      </w:tcW>
                       <w:gridSpan w:val="2"/>
                     </w:tcPr>
-                    <xsl:call-template name="grid_response"/>
+                    <xsl:call-template name="grid_response">
+                      <xsl:with-param name="extra" select="$extra"/>
+                    </xsl:call-template>
                   </w:tc>
                 </w:tr>
               </xsl:if>
@@ -362,7 +392,12 @@
                     </w:tc>
                     <w:tc>
                       <w:tcPr>
-                        <w:tcW w:w="6321" w:type="dxa"/>
+                        <w:tcW>
+                          <xsl:attribute name="w:w">
+                            <xsl:value-of select="$extra + 6321"/>
+                          </xsl:attribute>
+                          <xsl:attribute name="w:type">dxa</xsl:attribute>
+                        </w:tcW>
                       </w:tcPr>
                       <xsl:choose>
                         <xsl:when test="count(response) &gt; 1">
@@ -415,7 +450,14 @@
         <w:sectPr w:rsidR="009B5DCF" w:rsidSect="00603D2B">
           <w:headerReference w:type="default" r:id="rId9"/>
           <w:footerReference w:type="default" r:id="rId10"/>
-          <w:pgSz w:w="11906" w:h="16838"/>
+          <xsl:choose>
+            <xsl:when test="format/orientation = 'landscape'">
+              <w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <w:pgSz w:w="11906" w:h="16838"/>
+            </xsl:otherwise>
+          </xsl:choose>
           <w:pgMar w:top="720" w:right="720" w:bottom="720" w:left="720" w:header="567" w:footer="567" w:gutter="0"/>
           <w:cols w:space="708"/>
           <w:docGrid w:linePitch="360"/>
@@ -692,6 +734,7 @@
     </xsl:for-each>
   </xsl:template>
   <xsl:template name="grid_response">
+    <xsl:param name="extra" select="0"/>
     <xsl:variable name="cols" select="count(question[@is_grid != 'true'])"/>
     <xsl:if test="$cols &gt; 0">
       <w:tbl xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
@@ -700,7 +743,7 @@
           <w:tblW w:w="0" w:type="auto"/>
           <w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>
         </w:tblPr>
-        <xsl:variable name="colwidth" select="floor((9443 - 250) div $cols)"/>
+        <xsl:variable name="colwidth" select="floor((9443 + $extra - 250) div $cols)"/>
         <w:tblGrid>
           <xsl:for-each select="question[@is_grid != 'true']">
             <w:gridCol>

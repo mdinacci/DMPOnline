@@ -1,6 +1,10 @@
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:template match="/dmp">
+    <xsl:variable name="extra"><xsl:choose>
+      <xsl:when test="format/orientation = 'landscape'">4932</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose></xsl:variable>
 		<w:hdr
 			xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
 			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -25,7 +29,12 @@
 					<w:tabs>
 						<w:tab w:val="clear" w:pos="4513" />
 						<w:tab w:val="clear" w:pos="9026" />
-						<w:tab w:val="right" w:pos="10484" />
+						<w:tab>
+              <xsl:attribute name="w:val">right</xsl:attribute>
+              <xsl:attribute name="w:pos">
+                <xsl:value-of select="$extra + 10484"/>
+              </xsl:attribute>
+            </w:tab>
 					</w:tabs>
 				</w:pPr>
 				<w:r w:rsidRPr="00603D2B">

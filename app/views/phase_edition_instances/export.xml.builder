@@ -7,6 +7,7 @@ xml.dmp do
     xml.font_face(@doc[:font_style])
     xml.font_size(@doc[:font_size])
     xml.signatures(@doc[:page_signatures_count])
+    xml.orientation(@doc[:orientation])
   end
   if @doc[:project_status]
     xml.stage(t('dmp.project_stage', phase: @phase_edition_instance.edition.phase.phase))

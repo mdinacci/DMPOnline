@@ -23,10 +23,16 @@ class PhaseEditionInstancesController < ApplicationController
           render :edit
         end
       else
-        redirect_to complete_plan_path(@plan, tid: params[:tid].to_i, sid: params[:sid].to_i)
+        if success
+          redirect_to complete_plan_path(@plan, tid: params[:tid].to_i, sid: params[:sid].to_i), notice: I18n.t('dmp.plan_saved')
+        else
+          flash[:error] = I18n.t('dmp.plan_not_saved')
+          redirect_to complete_plan_path(@plan, tid: params[:tid].to_i, sid: params[:sid].to_i)
+        end
       end
     else
-      redirect_to plan_path(@plan), error: I18n.t('dmp.update_failed')
+      flash[:error] = I18n.t('dmp.update_failed')
+      redirect_to plan_path(@plan)
     end
   end
 
@@ -208,5 +214,5 @@ class PhaseEditionInstancesController < ApplicationController
 
     end
   end
-
+  
 end

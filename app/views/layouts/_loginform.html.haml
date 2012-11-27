@@ -5,12 +5,11 @@
     = render :partial => 'devise/sessions/form'
 
 -# Opens login form as an overlay using jQuery UI
-:javascript
-  $("a[rel=#login_overlay]").click(function() {
-    $("#login_overlay").show("scale", {percent: 100}, 500);
-    return false;
-  });
-  $("#login_overlay a.close").click(function() {
-    $("#login_overlay").hide();
-    return false;
-  });
+:coffeescript
+  jQuery ->
+    $("a[rel=#login_overlay]").click ->
+      $("#login_overlay").show "scale", percent: 100, 500
+      false
+    $("#login_overlay a.close").click ->
+      $("#login_overlay").hide()
+      false

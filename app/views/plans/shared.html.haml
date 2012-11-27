@@ -1,3 +1,3 @@
-- title t('dmp.plans')
+- title t('dmp.shared_plans')
 
-= render :partial => 'list'
+= render :partial => 'list', locals: {no_plans_message: t('dmp.no_shared_plans')}

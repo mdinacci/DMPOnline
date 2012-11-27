@@ -102,9 +102,6 @@
 
 form {
   input[type=submit], button[type=submit] {
-    box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    -webkit-box-sizing: content-box;
     display: inline-block;
     @include green-button;
     font-family: Helvetica, Arial, sans-serif;
@@ -438,15 +435,15 @@ div.link_spacing {
     bottom: 0.1em;
     padding-bottom: 3em;
   }
+  &.back {
+    margin-top: -0.5em;
+    padding-bottom: 2.5em;
+  }
   .right {
     float: right;
   }
 }
-div.top_link {
-  text-align: right;
-  padding-bottom: 1em;
-  width: 100%;
-}
+
 .email_sent {
   font-style: italic;
   color: $grey;
@@ -1258,4 +1255,26 @@ table.grid_answer {
 }
 form.phase_edition_instance > fieldset.buttons {
   margin-top: 5em;
+}
+
+.modal_message {
+  font-weight: bold;
+}
+.form_text {
+  font-style: italic;
+  padding: 0 2em;
+  margin-bottom: 1em;
+  border-bottom: 1px solid $lightgrey;
+}
+input[type=submit][disabled] {
+  @include light-button;
+  border-left: solid $lightgrey 1px;
+  margin-right: 9px !important;
+  &:hover {
+    @include light-button;
+    border-left: solid $lightgrey 1px;
+  }
+}
+fieldset.collapsible legend > span > span {
+  behavior: none;
 }

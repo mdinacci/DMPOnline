@@ -72,8 +72,5 @@ jQuery ->
       .slideToggle('slow')
     $(this).find("span>span").toggleClass('ui-icon-triangle-1-e ui-icon-triangle-1-s')
       
-  $(".collapsible legend span").prepend('<span class="ui-icon ui-icon-triangle-1-s">')
-  $(".collapsible legend")
-    .addClass('expanded')
-    .trigger('click')
-  
+  $(".collapsible legend span").prepend('<span class="ui-icon ui-icon-triangle-1-e">')
+  $(".collapsible legend").addClass('collapsed').next().hide()

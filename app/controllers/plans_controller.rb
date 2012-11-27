@@ -150,7 +150,9 @@ EOSQL
 
   # GET /plan/1/output
   def output
-
+    if @plan.phase_edition_instances.count == 1
+      redirect_to output_plan_layer_path(@plan, @plan.phase_edition_instances.first)
+    end
   end
   
   # GET /plan/1/section/1

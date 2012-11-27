@@ -6,7 +6,8 @@
     %h2.step= t('dmp.plan_create_step_1')
     = f.inputs do
       = f.input :project
-      = f.input :currency 
+      .form_text= t('dmp.following_optional')
+      = f.input :currency
       = f.input :budget, input_html: {value: number_with_precision(@plan.budget, precision: 2)}
       = f.input :start_date
       = f.input :end_date
@@ -15,10 +16,13 @@
 
     = f.buttons do
       = f.commit_button
-      - if @plan.new_record? 
+      - if @plan.new_record?
         %li.button= link_to t('dmp.cancel'), plans_path, {class: "cancel_link"}
       - else
         %li.button= link_to t('dmp.cancel'), plan_path(@plan), {class: "cancel_link"}
+    
+    .modal_message
+      = t('dmp.disabled_until_template_selection')
 
   
   .plan_right_column
@@ -40,7 +44,7 @@
                     - t.each do |i|
                       %li.choice
                         %label{for: dom_id(i)}
-                          = check_box_tag 'plan[template_ids][]', i.id, @plan.template_ids.include?(i.id), id: dom_id(i), class: @plan.template_ids.include?(i.id) ? "warning" : nil, disabled: @plan.template_ids.include?(i.id)
+                          = check_box_tag 'plan[template_ids][]', i.id, @plan.template_ids.include?(i.id), id: dom_id(i), class: @plan.template_ids.include?(i.id) ? "warning" : nil, disabled: !@plan.new_record? && @plan.template_ids.include?(i.id)
                           = i.name
                         .description
                           = sanitize i.description
@@ -52,3 +56,16 @@
       %p.error= t('dmp.no_templates')
 
   .plan_footer
+
+:coffeescript
+  jQuery ->
+    $(".plan_right_column input").change ->    
+      c = $(".plan_right_column input:checked").length
+      $("input.create").prop "disabled", c == 0
+      $(".modal_message").toggle(c == 0)
+    .change()
+    
+    $(".plan_right_column fieldset.collapsible").each (i) ->
+      if $("input:checked", this).length > 0
+        $("legend", this).trigger 'click'
+         

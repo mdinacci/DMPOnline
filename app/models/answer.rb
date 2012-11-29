@@ -161,19 +161,22 @@ class Answer < ActiveRecord::Base
   def update_dependencies
     # Find answers to all questions in this plan which depend on this answer and set the not_used flag as appropriate.
     # NB: SQL is MYSQL specific
-    aq = self.dcc_question || self.question
-    condition = ActiveRecord::Base.send(:sanitize_sql_array, ["%s", self.answer.to_s])
-
-    sql = ActiveRecord::Base.connection()
-    sql.execute <<EOSQL
-      UPDATE answers a LEFT OUTER JOIN 
-              questions q ON a.question_id = q.id AND q.dependency_question_id = #{aq.id} LEFT OUTER JOIN 
-              questions d ON d.id = a.dcc_question_id AND d.dependency_question_id = #{aq.id} 
-      SET a.not_used = CASE WHEN d.dependency_value RLIKE '^(.*\\\\|)?#{condition}(\\\\|.*)?$' THEN 0 WHEN q.dependency_value RLIKE '^(.*\\\\|)?#{condition}(\\\\|.*)?$' THEN 0 ELSE 1 END
-      WHERE a.phase_edition_instance_id IN (0#{self.phase_edition_instance.template_instance.plan.current_phase_edition_instance_ids.join(',')})
-            AND (q.id IS NOT NULL OR d.id IS NOT NULL)
+    # Limit maximum length of answer worth checking to 100 characters
+    unless self.answer.to_s.length > 100
+      aq = self.dcc_question || self.question
+      condition = ActiveRecord::Base.send(:sanitize_sql_array, ["%s", Regexp.escape(self.answer.to_s)])
+  
+      sql = ActiveRecord::Base.connection()
+      sql.execute <<EOSQL
+        UPDATE answers a LEFT OUTER JOIN 
+                questions q ON a.question_id = q.id AND q.dependency_question_id = #{aq.id} LEFT OUTER JOIN 
+                questions d ON d.id = a.dcc_question_id AND d.dependency_question_id = #{aq.id} 
+        SET a.not_used = CASE WHEN d.dependency_value RLIKE '^(.*\\\\|)?#{condition}(\\\\|.*)?$' THEN 0 WHEN q.dependency_value RLIKE '^(.*\\\\|)?#{condition}(\\\\|.*)?$' THEN 0 ELSE 1 END
+        WHERE a.phase_edition_instance_id IN (0#{self.phase_edition_instance.template_instance.plan.current_phase_edition_instance_ids.join(',')})
+              AND (q.id IS NOT NULL OR d.id IS NOT NULL)
 EOSQL
 
+    end
   end
 
 end

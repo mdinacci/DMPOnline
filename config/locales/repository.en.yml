@@ -1,0 +1,87 @@
+en:
+  repository:
+  
+    title:
+      details: "Repository details"
+      log: "Latest Repository Activity"
+      filetypes: "File types to use when depositing to the repository"
+      plans: "Associated plans"
+  
+    label:
+      deposit_in: "Deposit in %{rep}"    
+      create_metadata_with_new_plan: "Automatically deposit metadata whenever a plan is created"
+      status: "Repository status"
+      repository: "Repository"
+      duplicated_from: "Duplicated From"
+      no_repository_queue_record: "No repository action records found"
+      no_repository_record: "Plan not linked to a repository"
+      deposit_formats: "Deposit formats"
+    
+    action:
+      status_name:
+        initialising: "Initialising"
+        pending: "Pending"
+        processing: "Processing"
+        failed_requeue: "Failed - Requeue"
+        failed_terminated: "Failed - Terminated"
+        success: "Success"
+        removed: "Removed"
+        
+      status_description:
+        initialising: "Action initialising, not yet available for processing"
+        pending: "Awaiting processing"
+        processing: "In processing"
+        failed_requeue: "Failed processing, will automatically requeue and try again"
+        failed_terminated: "Failed processing, terminated action and will not try again"
+        success: "Succeeded processing"
+        removed: "Removed from queue for Delete operation"
+  
+      type_name:
+        create_metadata: "Create Metadata"
+        create_metadata_media: "Create Metadata and Media"
+        replace_media: "Replace Media"
+        add_media: "Add Media"
+        finalise: "Finalise"
+        duplicate: "Duplicate"
+        delete: "Delete"
+        
+      type_description:
+        create_metadata: "Create a metadata record in repository"
+        create_metadata_media: "Create a metadata and media record in repository"
+        replace_media: "Replace (put) the existing media record"
+        add_media: "Add (post) to the existing media record"
+        finalise: "Finalise record in repository"
+        duplicate: "Duplicate in repository"
+        delete: "Delete record from repository"
+        
+    log_message:
+      initialised: "Initialised"
+      archiving: "Archiving %{arg1} file(s)"
+      bagged: "Bagged file: %{arg1} (%{arg2})"
+      zip_archive: "Zip archive: %{arg1} (%{arg2})"
+      no_archive: "No files archived"
+      resubmitted: "Resubmitted failed process"
+      processing: "Processing"
+      repository_collection_uri_html: '<a href="%{arg1}">Collection URI</a>'
+      repository_content_uri_html: '<a href="%{arg1}">Content URI</a>'
+      repository_entry_edit_uri_html: '<a href="%{arg1}">Entry Edit URI</a>'
+      repository_edit_media_uri_html: '<a href="%{arg1}">Edit Media URI</a>'
+      repository_sword_edit_uri_html: '<a href="%{arg1}">Sword Edit URI</a>'
+      repository_sword_statement_uri_html: '<a href="%{arg1}">Sword Statement URI</a>'
+      completed: "Completed"
+      no_deposit_receipt: "Deposit receipt was not returned"
+      error: "Processing failed due to an error."
+      re_attempt: "Action to be re-attempted"
+      failed_terminated: "Failed (Terminated) - no handler for: %{arg1}"
+      attempt_count: "Attempt count: %{arg1} of %{arg2}"
+      terminated: "Terminated"
+      
+    log:
+      empty: "No activity log entries available"
+      plan_removed: "Removed"
+      all: "All"
+      no_plans: "No associated plans"
+      
+    notify:
+      queue_error: "DMP Online repository deposit failed"
+      deposit_queued: "Your plan has been queued for deposit"

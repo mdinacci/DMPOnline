@@ -4,4 +4,4 @@ en:
       open_calendar: "Open Calendar"
       not_saved: "Changes not saved"
       dirty_form_warning: "You need to save your changes before moving away from this template."
-      
+      already_deposited: "This plan/phase has already been deposited.\nAre you sure you wish to deposit it again?"      

@@ -1,0 +1,24 @@
+.panel
+  %h3= t('repository.title.log')
+  .panel_contents
+    .attributes_table
+      %table.repository_log
+        %thead
+          %tr
+            %th= t('attributes.log_date')
+            %th= t('attributes.phase')
+            %th= t('attributes.repository_action_type')
+            %th= t('attributes.repository_action_status')
+            %th.log= t('attributes.repository_action_log')
+        %tbody
+          - if @plan.repository_action_queues.empty?
+            %tr
+              %td.nothing{colspan: 5}= t('repository.log.empty')
+          - @plan.repository_action_queues.each do |log_entry|
+            %tr
+              %td= log_entry.created_at.localtime.to_s(:repository_time)
+              %td= log_entry.plan.nil? ? t('repository.log.plan_removed') : log_entry.phase_edition_instance.blank? ? t('repository.log.all') : log_entry.phase_edition_instance.edition.phase.phase
+              %td= t("repository.action.type_name.#{log_entry.type.to_s}")
+              %td= t("repository.action.status_name.#{log_entry.status.to_s}")
+              %td.log
+                .limit-height= simple_format(log_entry.repository_action_log)

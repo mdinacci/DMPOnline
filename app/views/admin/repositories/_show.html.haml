@@ -1,0 +1,16 @@
+.panel
+  %h3= t('repository.title.details')
+  .panel_contents
+    = render 'details', repository: repository
+.panel
+  %h3= t('repository.title.filetypes')
+  .panel_contents
+    = render 'filetypes', repository: repository, filetypes: filetypes
+.panel
+  %h3= t('repository.title.plans')
+  .panel_contents
+    = render 'plans', plans: repository.plans
+.panel
+  %h3= t('repository.title.log')
+  .panel_contents
+    = render 'log', queue: repository.repository_action_queues.latest_entries

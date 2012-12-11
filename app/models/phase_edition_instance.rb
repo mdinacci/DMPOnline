@@ -4,9 +4,10 @@ class PhaseEditionInstance < ActiveRecord::Base
   has_many :answers, :dependent => :delete_all
   has_many :questions, :through => :answers
   has_many :template_instance_rights, :through => :template_instance
+  has_many :repository_action_queues, :dependent => :destroy
 
   accepts_nested_attributes_for :answers, :allow_destroy => true
-  attr_accessible :sword_edit_uri, :answers_attributes, :edition_id
+  attr_accessible :answers_attributes, :edition_id
 
   attr_accessor :active_check
 

@@ -87,18 +87,45 @@
 
 
     .output-format
-      .selection
-        %label{for: "format"}
-          = t('dmp.output_format')
-          = select_tag 'format', '<option value="pdf">PDF</option><option value="html">HTML</option><option value="csv">CSV</option><option value="txt">TXT</option><option value="xml">XML</option><option value="xlsx">XLSX</option><option value="docx">DOCX</option><option value="rtf">RTF</option>'.html_safe
-    
-      .actions
-        = f.submit name: "doc[inline]", value: t('dmp.open')
-        = f.submit name: "doc[attachment]", value: t('dmp.download')
+      .attributes_table
+        %table
+          %tbody
+            %tr
+              %th= t('repository.label.status')
+              - if @plan.repository
+                %td
+                  - if @repository_queue.latest_entry.nil?
+                    - entry = t('repository.label.no_repository_queue_record')
+                  - else
+                    - entry = t("repository.action.status_description.#{@repository_queue.latest_entry.status}") 
+                  - phase = @output_all ? t('dmp.combined_output') : @phase_edition_instance.edition.phase.phase
+                  = "#{entry} (#{phase})"
+              - else
+                %td= t('repository.label.no_repository_record')
+              %td
+        
+            - if @plan.repository
+              %tr
+                %th= t('repository.label.deposit_formats')
+                %td= @plan.repository.filetypes_list.collect{|x| t("dmp.formats.#{x}")}.join(', ')
+                %td
+                  = hidden_field_tag "has_deposited_media", @repository_queue.has_deposited_media?, data: {confirmation: t('dmp.js.already_deposited')}
+                  = f.submit name: "doc[deposit]", value: t('repository.label.deposit_in', rep: @plan.repository.name), id: "doc_deposit"
+
+            %tr
+              %th= t('dmp.output_format')
+              %td
+                = select_tag 'format', export_formats_option_list
+              %td
+                = f.submit name: "doc[inline]", value: t('dmp.open')
+                = f.submit name: "doc[attachment]", value: t('dmp.download')
+
+      .link_spacing
         = link_to t('dmp.finished'), plan_path(@plan), :class => "nav_link"
 
     - unless @phase_edition_instance.template_instance.template.constraint_text.blank?
       .constraint= @phase_edition_instance.template_instance.template.constraint_text
+
 
     #page_layout.panel
       %h3= t('dmp.page_layout')
@@ -119,4 +146,5 @@
                 %th= t('dmp.font_style')
                 %td= select_tag 'doc[font_style]', "<option value='sans-serif'>#{t('dmp.sans_serif')}</option><option value='serif'>#{t('dmp.serif')}</option>".html_safe
 
- 
+  - if @plan.repository
+    = render partial: '/plans/repository_log'

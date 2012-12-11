@@ -9,6 +9,7 @@ class Organisation < ActiveRecord::Base
   has_many :templates, :dependent => :restrict
   has_many :users, :dependent => :restrict
   has_many :posts, :dependent => :restrict
+  has_many :repositories, :dependent => :restrict
   
   has_attached_file :logo, :styles => {home: '320x92>', template: '256x72>', thumb: '48x48>'}
   has_attached_file :banner, :styles => {home: '320x92>', template: '256x72>'}

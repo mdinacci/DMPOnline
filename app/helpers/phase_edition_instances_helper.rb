@@ -229,5 +229,21 @@ module PhaseEditionInstancesHelper
     params[:row] ||= {}
     params[:row][q_id.to_s] ||= r
   end
-  
+
+  def repository_option_list
+    Repository.order(:name).all.inject({}) do |hash, r|
+      hash.merge!("#{r.name} (#{r.organisation.full_name})" => r.id)
+    end
+  end
+
+  def obo_allowed_list
+    Repository
+      .select("repositories.id, repository_usernames.obo_username")
+      .joins("LEFT OUTER JOIN repository_usernames ON repository_usernames.repository_id = repositories.id AND repository_usernames.user_id = #{current_user.id}")
+      .where(allow_obo: true)
+      .all
+      .inject({}) do |hash, r|
+        hash.merge!(r.id.to_s => r.obo_username)
+      end
+  end
 end

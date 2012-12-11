@@ -64,4 +64,11 @@ gem "exception_notification", "2.6.1"
 gem 'letter_opener', :group => :development
 gem 'win32console', :platforms => :mingw
 
-gem 'therubyracer', "0.10.1", :platforms => :ruby 
+gem 'therubyracer', "0.10.1", :platforms => :ruby
+
+# Gems for repository integration
+gem 'email_validator', '1.3.0'
+gem 'validate_url', '0.2.0'
+gem 'bagit', '0.2.0'
+gem 'sword2ruby', '1.0.0'
+gem "attr_encrypted", '1.2.1'

@@ -44,7 +44,7 @@ Dmponline3::Application.routes.draw do
         put 'notify/:template_instance_right_id', :action => 'notify', :as => 'notify', :template_instance_right_id => /\d+/
       end
   
-      resources :phase_edition_instances, :only => [:edit, :update], :as => "layer", :path => 'layer' do
+      resources :phase_edition_instances, :only => [:update], :as => "layer", :path => 'layer' do
         member do
           get 'checklist/:question_id', :question_id => /\d+/, :action => 'checklist', :as => 'checklist'
           post 'add_answer/:question_id', :question_id => /\d+/, :action => 'add_answer', :as => 'add_answer'

@@ -17,7 +17,7 @@ module ActiveAdmin::ViewHelpers
         end
         link_to "#{item.boilerplate_type}: #{item.content.truncate(50)}", l
   
-      when :currency, :document
+      when :currency, :document, :repository
         link_to item.name, polymorphic_path([:admin, item])
 
       when :template

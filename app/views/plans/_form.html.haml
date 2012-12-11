@@ -13,7 +13,8 @@
       = f.input :end_date
       = f.input :lead_org
       = f.input :other_orgs
-
+      = render partial: 'repository', locals: {f: f}
+      
     = f.buttons do
       = f.commit_button
       - if @plan.new_record?
@@ -68,4 +69,16 @@
     $(".plan_right_column fieldset.collapsible").each (i) ->
       if $("input:checked", this).length > 0
         $("legend", this).trigger 'click'
-         
+
+    $("#plan_repository_id").change ->
+      obo_list = $("#repository_username_area").data('obo_list')
+      sel = $(this).val().toString()
+
+      if typeof obo_list[sel] == 'undefined'
+        $("#repository_username_area").hide()
+      else
+        $("#plan_repository_username_username").val(obo_list[sel])
+        $("#repository_username_area").show()
+      end
+    .change()
+

@@ -60,6 +60,7 @@ ActiveAdmin.register Organisation do
     column :url do |organisation|
       link_to organisation.url, organisation.url
     end
+    column :repository
     default_actions
   end
   
@@ -80,7 +81,8 @@ ActiveAdmin.register Organisation do
         end
       end
       row :logo_file_size
-      row :branded do |organisation|
+      row :repository
+      row :branded do
         organisation.branded ? I18n.t('dmp.boolean_yes') : I18n.t('dmp.boolean_no')
       end
       row :domain

@@ -14,6 +14,10 @@
               %tr
                 %th= t('attributes.project')
                 %td= plan_display(@plan, :project, nil, true)
+              - if @plan.source_plan.present? 
+                %tr
+                  %th= t('attributes.duplicated_from')
+                  %td= plan_display(@plan, :source_plan, nil, true)
               %tr
                 %th= t('dmp.plan_created_at')
                 %td= plan_display(@plan, :created_at, :long, true)
@@ -32,6 +36,10 @@
               %tr
                 %th= t('attributes.other_orgs')
                 %td= plan_display(@plan, :other_orgs, nil, true)
+              - if @plan.repository.present?
+                %tr
+                  %th= t('attributes.repository')
+                  %td= plan_display(@plan, :repository, nil, true)
     .link_spacing.top
       - if cannot? :update, @plan
         %span.disabled_link= t('dmp.edit_project')
@@ -142,3 +150,5 @@
     - if multi_message
       %p.phase_guide= t('dmp.change_phase')
 
+- if @plan.repository
+  - render partial: 'repository_log'

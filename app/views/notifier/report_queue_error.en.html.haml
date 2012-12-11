@@ -1,0 +1,56 @@
+!!! Strict
+%html{:lang => 'en'}
+  %head
+    %meta{:content => 'text/html; charset=utf-8', 'http-equiv' => 'Content-Type'}
+    
+  %body
+    %p
+      = "Dear #{@entry.repository.administrator_name},"
+    
+    %p
+      This is an automated error report from DMP Online, 
+      = link_to root_url, root_url
+    %p
+      This email address is listed as the admin contact for the repository shown below; 
+      please reply to this email if this needs updating.
+
+    %dl
+      %dt Queue Id:
+      %dd= @entry.id
+      %dt Repository:
+      %dd= "#{@entry.repository.name} (#{@entry.repository.id})"
+      %dt Plan:
+      %dd
+        = link_to @entry.plan.project, plan_url(@entry.plan)
+        = "(#{@entry.plan.id})"
+      - if @entry.phase_edition_instance
+        %dt Phase:
+        %dd= @entry.phase_edition_instance.edition.phase.phase 
+      %dt Action Type:
+      %dd
+        = t("repository.action.type_name.#{@entry.type.to_s}")
+        = "(#{@entry.repository_action_type}): "
+        = t("repository.action.type_description.#{@entry.type.to_s}")
+      %dt Action Status:
+      %dd
+        = t("repository.action.status_name.#{@entry.status.to_s}")
+        = "(#{@entry.repository_action_status}): "
+        = t("repository.action.status_description.#{@entry.status.to_s}")
+      %dt Submitting user:
+      %dd= "#{@entry.user.email} (#{@entry.user.id})"
+      %dt Repository Action URI:
+      %dd= @entry.repository_action_uri
+      %dt Repository Receipt:
+      %dd= @entry.repository_action_receipt
+      %dt Retry Count:
+      %dd= (@entry.retry_count + 1)
+
+
+    %dl
+      %dt
+        %strong Repository Log:
+      %dd= raw @entry.repository_action_log
+
+      %dt
+        %strong Exception Message:
+      %dd= @exception

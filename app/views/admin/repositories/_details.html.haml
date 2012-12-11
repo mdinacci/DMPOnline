@@ -1,0 +1,28 @@
+.attributes_table
+  %table
+    %tbody
+      %tr
+        %th= t('attributes.name')
+        %td= repository.name
+      %tr
+        %th= t('attributes.organisation')
+        %td= link_to repository.organisation.full_name, admin_organisation_path(repository.organisation)
+      %tr
+        %th= t('attributes.sword_collection_uri')
+        %td= link_to(repository.sword_collection_uri, repository.sword_collection_uri, :target => "_blank")
+      %tr
+        %th= t('attributes.username')
+        %td= repository.username
+      %tr
+        %th= t('attributes.administrator_name')
+        %td= repository.administrator_name
+      %tr
+        %th= t('attributes.administrator_email')
+        %td= repository.administrator_email
+      %tr
+        %th= t('attributes.allow_obo')
+        %td= repository.allow_obo
+      - if metadata_option_available?
+        %tr
+          %th= t('repository.label.create_metadata_with_new_plan')
+          %td= check_box_tag :create_metadata_with_new_plan, 1, repository.create_metadata_with_new_plan, :disabled => true

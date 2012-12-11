@@ -12,7 +12,13 @@ class Plan < ActiveRecord::Base
   has_many :current_answers, :source => :answers, :through => :current_phase_edition_instances 
   has_many :questions, :through => :answers
 
+  belongs_to :repository
+  has_many :repository_action_queues, :dependent => :destroy
+  belongs_to :source_plan, :class_name => 'Plan', :foreign_key => 'duplicated_from_plan_id'
+  has_many :duplicate_plans, :class_name => 'Plan', :foreign_key => 'duplicated_from_plan_id'
+
   attr_accessible :project, :currency_id, :budget, :start_date, :end_date, :lead_org, :other_orgs, :template_ids
+  attr_accessible :repository_id
   accepts_nested_attributes_for :template_instances, :update_only => true, :allow_destroy => false
 
   validates_presence_of :project
@@ -116,12 +122,21 @@ class Plan < ActiveRecord::Base
     !self.template_instance_rights.where(:role_flags => TemplateInstance::ROLES.index('write')).blank?
   end
   
+  def current_repository_actions
+    RepositoryActionQueue
+      .where(plan_id: self.id, repository_id: self.repository_id)
+  end
+  
+
+  
   protected
   
-  #after_save callback to handle template_instances
+  # before_validation callback to handle adding template_instances
   def update_template_instances
     if !self.template_ids.nil? && self.template_ids.is_a?(Array)
       self.template_instances.each do |t|
+        # We're not allowing deletion since this could lead to user losing data, 
+        # and destroy should only happen after validation, not here
         #t.destroy unless template_ids.include?(t.template_id.to_s)
         self.template_ids.delete(t.template_id.to_s)
       end

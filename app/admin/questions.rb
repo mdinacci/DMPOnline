@@ -27,11 +27,11 @@ ActiveAdmin.register Question do
   
   show do |question|
     attributes_table do
-      row :kind do |question|
+      row :kind do
         display = translated_types.invert
         display[question.kind]
       end
-      row :number_style do |question|
+      row :number_style do
         display = translated_styles.invert
         display[question.number_style]
       end

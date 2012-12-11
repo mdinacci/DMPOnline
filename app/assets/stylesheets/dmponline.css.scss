@@ -1278,3 +1278,37 @@ input[type=submit][disabled] {
 fieldset.collapsible legend > span > span {
   behavior: none;
 }
+.output-format {
+  .attributes_table {
+    select {
+      margin-bottom: 2px;
+      margin-left: 0;
+      padding-left: 0;
+    }
+    table {
+      width: auto;
+    }
+    display: inline-block;
+    padding-right: 50px;
+  }
+  .link_spacing {
+    padding-bottom: 15px;
+  }
+  padding-left: 15px;
+}
+.repository fieldset.inputs {
+  @include no_shadow;
+  margin: 0 0;
+  padding: 0 0;
+}
+table.repository_log {
+  td.log > .limit-height {
+    max-height: 6em;
+    overflow: auto;
+    border: solid $grey 1px;
+    padding-left: 4px;
+  }
+  td.log, th.log {
+    width: 40%;
+  }
+}

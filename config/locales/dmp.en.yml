@@ -134,6 +134,7 @@ en:
     org_guidance: "%{org_name} Guidance"
     all_questions: "All questions"
     across_all_templates: "Single report of questions across all templates"
+    combined_output: "Combined output"
     project_access: "Project Sharing"
     not_shared: "This plan is not shared"
     edit_project_access: "Share Plan"
@@ -393,7 +394,18 @@ en:
       researcher: "Researcher"
       support: "Support staff"
       other: "Other"
-        
+
+    formats:
+      rdf: ".RDF (Metadata)"
+      pdf: ".PDF"
+      html: ".HTML"
+      csv: ".CSV"
+      txt: ".TXT"
+      xml: ".XML"
+      xlsx: ".XLSX (Microsoft Excel)"
+      docx: ".DOCX (Microsoft Word)"
+      rtf: ".RTF (Rich Text Format)"
+
     cancel: "Cancel"
     finished: "Back to plan details"
     

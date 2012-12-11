@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   has_many :posts
   has_many :plans, :dependent => :destroy
   has_many :roles, :dependent => :destroy
+  has_many :repository_usernames, :dependent => :destroy
   belongs_to :organisation
   
   # Include default devise modules. Others available are:
@@ -11,7 +12,6 @@ class User < ActiveRecord::Base
          :omniauthable, :confirmable, :timeoutable, :encryptable,
          :token_authenticatable, :omniauth_providers => [:shibboleth] 
 
-
   # Setup accessible (or protected) attributes for the model
   attr_accessible :password, :password_confirmation, :remember_me, :categories, :email, :email_confirmation, :current_password
   # Currently email address cannot be changed.  Need later version of Devise to ensure changed 
@@ -19,6 +19,8 @@ class User < ActiveRecord::Base
   # Also implications for access to plans need clearly signposted for users
   attr_readonly :email, :email_confirmation
   validates :email, uniqueness: {case_sensitive: false}, presence: true, confirmation: true
+
+  accepts_nested_attributes_for :repository_usernames
 
   # User Roles used by DMPOnline
   # sysadmin: can manage everything in the system.
@@ -185,6 +187,17 @@ class User < ActiveRecord::Base
       Document.scoped
     else
       Document
+        .joins(:organisation => :roles)
+        .where('roles.role_flags' => 2**ROLES.index('orgadmin'))
+        .where('roles.user_id' => self.id)
+        .readonly(false)
+    end
+  end
+  def repositories
+    if is_dccadmin?
+      Repository.scoped
+    else
+      Repository
         .joins(:organisation => :roles)
         .where('roles.role_flags' => 2**ROLES.index('orgadmin'))
         .where('roles.user_id' => self.id)

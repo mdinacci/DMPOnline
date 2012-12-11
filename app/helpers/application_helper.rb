@@ -39,7 +39,7 @@ module ApplicationHelper
   end
   
   def plan_display(plan, attribute, date_format = :long, show_none = false)
-    if plan.send(attribute).blank?
+    if plan.respond_to?(attribute) && plan.send(attribute).blank?
       if show_none
         content_tag :span, t('dmp.admin.none'), :class => 'empty'
       else 
@@ -59,6 +59,13 @@ module ApplicationHelper
         end
       when :created_at, :updated_at, :start_date, :end_date
         l plan.send(attribute), format: date_format
+      when :repository
+        r = plan.send(attribute)
+        "#{r.name} (#{r.organisation.full_name})".force_encoding('UTF-8')
+      when :source_plan
+        plan.send(attribute).project.force_encoding('UTF-8')
+      when :owner
+        plan.user.email.force_encoding('UTF-8')
       else
         plan.send(attribute).force_encoding('UTF-8')
       end
@@ -76,4 +83,19 @@ module ApplicationHelper
      end
   end
 
+  def export_formats_collection
+    opts = []
+    Rails.application.config.export_formats.each do |filetype|
+      opts << [I18n.t("dmp.formats.#{filetype.to_s}"), filetype.to_s]
+    end
+    opts
+  end
+  
+  def export_formats_option_list  
+    options_for_select(export_formats_collection).html_safe
+  end
+
+  def metadata_option_available?
+    Rails.application.config.export_formats.include?(:rdf)
+  end
 end

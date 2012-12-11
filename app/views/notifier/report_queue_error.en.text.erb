@@ -1,0 +1,25 @@
+Dear <%= @entry.repository.administrator_name%>,
+
+This is an automated error report from <%= t('dmp.title')%>, <%= root_url %>
+This email address is listed as the admin contact for the repository shown below; 
+please reply to this email if this needs updating.
+
+Queue Id:   <%= @entry.id %>
+Repository:   <%= @entry.repository.name %> (<%= @entry.repository.id %>)
+Plan:   <%= @entry.plan.project %> (<%= @entry.plan.id %>): <%= plan_url(@entry.plan) %>
+Phase:  <%= @entry.phase_edition_instance.edition.phase.phase if @entry.phase_edition_instance %> 
+Action Type:  <%= t("repository.action.type_name.#{@entry.type.to_s}") %> (<%= @entry.repository_action_type %>)
+Action Status:  <%= t("repository.action.status_name.#{@entry.status.to_s}") %> (<%= @entry.repository_action_status %>)
+Submitting user:  <%= @entry.user.email %> (<%= @entry.user.id %>)
+Repository Action URI:  <%= @entry.repository_action_uri %>
+Repository Receipt:  <%= @entry.repository_action_receipt %>
+Retry Count:  <%= @entry.retry_count + 1 %>
+
+
+Repository Log:
+<%= @entry.repository_action_log %>
+
+
+Exception Message:
+<%= @exception %>
+

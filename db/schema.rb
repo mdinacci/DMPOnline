@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121120152000) do
+ActiveRecord::Schema.define(:version => 20121206093000) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",                       :null => false
@@ -183,7 +183,6 @@ ActiveRecord::Schema.define(:version => 20121120152000) do
     t.integer  "edition_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "sword_edit_uri"
   end
 
   add_index "phase_edition_instances", ["edition_id"], :name => "index_phase_edition_instances_on_edition_id"
@@ -207,10 +206,17 @@ ActiveRecord::Schema.define(:version => 20121120152000) do
     t.date     "end_date"
     t.string   "lead_org"
     t.string   "other_orgs"
-    t.boolean  "locked",      :default => false
+    t.boolean  "locked",                         :default => false
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "duplicated_from_plan_id"
+    t.integer  "repository_id"
+    t.string   "repository_content_uri"
+    t.string   "repository_entry_edit_uri"
+    t.string   "repository_edit_media_uri"
+    t.string   "repository_sword_edit_uri"
+    t.string   "repository_sword_statement_uri"
   end
 
   add_index "plans", ["currency_id"], :name => "index_plans_on_currency_id"
@@ -247,6 +253,47 @@ ActiveRecord::Schema.define(:version => 20121120152000) do
   add_index "questions", ["dependency_question_id"], :name => "index_questions_on_dependency_question_id"
   add_index "questions", ["edition_id"], :name => "index_questions_on_edition_id"
 
+  create_table "repositories", :force => true do |t|
+    t.integer  "organisation_id"
+    t.string   "name"
+    t.string   "sword_collection_uri"
+    t.string   "encrypted_username"
+    t.string   "encrypted_password"
+    t.string   "administrator_name"
+    t.string   "administrator_email"
+    t.boolean  "allow_obo",                     :default => false
+    t.boolean  "create_metadata_with_new_plan", :default => true
+    t.string   "filetypes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "repository_action_queues", :force => true do |t|
+    t.integer  "repository_id"
+    t.integer  "plan_id"
+    t.integer  "phase_edition_instance_id"
+    t.integer  "user_id"
+    t.integer  "repository_action_type"
+    t.integer  "repository_action_status"
+    t.string   "repository_action_uri"
+    t.text     "repository_action_receipt"
+    t.text     "repository_action_log"
+    t.integer  "retry_count",               :default => 0, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "repository_action_queues", ["phase_edition_instance_id"], :name => "index_repository_action_queues_on_phase_edition_instance_id"
+  add_index "repository_action_queues", ["repository_id"], :name => "index_repository_action_queues_on_repository_id"
+
+  create_table "repository_usernames", :force => true do |t|
+    t.integer  "repository_id"
+    t.integer  "user_id"
+    t.string   "obo_username"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "roles", :force => true do |t|
     t.integer  "role_flags"
     t.integer  "user_id"
@@ -276,7 +323,6 @@ ActiveRecord::Schema.define(:version => 20121120152000) do
     t.integer  "current_edition_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "sword_col_uri"
   end
 
   add_index "template_instances", ["current_edition_id"], :name => "index_template_instances_on_current_edition_id"
@@ -292,7 +338,6 @@ ActiveRecord::Schema.define(:version => 20121120152000) do
     t.boolean  "checklist",                            :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "sword_sd_uri"
     t.string   "constraint_text"
   end
 

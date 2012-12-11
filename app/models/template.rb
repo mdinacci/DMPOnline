@@ -8,7 +8,7 @@ class Template < ActiveRecord::Base
   has_many :template_instances, :dependent => :restrict
   
   accepts_nested_attributes_for :phases, :allow_destroy => true, :reject_if => :phase_empty
-  attr_accessible :organisation_id, :name, :url, :description, :constraint_limit, :constraint_text, :sword_sd_uri, :phases_attributes
+  attr_accessible :organisation_id, :name, :url, :description, :constraint_limit, :constraint_text, :phases_attributes
   validates :name, :organisation, :presence => true
   validates_presence_of :phases
 

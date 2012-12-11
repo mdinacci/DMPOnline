@@ -12,34 +12,19 @@ class PhaseEditionInstancesController < ApplicationController
   end
 
   # PUT /plans/1/layer/1
-  # Checking to see whether submission of plan answers or update of the pei table
+  # Submission of plan answers
   def update
     if params[:phase_edition_instance].present?
-      success = @phase_edition_instance.update_attributes(params[:phase_edition_instance])
-      if params[:phase_edition_instance][:answers_attributes].blank?
-        if success
-          redirect_to plan_path(@plan), notice: I18n.t('dmp.details_updated')
-        else
-          render :edit
-        end
+      if @phase_edition_instance.update_attributes(params[:phase_edition_instance])
+        redirect_to complete_plan_path(@plan, tid: params[:tid].to_i, sid: params[:sid].to_i), notice: I18n.t('dmp.plan_saved')
       else
-        if success
-          redirect_to complete_plan_path(@plan, tid: params[:tid].to_i, sid: params[:sid].to_i), notice: I18n.t('dmp.plan_saved')
-        else
-          flash[:error] = I18n.t('dmp.plan_not_saved')
-          redirect_to complete_plan_path(@plan, tid: params[:tid].to_i, sid: params[:sid].to_i)
-        end
+        flash[:error] = I18n.t('dmp.plan_not_saved')
+        redirect_to complete_plan_path(@plan, tid: params[:tid].to_i, sid: params[:sid].to_i)
       end
     else
       flash[:error] = I18n.t('dmp.update_failed')
       redirect_to plan_path(@plan)
     end
-  end
-
-  # GET /plans/1/layer/1/edit
-  # Edit only here for sword_edit_uri
-  def edit
-
   end
 
   # DELETE /plans/1/layer/1/drop_row/1
@@ -96,12 +81,14 @@ class PhaseEditionInstancesController < ApplicationController
   def output
     @eqs = @phase_edition_instance.report_questions
     @output_all = false
+    @repository_queue = @phase_edition_instance.repository_action_queues
   end
 
   def output_all
-    @eqs = @phase_edition_instance.template_instance.plan.report_questions
+    @eqs = @plan.report_questions
     @output_all = true
-
+    @repository_queue = @plan.repository_action_queues
+    
     render :output
   end
 
@@ -112,7 +99,9 @@ class PhaseEditionInstancesController < ApplicationController
       redirect_to output_plan_layer_path(@plan, @phase_edition_instance)
       return
     end
+
     @doc = params[:doc]
+    
     pos = @doc[:position] || {}
     unless pos.is_a?(HashWithIndifferentAccess) 
       pos = {}
@@ -159,59 +148,125 @@ class PhaseEditionInstancesController < ApplicationController
     @doc[:filename] = "#{@plan.project.parameterize}.#{params[:format]}"
     @doc[:format] = params[:format]
     
-    unless @doc[:inline].blank?
-      response.headers['Content-Disposition'] = 'inline; filename=' + @doc[:filename]
-    else
-      response.headers['Content-Disposition'] = 'attachment; filename=' + @doc[:filename]
-    end
-    
     unless @doc[:output_all].blank?
       @pei = @plan
     else
       @pei = @phase_edition_instance
     end
     
-    template = (@doc[:layout] == 'full') ? 'export' : 'export_col'
-    
-    respond_to do |format|
-      format.html { render template.to_sym, layout: false }
-      format.rtf  { render template.to_sym, layout: false }
-      format.txt  { render :export, layout: false }
-      format.xml  { render :export, layout: false }
-      format.csv  { render :export, layout: false }
+    if @doc[:deposit].present?
+      if @plan.repository.present?
+        files = []
+
+        @plan.repository.filetypes_list.each do |format|
+          logger.info "Deposit generating #{format}"
+          filename = "#{@plan.project.parameterize}.#{format}"
+          binary = %w(pdf docx xlsx).include?(format)
+          data = export_rendering(format.to_sym)
+          if %w(docx xlsx).include?(format)
+            data = open(data, "rb") {|io| io.read }
+          end
+          
+          files << {filename: filename, binary: binary, data: data}
+        end
+          
+        # Do an EXPORT to the Edit-Media URI if there is already (or will be an entry) in the repository.
+        # Otherwise, do a CREATE to Col-URI.
+        if @plan.repository_entry_edit_uri.present? || @plan.current_repository_actions.try(:has_deposited_metadata?)
+          # replace
+          RepositoryActionQueue.enqueue(:replace_media, @plan, @doc[:output_all].blank? ? @phase_edition_instance : nil, current_user, files)
+        else
+          # create
+          RepositoryActionQueue.enqueue(:create_metadata_media, @plan, @doc[:output_all].blank? ? @phase_edition_instance : nil, current_user, files)
+        end
+        # If we are depositing from a plan for the first time but it has already been locked, ensure it is finalised 
+        if @plan.locked
+          RepositoryActionQueue.enqueue(:finalise, @plan, nil, current_user)
+        end
+      end
       
-      format.xlsx do
-        xlsx = Tempfile.new("dmp")
-        xlsx.close
-        newpath = "#{xlsx.path}.xlsx"
-        newpath.gsub!(/^.*:/, '')
-        File.rename(xlsx.path, newpath)
-        @doc[:tmpfile] = newpath
-        render_to_string :export, layout: false
+      # Redirect to output selection screen
+      self.formats = [:html]
+      if @doc[:output_all].blank?
+        url = output_plan_layer_path(@plan, @phase_edition_instance)
+      else
+        url = output_all_plan_layer_path(@plan, @phase_edition_instance)
+      end
+      redirect_to url, notice: I18n.t('repository.notify.deposit_queued')
+      return
+
+    elsif @doc[:inline].present?
+      response.headers['Content-Disposition'] = 'inline; filename=' + @doc[:filename]
+    elsif @doc[:attach].present?
+      response.headers['Content-Disposition'] = 'attachment; filename=' + @doc[:filename]
+    end
+   
+    respond_to do |format|
+      Rails.application.config.export_formats.each do |type|
+        format.send(type) { self.response_body = export_rendering(type) }
+      end
+    end
+    
+  end
+
+
+  private
+  
+  # Requires @doc to be populated!
+  def export_rendering(format)
+    self.formats = [format.to_sym]
+    template = (@doc[:layout] == 'full') ? 'export' : 'export_col'
+
+    case format.to_sym
+
+    # Formats with different templates for columned and full-width layouts
+    when :html, :rtf
+      render_to_string template.to_sym, layout: false
+
+    # Formats with just the one view template
+    when :txt, :xml, :csv
+      render_to_string :export, layout: false
+
+    when :pdf
+      @doc[:page_footer] = false
+      @doc[:page_header] = false
+      render_to_string pdf: @doc[:filename],
+          template: "phase_edition_instances/#{template}.html",
+          margin: {:top => '1.7cm'},
+          orientation: @doc[:orientation], 
+          default_header: false,
+          header: {right: '[page]/[topage]', left: @doc[:page_header_text], spacing: 3, line: true},
+          footer: {center: @doc[:page_footer_text], spacing: 1.2, line: true}       
+
+    # Special cases for xlsx and docx where a send_file is used rather than response_body
+    when :xlsx
+      xlsx = Tempfile.new("dmp")
+      xlsx.close
+      newpath = "#{xlsx.path}.xlsx"
+      newpath.gsub!(/^.*:/, '')
+      File.rename(xlsx.path, newpath)
+      @doc[:tmpfile] = newpath
+      render_to_string :export, layout: false
+      if @doc[:deposit].present?
+        newpath 
+      else
         send_file newpath, :type => :xlsx, :filename => @doc[:filename]
       end
 
-      format.pdf do
-        @doc[:page_footer] = false
-        @doc[:page_header] = false
-        render  pdf: @doc[:filename],
-                template: "phase_edition_instances/#{template}.html",
-                margin: {:top => '1.7cm'},
-                orientation: @doc[:orientation], 
-                default_header: false,
-                header: {right: '[page]/[topage]', left: @doc[:page_header_text], spacing: 3, line: true},
-                footer: {center: @doc[:page_footer_text], spacing: 1.2, line: true}       
-      end
-
-      format.docx do
-        xml_data = render_to_string 'export.xml'
-        docx = Tempfile.new("dmp")
-        docx.close
-        media_logo = current_organisation.media_logo.file? ? current_organisation.media_logo.path : ''
-        OfficeOpenXML.transform(xml_data, docx.path, @doc[:layout], media_logo)
+    when :docx
+      xml_data = render_to_string 'export.xml'
+      docx = Tempfile.new("dmp")
+      docx.close
+      media_logo = current_organisation.media_logo.file? ? current_organisation.media_logo.path : ''
+      OfficeOpenXML.transform(xml_data, docx.path, @doc[:layout], media_logo)
+      if @doc[:deposit].present?
+        docx.path 
+      else
         send_file docx.path, :type => :docx, :filename => @doc[:filename]
       end
 
+    else
+      nil
     end
   end
   

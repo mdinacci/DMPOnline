@@ -45,6 +45,16 @@ class PlansController < ApplicationController
 #    @plan = Plan.new(params[:plan])
 
     if @plan.save
+      # Create a record in the repository if the repository has been associated 
+      # with the plan and the repository has create_metadata_with_new_plan = true
+      if @plan.repository && @plan.repository.create_metadata_with_new_plan
+        RepositoryActionQueue.enqueue(:create_metadata, @plan, nil, current_user)
+      end
+      if @plan.repository
+        ru = RepositoryUsername.find_or_create_by_user_id_and_repository_id(current_user.id, @plan.repository_id)
+        ru.obo_username = params[:plan][:repository_username][:username].strip
+        ru.save
+      end
       redirect_to @plan, notice: t('dmp.plan_created')
     else
       render :new
@@ -56,6 +66,11 @@ class PlansController < ApplicationController
 #    @plan = Plan.for_user(current_user).find(params[:id])
 
     if @plan.update_attributes(params[:plan])
+      if @plan.repository
+        ru = RepositoryUsername.find_or_create_by_user_id_and_repository_id(current_user.id, @plan.repository_id)
+        ru.obo_username = params[:plan][:repository_username][:username].strip
+        ru.save
+      end
       redirect_to @plan, notice: t('dmp.plan_updated')
     else
       render :edit
@@ -65,6 +80,10 @@ class PlansController < ApplicationController
   # DELETE /plans/1
   def destroy
 #    @plan = Plan.for_user(current_user).find(params[:id])
+
+    # Need to queue a delete request with the repository
+    RepositoryActionQueue.enqueue(:delete, @plan, nil, current_user)
+    
     @plan.destroy
 
     redirect_to plans_url
@@ -76,12 +95,16 @@ class PlansController < ApplicationController
     # allow the default creation of template_instances and phase_edition_instances to happen.  The entire
     # copy of the plan, template_instances, phase_edition_instances and answers is done with raw SQL.
     # This also avoids the overhead of all the validation which should be unnecessary.
+
+    # Note that fields for repository interaction are not duplicated to ensure a new entry is created in the repository.
+
     sql = ActiveRecord::Base.connection()
 
     plan_id = sql.insert_sql <<EOSQL
-      INSERT INTO plans (project, currency_id, budget, start_date, end_date, lead_org, other_orgs, user_id, created_at, updated_at)
+      INSERT INTO plans (project, currency_id, budget, start_date, end_date, lead_org, other_orgs, 
+          user_id, created_at, updated_at, repository_id, duplicated_from_plan_id)
       SELECT CONCAT('[#{t('dmp.copy_stamp')} #{DateTime.now.to_s(:short)}] ', project), currency_id, budget, start_date, end_date, lead_org, other_orgs, 
-          #{current_user.id}, now(), updated_at
+          #{current_user.id}, now(), updated_at, repository_id, id
         FROM plans
         WHERE id = #{@plan.id} 
 EOSQL
@@ -89,8 +112,8 @@ EOSQL
     ti_list = {}
     @plan.template_instances.for_user(current_user).each do |ti|
       new_id = sql.insert_sql <<EOSQL
-        INSERT INTO template_instances (template_id, plan_id, current_edition_id, created_at, updated_at, sword_col_uri)
-        SELECT template_id, #{plan_id}, current_edition_id, now(), updated_at, sword_col_uri
+        INSERT INTO template_instances (template_id, plan_id, current_edition_id, created_at, updated_at)
+        SELECT template_id, #{plan_id}, current_edition_id, now(), updated_at
         FROM template_instances
         WHERE id = #{ti.id}
 EOSQL
@@ -101,8 +124,8 @@ EOSQL
     old_pei_ids = []
     @plan.phase_edition_instances.for_user(current_user).each do |pei|
       new_id = sql.insert_sql <<EOSQL
-        INSERT INTO phase_edition_instances (template_instance_id, edition_id, created_at, updated_at, sword_edit_uri)
-        SELECT #{ti_list[pei.template_instance_id]}, edition_id, now(), updated_at, sword_edit_uri
+        INSERT INTO phase_edition_instances (template_instance_id, edition_id, created_at, updated_at)
+        SELECT #{ti_list[pei.template_instance_id]}, edition_id, now(), updated_at
       FROM phase_edition_instances
       WHERE id = #{pei.id}
 EOSQL
@@ -110,7 +133,7 @@ EOSQL
       new_pei_ids << new_id
     end
 
-    sql.execute <<EOSQL      
+    sql.execute <<EOSQL
       INSERT INTO answers (phase_edition_instance_id, question_id, dcc_question_id, answer, answered, hidden, position, created_at, updated_at)
       SELECT new_pei.id, a.question_id, a.dcc_question_id, a.answer, a.answered, a.hidden, a.position, now(), a.updated_at
       FROM phase_edition_instances old_pei INNER JOIN 
@@ -118,6 +141,12 @@ EOSQL
             editions e ON e.id = old_pei.edition_id INNER JOIN
             phase_edition_instances new_pei ON new_pei.edition_id = e.id AND new_pei.id IN (#{new_pei_ids.join(',')})
 EOSQL
+
+    # Now Duplicate in the Repository IF the repository has create_metadata_with_new_plan
+    if @plan.repository && @plan.repository.create_metadata_with_new_plan
+      new_plan = Plan.find(plan_id)
+      RepositoryActionQueue.enqueue(:duplicate, new_plan, nil, current_user)
+    end
 
     redirect_to plans_url, notice: t('dmp.plan_created')
   end
@@ -127,6 +156,11 @@ EOSQL
 #    @plan = Plan.for_user(current_user).find(params[:id])
 
     if @plan.update_attribute(:locked, true)
+      # Call finalise method in repository
+      if @plan.repository
+        RepositoryActionQueue.enqueue(:finalise, @plan, nil, current_user)
+      end
+      
       redirect_to plans_url, notice: t('dmp.plan_updated')
     else
       redirect_to plan_path(@plan), error: t('dmp.update_failed')

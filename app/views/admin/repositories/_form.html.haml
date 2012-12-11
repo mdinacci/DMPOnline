@@ -1,0 +1,18 @@
+= semantic_form_for [:admin, @repository], :html => {:class => "repository_edit_form"} do |f|
+  = f.inputs I18n.t('dmp.admin.details') do
+    = f.input :organisation, :label => :organisation_id, :collection => current_user.org_list
+    = f.input :name
+    = f.input :sword_collection_uri
+    = f.input :username
+    = f.input :password, as: :string, input_html: {type: "password"}
+    = f.input :administrator_name
+    = f.input :administrator_email
+    = f.input :allow_obo, as: :select, required: true, include_blank: false
+    - if metadata_option_available?
+      = f.input :create_metadata_with_new_plan, :as => :select, :hint => t('repository.label.create_metadata_with_new_plan')
+
+  = f.inputs t('repository.title.filetypes') do
+    - f.object.filetypes = f.object.filetypes_list unless f.object.filetypes.is_a?(Array)
+    = f.input :filetypes, as: :check_boxes, collection: export_formats_collection
+
+  = f.buttons

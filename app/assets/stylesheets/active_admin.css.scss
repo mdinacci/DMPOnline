@@ -580,3 +580,11 @@ body.admin_dashboard {
   padding-top: 1.5em;
 }
 
+table.repository_log {
+  td.log > .limit-height {
+    max-height: 6em;
+    overflow: auto;
+    border: solid $grey 1px;
+    padding-left: 4px;
+  }
+}

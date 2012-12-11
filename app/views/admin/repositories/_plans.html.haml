@@ -1,0 +1,21 @@
+%table.repository_log
+  %thead
+    %tr
+      %th= t('attributes.project')
+      %th= t('attributes.user')
+      %th= t('attributes.start_date')
+      %th= t('attributes.lead_org')
+  %tbody
+    - if plans.empty?
+      %tr
+        %td.nothing{colspan: 3}= t('repository.log.no_plans')
+
+    - plans.each do |plan_entry|    
+      %tr
+        %td
+          = link_to plan_display(plan_entry, :project, nil, true), plan_path(plan_entry)
+          - if plan_entry.locked
+            %span.status= t('dmp.locked')
+        %td= plan_display(plan_entry, :owner)
+        %td= plan_display(plan_entry, :start_date, :short, true)
+        %td= plan_display(plan_entry, :lead_org, nil, true)

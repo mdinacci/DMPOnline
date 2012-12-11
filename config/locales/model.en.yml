@@ -64,6 +64,9 @@ en:
       currency:
         one: "Currency"
         other: "Currencies"
+      repository:
+        one: "Repository"
+        other: "Repositories"
 
   attributes:
     created_at: "Created"
@@ -133,9 +136,6 @@ en:
     event: "Event"
     object_changes: "Changes Made"
     ip_address: "IP Address"
-    sword_sd_uri: "SWORD Service Document URI"
-    sword_col_uri: "SWORD Collection URI"
-    sword_edit_uri: "SWORD Repository Edit URI"      
     attachment: "File to upload"
     attachment_file_size: "File size (bytes)"
     attachment_updated_at: "Attachment updated"
@@ -152,3 +152,15 @@ en:
     media_logo: "Logo for export media"
     start_numbering: "Start numbering from"
     checklist_owner: "Checklist provider"
+    sword_collection_uri: "Collection URI"
+    create_metadata_with_new_plan: "Create Metadata"
+    username: "Username"
+    administrator_email: "Administrator Email"
+    administrator_name: "Administrator Name"
+    log_date: "Log date"
+    repository_action_type: "Action"
+    repository_action_status: "Status"
+    repository_action_log: "Log"
+    filetypes: "File types"
+    allow_obo: "Allow 'On Behalf Of' deposits"
+    repository_username: "Username to use with this repository"

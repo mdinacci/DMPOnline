@@ -60,7 +60,7 @@ ActiveAdmin.register Organisation do
     column :url do |organisation|
       link_to organisation.url, organisation.url
     end
-    column :repository
+   
     default_actions
   end
   

@@ -28,7 +28,7 @@ module Dmponline3
     # Set the path to the repository folder, used for queueing operations, e.g.
     config.repository_path = Rails.root.join('repository')
     # Maximum number of log entries to display
-    config.repository_log_length = 100
+    config.repository_log_length = 50
     # How many times should the system attempt to post to a repository before giving up
     config.repository_queue_retries = 3
     # You must change this to a key of your own

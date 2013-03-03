@@ -2,6 +2,7 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.1.3'
 
+gem "haml", "3.1.8"
 gem "mysql2", "0.3.11"
 gem "haml-rails", :group => :development
 gem "devise", "1.5.3"
@@ -21,7 +22,7 @@ group :assets do
   gem 'uglifier'
 end
 gem 'sass-rails', "3.1.4"
-gem 'coffee-filter', '0.1.1'
+gem 'coffee-filter', '0.1.3'
 
 gem 'jquery-rails', "2.1.3"
 gem "rails3-jquery-autocomplete", "1.0.7"

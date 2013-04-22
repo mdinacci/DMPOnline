@@ -80,7 +80,7 @@ Page.create!([
     :organisation_id => dcc.id
   },
   {
-    :title => "My Plans",
+    :title => "My plans",
     :menu => Page::MENU.index('navigation'),
     :position => 10,
     :target_url => plans_path,
@@ -88,7 +88,7 @@ Page.create!([
     :organisation_id => dcc.id
   },
   {
-    :title => "Shared Plans",
+    :title => "Shared plans",
     :menu => Page::MENU.index('navigation'),
     :position => 10,
     :target_url => shared_plans_path,

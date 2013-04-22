@@ -150,6 +150,14 @@ form {
     padding-bottom: 30px;
   }
 }
+.plan_column {
+  position: relative;
+  float: left;
+  width: 100%;
+  .panel_contents {
+    padding-bottom: 30px;
+  }
+}
 .plan_left_column {
   position: relative;
   float: left;

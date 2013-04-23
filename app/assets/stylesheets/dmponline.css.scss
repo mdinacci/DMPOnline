@@ -1320,3 +1320,17 @@ table.repository_log {
     width: 40%;
   }
 }
+
+// Messages
+
+.default-message {
+    @include default-message;
+}
+
+.warning-message {
+    @include warning-message;
+}
+
+.error-message {
+    @include error-message;
+}

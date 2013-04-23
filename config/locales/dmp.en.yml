@@ -77,6 +77,8 @@ en:
     grid_delete_row: "Delete Row"
     grid_add_row: "Add Row"
 
+    template_choice_irreversible: "Template selection is irreversible"
+
     sword_repository: "SWORD2 Repository"
     update_url: "Update URL"
 

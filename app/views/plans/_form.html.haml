@@ -22,6 +22,7 @@
   .plan_column#step2
     %h2.step= t('dmp.plan_create_step_2')
     %h3= t('dmp.templates')
+    .warning-message t('dmp.template_choice_irreversible') 
     - template_list = current_user.plan_templates(current_organisation)
     - if template_list.any?
       = t('dmp.click_to_expand')

@@ -97,11 +97,6 @@
         %span.disabled_link= t('dmp.lock')
       - else
         = link_to t('dmp.lock'), lock_plan_path(@plan), :confirm => t('dmp.lock_confirm'), :method => :put, :class => 'lock_link'
-    = link_to t('dmp.make_copy'), duplicate_plan_path(@plan), :method => :post, :class => 'edit_link'
-    - if cannot? :update, @plan
-      %span.disabled_link= t('dmp.admin.delete')
-    - else
-      = link_to t('dmp.admin.delete'), @plan, :confirm => t('dmp.admin.delete_confirm'), :method => :delete, :class => 'delete_link'
 
 
 -# One query across all phases

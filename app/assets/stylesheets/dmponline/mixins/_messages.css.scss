@@ -1,0 +1,36 @@
+@import "rounded";
+
+@mixin default-message {
+  padding: 8px 35px 8px 14px;                                                  
+  margin-bottom: 18px;                                                         
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);                               
+  border: 1px solid;
+  @include rounded;
+}
+
+@mixin info-message {
+  background-color: #D9EDF7;
+  border-color: #BCE8F1;
+  color: #3A87B9;
+}
+
+@mixin warning-message {
+  @include default-message;
+  background-color: #FCF8E3;
+  border-color: #FBEED5;
+  color: #C09853;
+}
+
+@mixin success-message {
+  @include default-message;
+  background-color: #DFF0D8;
+  border-color: #D6E9C6;
+  color: #468847;
+}
+
+@mixin error-message {
+  @include default-message;
+  background-color: #F2DEDE;
+  border-color: #EED3D7;
+  color: #B94A48;
+}

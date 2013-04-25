@@ -90,7 +90,7 @@
       %span.disabled_link= t('dmp.complete_plan')
     - else
       = link_to t('dmp.complete_plan'), complete_plan_path(@plan), class: "edit_link"
-    = link_to t('dmp.output'), output_plan_path(@plan), class: "nav_link"
+    = link_to t('dmp.output'), output_plan_path(@plan), class: "edit_link"
   .right
     - unless @plan.locked 
       - if cannot? :update, @plan

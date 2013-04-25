@@ -273,7 +273,7 @@ a.view_link, a.edit_link, a.create_link {
   @include green-button;
 }
 
-a.delete_link, a.cancel_link, a.lock_link {
+a.delete_link, a.cancel_link,  a.lock_link {
   @include red-button;
 }
 
@@ -316,6 +316,7 @@ span.disabled_link {
   ul.menuitem {
     padding-top: 2em;
   }
+  a, a:link, a:visited { color: $green; }
 }
 .session {
   ul.menuitem {
@@ -412,6 +413,9 @@ dl.phases {
           display: block;
         }
       }
+      > div, > a > div.completed {background:$green;}
+      > div, > a > div.active {background:$offwhite;}
+      > div, > a > div.active:hover {background:$orange;}
     }
   }
 }

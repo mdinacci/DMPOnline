@@ -143,7 +143,7 @@ en:
     edit_project_access: "Share plan"
     share_description: "To allow others to use your plans, add their email address to the relevant templates.  Use the big green plus to add an entry.  (You can use the * wildcard to, for example, include everyone at an organisation with *@example.com)"
     update_rights: "Save changes"
-    invalid_emailmask: "Invalid email mask"
+    invalid_emailmask: "Invalid email address"
     share_all: "Share with other email addresses"
     read_only: "You have read-only access to this plan; you cannot make changes."
     simple_share: "Simple"

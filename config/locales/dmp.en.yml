@@ -191,7 +191,7 @@ en:
       current_password_hint: "Please confirm your current password to make changes"
       change_email: "Change my email address"
       sign_in_with_shib: "Or, sign in with your institution credentials"
-      acceptance_statement: "By signing up to use this service you are agreeing to the terms laid out in the Privacy Statement"
+      acceptance_statement: "By signing up to use this service you are agreeing to the terms laid out in the <a href='/pages/terms' title='Terms'>Privacy Statement</a>"
       email_required: "Email address required"
       password_reset_shib: "Your account has been reset to use your institution credentials for sign in"
       associate_with_shibboleth: "Associate an existing account with your institution credentials instead"

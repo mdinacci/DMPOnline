@@ -1,6 +1,4 @@
 - title @plan.project
-.link_spacing.back
-  .right= link_to t('dmp.finished'), plan_path(@plan), class: "nav_link"
 
 #templates.accordion{data: {preloader: "#{ajax_preloader}"}}
   - template_list = @plan.template_instances.joins(:template => :organisation).order('organisations.full_name, templates.name')

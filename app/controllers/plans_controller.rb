@@ -154,8 +154,16 @@ EOSQL
   # PUT /plan/1/lock
   def lock
 #    @plan = Plan.for_user(current_user).find(params[:id])
+    set_locked true
+  end
 
-    if @plan.update_attribute(:locked, true)
+  # PUT /plan/1/unlock
+  def unlock
+    set_locked false
+  end  
+
+  def set_locked lock_status
+    if @plan.update_attribute(:locked, lock_status)
       # Call finalise method in repository
       if @plan.repository
         RepositoryActionQueue.enqueue(:finalise, @plan, nil, current_user)

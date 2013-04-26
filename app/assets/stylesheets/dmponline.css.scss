@@ -269,6 +269,15 @@ label abbr[title=required] {
   padding: 25px 30px;
 }
 
+#cancel_button {
+  @include red-button;
+}
+
+#action_button {
+  @include orange-button;
+  float:left;
+}
+
 a.view_link, a.edit_link, a.create_link {
   @include green-button;
 }
@@ -1021,7 +1030,7 @@ h2.step {
       }
       input[type=text] {
         left: auto;
-        width: 60%;
+        width: 50%;
       }
       a {
         margin-left: 2em;

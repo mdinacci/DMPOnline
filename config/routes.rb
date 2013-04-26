@@ -35,6 +35,7 @@ Dmponline3::Application.routes.draw do
       member do
         post 'duplicate'
         put 'lock'
+        put 'unlock'
         get 'complete'
         get 'output'
         get 'section/:section_id', :action => 'ajax_section', :as => 'ajax_section', :section_id => /\d+/

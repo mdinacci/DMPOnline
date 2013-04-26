@@ -32,7 +32,7 @@
         - else
           %td.actions= link_to t('dmp.lock'), lock_plan_path(plan), :method => :put, :class => 'lock_link'
         - if cannot? :update, plan                                                
-          %td.actions.disabled_link= t('dmp.admin.delete')                               
+          %td.actions 
         - else                                                                     
           %td.actions= link_to t('dmp.admin.delete'), plan, :confirm => t('dmp.admin.delete_confirm'), :method => :delete, :class => 'delete_link'
 

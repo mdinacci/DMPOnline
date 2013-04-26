@@ -40,6 +40,7 @@ en:
     copy_stamp: "COPY"
     make_copy: "Duplicate"
     lock: "Lock"
+    unlock: "Unlock"
     lock_confirm: "Are you sure you want to lock this?  You can't edit the plan once locked."
     locked: "Locked"
     lock_error: "This plan is locked, you cannot edit it"

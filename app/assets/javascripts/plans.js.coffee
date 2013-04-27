@@ -115,7 +115,15 @@ jQuery ->
     $('#templates.accordion .ui-accordion-header a').click ->
       i = $('#templates.accordion .ui-accordion-header a').index(this)
       
-      if $("form.phase_edition_instance").isDirty() && !confirm 'You have unsaved changes.  Are you sure you want to navigate away?'
+      form = $("form.phase_edition_instance")
+      if form.isDirty() 
+        # Submit the form via AJAX
+        $.post(
+          form.attr('action')
+          form.serialize()
+          (data, textStatus, jqXHR) ->
+              # data saved
+        )
         return false
       
       $("form.phase_edition_instance").cleanDirty()
@@ -133,7 +141,15 @@ jQuery ->
       
   $("form.phase_edition_instance a.create_link").livequery ->
     $(this).click ->
-      if $("form.phase_edition_instance").isDirty() && !confirm 'You have unsaved changes.  Are you sure you want to navigate away?'
+      form = $("form.phase_edition_instance")
+      if form.isDirty() 
+        $.post(
+          form.attr('action')
+          form.serialize()
+          (data, textStatus, jqXHR) ->
+              # data saved
+        )
+
         return false
       $("form.phase_edition_instance").cleanDirty()
   
@@ -163,13 +179,21 @@ jQuery ->
   
     $(section_id + ' .ui-tabs-nav a').livequery "click", (event) ->
       event.stopImmediatePropagation()
-      
-      if $("form.phase_edition_instance").isDirty() && !confirm 'You have unsaved changes.  Are you sure you want to navigate away?'
-        return false
-      
+
+      form = $("form.phase_edition_instance")
+      if form.isDirty() 
+        # Submit the form via AJAX
+        $.post(
+          form.attr('action')
+          form.serialize()
+          (data, textStatus, jqXHR) ->
+              # data saved
+        )
+
       $("form.phase_edition_instance").cleanDirty()
       i = $(section_id + ' .ui-tabs-nav a').index(this)
       $(section_id).tabs('select', i)
+
       return false
 
 

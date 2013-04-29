@@ -7,7 +7,7 @@
       - unless ti.template.description.blank?
         = sanitize ti.template.description
         - unless ti.template.url.blank?
-          .website= link_to t('dmp.further_details'), ti.template.url
+          .website= link_to t('dmp.further_details'), ti.template.url, :target => "_blank"
 
   - qs = number_questions(ti.current_edition.sorted_sections, ti.current_edition.start_numbering)
   - section_id = params[:sid].to_i

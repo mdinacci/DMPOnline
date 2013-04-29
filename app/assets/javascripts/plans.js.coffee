@@ -117,7 +117,6 @@ jQuery ->
       
       form = $("form.phase_edition_instance")
       if form.isDirty() 
-        # Submit the form via AJAX
         $.post(
           form.attr('action')
           form.serialize()
@@ -150,7 +149,6 @@ jQuery ->
               # data saved
         )
 
-        return false
       $("form.phase_edition_instance").cleanDirty()
   
 

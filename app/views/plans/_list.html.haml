@@ -24,7 +24,7 @@
             %span.plan-owner= plan_created_by(plan)
         %td= plan_display(plan, :start_date, :short, true)
         %td= plan_display(plan, :lead_org, nil, true)
-        %td.actions= link_to t('dmp.admin.view'), plan, :class => 'view_link'
+        %td.actions= link_to t('dmp.admin.edit'), plan, :class => 'view_link'
         %td.actions= link_to t('dmp.output'), output_plan_path(plan), :class => 'edit_link'
         %td.actions= link_to t('dmp.make_copy'), duplicate_plan_path(plan), :method => :post, :class => 'edit_link'
         - if plan.locked

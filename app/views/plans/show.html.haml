@@ -50,7 +50,9 @@
   
   .plan_right_column
     .panel
-      %h3= t('dmp.project_access')
+      %h3
+        %span.info_icon{:title => t('dmp.share_plan_explanation')}
+          %span= t('dmp.project_access')
       .panel_contents
         .attributes_table
           - if @plan.template_instance_rights.empty?
@@ -99,7 +101,9 @@
 - multi_message = false
 
 .panel
-  %h3= t('dmp.project_phases')
+  %h3
+    %span.info_icon{:title => t('dmp.plan_phase_explanation')}
+      %span= t('dmp.project_access')
   .panel_contents
     %dl.phases
       - @plan.template_instances.for_user(current_user).each do |t|

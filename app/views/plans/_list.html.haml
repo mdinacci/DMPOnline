@@ -28,9 +28,9 @@
         %td.actions= link_to t('dmp.output'), output_plan_path(plan), :class => 'edit_link'
         %td.actions= link_to t('dmp.make_copy'), duplicate_plan_path(plan), :method => :post, :class => 'edit_link'
         - if plan.locked
-          %td.actions= link_to t('dmp.unlock'), unlock_plan_path(plan), :method => :put, :class => 'lock_link'
+          %td.actions= link_to t('dmp.unlock'), unlock_plan_path(plan), :method => :put, :class => 'lock_link', :title => t('dmp.unlock_explanation')
         - else
-          %td.actions= link_to t('dmp.lock'), lock_plan_path(plan), :method => :put, :class => 'lock_link'
+          %td.actions= link_to t('dmp.lock'), lock_plan_path(plan), :method => :put, :class => 'lock_link', :title => t('dmp.lock_explanation')
         - if cannot? :update, plan                                                
           %td.actions 
         - else                                                                     

@@ -122,6 +122,14 @@ form {
   }
 }
 
+span.info_icon {
+  padding-right: 25px;
+  background: no-repeat url(message_icons/info.png);
+  background-position:right center;
+  padding-top:5px;
+  padding-bottom: 5px;
+}
+
 .plan_right_column {
   position: relative;
   float: right;

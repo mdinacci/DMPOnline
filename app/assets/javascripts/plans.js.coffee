@@ -33,7 +33,7 @@ jQuery ->
         autoOpen: false
         show: 'fold'
         hide: 'clip'
-        # position: 'right'
+        position: 'right bottom'
         height: 300
         width: 400
         modal: false
@@ -43,7 +43,7 @@ jQuery ->
       event.stopPropagation()
       ref = $(this).data("guide")
       $("#dialogue-" + ref).dialog("open")
-      $("#dialogue-" + ref).dialog("moveToTop")
+      #$("#dialogue-" + ref).dialog("moveToTop")
 
     $(".dialogue a").livequery ->
       $(this).unbind("click").click (event) ->

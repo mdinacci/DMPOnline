@@ -44,7 +44,7 @@ en:
     lock: "Lock"
     unlock: "Unlock"
     lock_explanation: "Plans can be locked for editing when complete. Note that you will not be able to make changes to the plan afterwards"
-    unlock_explanation: "Unlock the plan to edit it again."
+    unlock_explanation: "Unlock the plan so that it can be modified."
     lock_confirm: "Are you sure you want to lock this?  You can't edit the plan once locked."
     locked: "Locked"
     lock_error: "This plan is locked, you cannot edit it"

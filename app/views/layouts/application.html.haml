@@ -30,6 +30,7 @@
         = render :partial => 'layouts/navmenu'
       .notices
         - flash.each do |type, message|
+          /= content_tag :span, " ", :class => "flash_icon_#{type}"
           = content_tag :div, message, :class => "flash flash_#{type}"
         - if content_for?(:error_notices) 
           %div{class: "flash flash_error"}

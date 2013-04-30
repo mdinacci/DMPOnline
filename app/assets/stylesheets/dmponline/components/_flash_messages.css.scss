@@ -15,11 +15,17 @@ body {
       border-bottom: 1px solid #adcbaf;
       color: #416347;
     }
-    &.flash_error {
+    &.flash_error, &.flash_alert {
       @include gradient(#f5e4e4, #f1dcdc);
       border-bottom: 1px solid #e0c2c0;
       color: #b33c33;
     }
+  }
+
+  .flash_icon_alert {
+      color: #000;
+      background:no-repeat url(message_icons/error.png) left center;
+      margin-left:5px;
   }
 }
 

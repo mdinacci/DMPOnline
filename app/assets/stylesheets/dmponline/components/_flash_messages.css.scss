@@ -22,10 +22,27 @@ body {
     }
   }
 
+  .flash_icon_error {
+      background:no-repeat url(message_icons/error.png) 0 center;
+      padding-right:30px;
+  }
+
+  .flash_icon_notice {
+      background:no-repeat url(message_icons/notice.png) 0 center;
+      padding-right:35px;
+  }
+
+  /* Used only when the login is incorrect */
   .flash_icon_alert {
-      color: #000;
+      color: #b33c33;
       background:no-repeat url(message_icons/error.png) left center;
       margin-left:5px;
   }
+
+  .message_icon {
+     padding-left:5px;
+     padding-right:5px;
+     vertical-align:middle;
+   }
 }
 

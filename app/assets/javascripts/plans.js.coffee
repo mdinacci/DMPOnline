@@ -26,31 +26,18 @@ jQuery ->
   @guidance_dialogue = '' 
   
   guidance_blocks = () ->
-    $(".guidance-area .dialogue").livequery ->
-      $(this).dialog("destroy")
-    $(".guidance-area .dialogue").livequery ->
-      $(this).dialog
-        autoOpen: false
-        show: 'fold'
-        hide: 'clip'
-        position: 'right bottom'
-        height: 300
-        width: 400
-        modal: false
 
     $("a.guidance-button").livequery "click", (event) ->
       event.preventDefault()
       event.stopPropagation()
-      ref = $(this).data("guide")
-      $("#dialogue-" + ref).dialog("open")
-      #$("#dialogue-" + ref).dialog("moveToTop")
+      dialogue = $("#dialogue-" + $(this).data("guide"))
+      dialogue.slideToggle()
 
     $(".dialogue a").livequery ->
       $(this).unbind("click").click (event) ->
         event.preventDefault()
         event.stopPropagation()
         window.open(this.href, '_blank')
-      
 
   guidance_hovers = () ->
     $("#templates .answer li.input.radio").livequery ->
@@ -85,6 +72,7 @@ jQuery ->
     ref = $(e).parents("tr").find("td.guidance-area div.popup a.guidance-button").data("guide").toString()
     unless ref.length == 0
       dialogue = "#dialogue-" + ref
+      alert dialogue
       unless $(dialogue).dialog("isOpen")
         close_guidance()
         # Nasty workaround to stop dialog stealing focus...

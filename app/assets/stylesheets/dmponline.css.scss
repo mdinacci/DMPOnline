@@ -178,6 +178,13 @@ span.info_icon {
   clear: both;
 }
 
+.dialogue {
+  display:none;
+  background-color:#F4F4F4;
+  border:1px solid $grey;
+  padding:10px;
+}
+
 .flash {
   p {
     margin: 0 0 0.5em;

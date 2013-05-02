@@ -30,7 +30,18 @@ jQuery ->
     $("a.guidance-button").livequery "click", (event) ->
       event.preventDefault()
       event.stopPropagation()
-      dialogue = $("#dialogue-" + $(this).data("guide"))
+      
+      dataGuide = $(this).data("guide")
+      dialogue = $("#dialogue-" + dataGuide)
+      link = $('a[href=#anchor-'+dataGuide+']');
+      topPosition = link.position()["top"]
+      console.log(topPosition)
+      dialogue.css({
+       position:'absolute',
+       top:(topPosition + link.height()) + "px",
+       left:"75%"
+       zIndex:5000
+      }) 
       dialogue.slideToggle()
 
     $(".dialogue a").livequery ->
@@ -72,7 +83,6 @@ jQuery ->
     ref = $(e).parents("tr").find("td.guidance-area div.popup a.guidance-button").data("guide").toString()
     unless ref.length == 0
       dialogue = "#dialogue-" + ref
-      alert dialogue
       unless $(dialogue).dialog("isOpen")
         close_guidance()
         # Nasty workaround to stop dialog stealing focus...

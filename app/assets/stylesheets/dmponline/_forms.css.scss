@@ -29,6 +29,10 @@ form {
       }
     }
 
+	li.choice label {
+		width: 100%;
+		text-align: left;
+	}
 
     ol > li > li label { 
       line-height:100%; 

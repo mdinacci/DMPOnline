@@ -241,28 +241,36 @@ EOSQL
     if ti_vals.nil?
       # Simple submission?
       tir_vals = params[:template_instance]
-      if tir_vals.nil?
-        err = true
-      else
-        @plan.template_instances.each do |ti|
-          TemplateInstanceRight.delete_all(:template_instance_id => ti.id)
-          unless ti.update_attributes(:template_instance_rights_attributes => tir_vals[:template_instance_rights_attributes])
-            err=true
-          end
+      
+      @plan.template_instances.each do |ti|
+        TemplateInstanceRight.delete_all(:template_instance_id => ti.id)
+                    
+        hash = tir_vals[:template_instance_rights_attributes]
+        hash.delete_if do |key, value|
+          value[:email_mask].empty?
+        end
+        if not hash.empty? 
+          ti.update_attributes(:template_instance_rights_attributes => hash)   
         end
       end
     else
       # Advanced submission
       ti_vals.each do |k, v|
-        unless v[:template_instance_rights_attributes].nil?
+      	unless v[:template_instance_rights_attributes].nil?
           ti = TemplateInstance
                   .where(:plan_id => @plan.id, :id => v[:id])
                   .readonly(false)
                   .first!
-                  
-          unless ti.update_attributes(:template_instance_rights_attributes => v[:template_instance_rights_attributes])
-            err = true
-          end
+          
+          hash = v[:template_instance_rights_attributes]
+		  hash.delete_if do |key, value|
+          	value[:email_mask].empty?
+		  end
+		  if not hash.empty? 
+          	unless ti.update_attributes(:template_instance_rights_attributes => hash)
+          		logger.info(ti.errors.messages.inspect)
+          	end
+		  end        
         end
       end
     end

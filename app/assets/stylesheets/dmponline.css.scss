@@ -312,6 +312,10 @@ a.nav_link {
   @include orange-button;
 }
 
+a.nav_link.cancel {
+	@include red-button;
+}
+
 span.disabled_link {
   @include light-button;
 

@@ -140,7 +140,7 @@
                 = f.submit name: "doc[attachment]", value: t('dmp.download')
 
       .link_spacing
-        = link_to t('dmp.cancel'), plan_path(@plan), :class => "nav_link"
+        = link_to t('dmp.cancel'), plan_path(@plan), :class => "nav_link cancel"
 
     - unless @phase_edition_instance.template_instance.template.constraint_text.blank?
       .constraint= @phase_edition_instance.template_instance.template.constraint_text

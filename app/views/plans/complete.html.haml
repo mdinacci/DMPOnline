@@ -1,3 +1,12 @@
+:javascript
+  $(document).ready(function(){
+    $('a.nav_link').click(function(){
+      if(!confirm('Are you sure you want to leave this page? Any data you have entered and not saved will be lost.')){
+        return false;
+      }
+    });
+  });
+
 - title @plan.project
 
 #templates.accordion{data: {preloader: "#{ajax_preloader}"}}

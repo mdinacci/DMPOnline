@@ -26,16 +26,17 @@ table {
     }
     &.depth-0.type-h,
     &.depth-0.type-m {
-      background: #000;
+      background: #EAEBEB;
       font-weight: bold;
-      font-size: 110%;
-      color: #fff;
+      font-size: 115%;
+      line-height: 160%;
+      color: #000;
     }
     &.odd {
-      background: #eee;
+      background: #F4F5F5;
     }
     &.even {
-      background: #ddd;
+      background: #FFF;
     }
     &.spacer {
       height: 0.5em; 

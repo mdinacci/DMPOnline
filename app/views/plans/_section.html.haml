@@ -1,3 +1,12 @@
+:javascript
+  $(document).ready(function(){
+    $('a.create_link').click(function(){
+      if(!confirm('Are you sure you want to leave this page? Any data you have entered and not saved will be lost.')){
+        return false;
+      }
+    });
+  });
+  
 - dcc_q_numbering = dcc_numbering(ti.current_edition)
 - section_qs = get_numbered_section_questions(ti.current_edition, section_id) 
 - pei = ti.phase_edition_instances.where(:edition_id => ti.current_edition.id).first
@@ -39,5 +48,8 @@
     = hidden_field_tag 'tid', ti.template_id
     = hidden_field_tag 'sid', section_id
 
+    <hr>
+
     = f.buttons do
       = f.commit_button t('dmp.update_plan')
+

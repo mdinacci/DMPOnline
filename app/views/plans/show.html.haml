@@ -50,7 +50,9 @@
   
   .plan_right_column
     .panel
-      %h3= t('dmp.project_access')
+      %h3
+        %span.info_icon{:title => t('dmp.share_plan_explanation')}
+          %span= t('dmp.project_access')
       .panel_contents
         .attributes_table
           - if @plan.template_instance_rights.empty?
@@ -90,19 +92,8 @@
       %span.disabled_link= t('dmp.complete_plan')
     - else
       = link_to t('dmp.complete_plan'), complete_plan_path(@plan), class: "edit_link"
-    = link_to t('dmp.output'), output_plan_path(@plan), class: "nav_link"
   .right
-    - unless @plan.locked 
-      - if cannot? :update, @plan
-        %span.disabled_link= t('dmp.lock')
-      - else
-        = link_to t('dmp.lock'), lock_plan_path(@plan), :confirm => t('dmp.lock_confirm'), :method => :put, :class => 'lock_link'
-    = link_to t('dmp.make_copy'), duplicate_plan_path(@plan), :method => :post, :class => 'edit_link'
-    - if cannot? :update, @plan
-      %span.disabled_link= t('dmp.admin.delete')
-    - else
-      = link_to t('dmp.admin.delete'), @plan, :confirm => t('dmp.admin.delete_confirm'), :method => :delete, :class => 'delete_link'
-
+    
 
 -# One query across all phases
 - question_count = @plan.question_counts
@@ -110,7 +101,9 @@
 - multi_message = false
 
 .panel
-  %h3= t('dmp.project_phases')
+  %h3
+    %span.info_icon{:title => t('dmp.plan_phase_explanation')}
+      %span= t('dmp.project_access')
   .panel_contents
     %dl.phases
       - @plan.template_instances.for_user(current_user).each do |t|

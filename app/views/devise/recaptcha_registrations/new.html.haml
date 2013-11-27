@@ -18,11 +18,14 @@
       .session.omniauth
         %ul.menuitem
           %li= link_to "#{t('dmp.auth.associate_with_shibboleth')}", user_shibboleth_assoc_path
-
+                    
+          You can associate your account with your institutional login details so you don't have to remember 
+          another username and password. Visit the <a href="/pages/help">help page</a> for step-by-step instructions
 
   = render :partial => 'profile', locals: {f: f}
 
-  .terms= t('dmp.auth.acceptance_statement')
+  .terms
+    =raw t('dmp.auth.acceptance_statement') 
   
   - if Rails.application.config.recaptcha_enabled && !using_shibboleth?
     = recaptcha_tags

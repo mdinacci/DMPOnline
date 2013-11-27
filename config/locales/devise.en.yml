@@ -57,9 +57,9 @@ en:
       failure: 'Could not authorize you from %{kind} because "%{reason}".'
     mailer:
       confirmation_instructions:
-        subject: 'Confirmation instructions'
+        subject: 'DMP Online confirmation instructions'
       reset_password_instructions:
-        subject: 'Reset password instructions'
+        subject: 'DMP Online reset password instructions'
       unlock_instructions:
-        subject: 'Unlock Instructions'
+        subject: 'DMP Online unlock instructions'
         

@@ -29,6 +29,10 @@ form {
       }
     }
 
+	li.choice label {
+		width: 100%;
+		text-align: left;
+	}
 
     ol > li > li label { 
       line-height:100%; 
@@ -198,7 +202,11 @@ form {
     padding-top: 0;
     &.cancel { margin-left: 0.3em; padding: 5px; a { @include light-button; @include icon(#777, 9px);} }
   }
-
+  
+  fieldset.buttons li.commit.button {
+	  float: right !important;
+  }
+  
 }
 
 // -------------------------------------- Sidebar Forms 

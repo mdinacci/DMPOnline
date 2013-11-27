@@ -1,4 +1,6 @@
-%p= t('dmp.errors', :count => errors.count)
-%ul
-  - errors.full_messages.each do |msg|
-    %li= msg
+%div
+  %span.flash_icon_error        
+  %span= t('dmp.errors', :count => errors.count)
+  %ul
+    - errors.full_messages.each do |msg|
+      %li= msg 

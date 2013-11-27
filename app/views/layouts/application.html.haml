@@ -30,7 +30,9 @@
         = render :partial => 'layouts/navmenu'
       .notices
         - flash.each do |type, message|
-          = content_tag :div, message, :class => "flash flash_#{type}"
+          %div{:class => "flash flash_#{type}"}
+            %img{:src => "/assets/message_icons/#{type}.png", :class => "message_icon"}
+            %span= message
         - if content_for?(:error_notices) 
           %div{class: "flash flash_error"}
             = yield(:error_notices)

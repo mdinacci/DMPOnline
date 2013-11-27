@@ -85,6 +85,25 @@
           %ol
             = render partial: 'output_sort', collection: @eqs, locals: {f: f}
 
+    #page_layout.panel
+      %h3= t('dmp.page_layout')
+      .panel_contents
+        .attributes_table
+          %table
+            %tbody
+              %tr
+                %th= t('dmp.layout')
+                %td= select_tag 'doc[layout]', "<option value='full'>#{t('dmp.full_width')}</option><option value='columned'>#{t('dmp.columned')}</option>".html_safe
+              %tr
+                %th= t('dmp.paper_orientation')
+                %td= select_tag 'doc[orientation]', "<option value='portrait'>#{t('dmp.portrait')}</option><option value='landscape'>#{t('dmp.landscape')}</option>".html_safe
+              %tr
+                %th= t('dmp.font_size')
+                %td= text_field_tag 'doc[font_size]', "9"
+              %tr
+                %th= t('dmp.font_style')
+                %td= select_tag 'doc[font_style]', "<option value='sans-serif'>#{t('dmp.sans_serif')}</option><option value='serif'>#{t('dmp.serif')}</option>".html_safe
+
 
     .output-format
       .attributes_table
@@ -117,34 +136,15 @@
               %td
                 = select_tag 'format', export_formats_option_list
               %td
-                = f.submit name: "doc[inline]", value: t('dmp.open')
+                /= f.submit name: "doc[inline]", value: t('dmp.open')
                 = f.submit name: "doc[attachment]", value: t('dmp.download')
 
       .link_spacing
-        = link_to t('dmp.finished'), plan_path(@plan), :class => "nav_link"
+        = link_to t('dmp.cancel'), plan_path(@plan), :class => "nav_link cancel"
 
     - unless @phase_edition_instance.template_instance.template.constraint_text.blank?
       .constraint= @phase_edition_instance.template_instance.template.constraint_text
 
-
-    #page_layout.panel
-      %h3= t('dmp.page_layout')
-      .panel_contents
-        .attributes_table
-          %table
-            %tbody
-              %tr
-                %th= t('dmp.layout')
-                %td= select_tag 'doc[layout]', "<option value='full'>#{t('dmp.full_width')}</option><option value='columned'>#{t('dmp.columned')}</option>".html_safe
-              %tr
-                %th= t('dmp.paper_orientation')
-                %td= select_tag 'doc[orientation]', "<option value='portrait'>#{t('dmp.portrait')}</option><option value='landscape'>#{t('dmp.landscape')}</option>".html_safe
-              %tr
-                %th= t('dmp.font_size')
-                %td= text_field_tag 'doc[font_size]', "9"
-              %tr
-                %th= t('dmp.font_style')
-                %td= select_tag 'doc[font_style]', "<option value='sans-serif'>#{t('dmp.sans_serif')}</option><option value='serif'>#{t('dmp.serif')}</option>".html_safe
 
   - if @plan.repository
     = render partial: '/plans/repository_log'

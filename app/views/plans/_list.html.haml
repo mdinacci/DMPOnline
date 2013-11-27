@@ -4,7 +4,7 @@
       =sortable_header :project
       =sortable_header :start_date
       =sortable_header :lead_org
-      %th{colspan: 2}
+      %th{colspan: 5}
   
     - if @plans.blank?
       %tr
@@ -24,8 +24,18 @@
             %span.plan-owner= plan_created_by(plan)
         %td= plan_display(plan, :start_date, :short, true)
         %td= plan_display(plan, :lead_org, nil, true)
-        %td.actions= link_to t('dmp.admin.view'), plan, :class => 'view_link'
+        %td.actions= link_to t('dmp.admin.edit'), plan, :class => 'view_link'
         %td.actions= link_to t('dmp.output'), output_plan_path(plan), :class => 'edit_link'
+        %td.actions= link_to t('dmp.make_copy'), duplicate_plan_path(plan), :method => :post, :class => 'edit_link'
+        - if plan.locked
+          %td.actions= link_to t('dmp.unlock'), unlock_plan_path(plan), :method => :put, :class => 'lock_link', :title => t('dmp.unlock_explanation')
+        - else
+          %td.actions= link_to t('dmp.lock'), lock_plan_path(plan), :method => :put, :class => 'lock_link', :title => t('dmp.lock_explanation')
+        - if cannot? :update, plan                                                
+          %td.actions 
+        - else                                                                     
+          %td.actions= link_to t('dmp.admin.delete'), plan, :confirm => t('dmp.admin.delete_confirm'), :method => :delete, :class => 'delete_link'
+
 
   .pagination= paginate @plans
 

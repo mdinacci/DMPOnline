@@ -26,31 +26,29 @@ jQuery ->
   @guidance_dialogue = '' 
   
   guidance_blocks = () ->
-    $(".guidance-area .dialogue").livequery ->
-      $(this).dialog("destroy")
-    $(".guidance-area .dialogue").livequery ->
-      $(this).dialog
-        autoOpen: false
-        show: 'fold'
-        hide: 'clip'
-        # position: 'right'
-        height: 300
-        width: 400
-        modal: false
 
     $("a.guidance-button").livequery "click", (event) ->
       event.preventDefault()
       event.stopPropagation()
-      ref = $(this).data("guide")
-      $("#dialogue-" + ref).dialog("open")
-      $("#dialogue-" + ref).dialog("moveToTop")
+      
+      dataGuide = $(this).data("guide")
+      dialogue = $("#dialogue-" + dataGuide)
+      link = $('a[href=#anchor-'+dataGuide+']');
+      topPosition = link.position()["top"]
+      console.log(topPosition)
+      dialogue.css({
+       position:'absolute',
+       top:(topPosition + link.height()) + "px",
+       left:"75%"
+       zIndex:5000
+      }) 
+      dialogue.slideToggle()
 
     $(".dialogue a").livequery ->
       $(this).unbind("click").click (event) ->
         event.preventDefault()
         event.stopPropagation()
         window.open(this.href, '_blank')
-      
 
   guidance_hovers = () ->
     $("#templates .answer li.input.radio").livequery ->
@@ -115,7 +113,14 @@ jQuery ->
     $('#templates.accordion .ui-accordion-header a').click ->
       i = $('#templates.accordion .ui-accordion-header a').index(this)
       
-      if $("form.phase_edition_instance").isDirty() && !confirm 'You have unsaved changes.  Are you sure you want to navigate away?'
+      form = $("form.phase_edition_instance")
+      if form.isDirty() 
+        $.post(
+          form.attr('action')
+          form.serialize()
+          (data, textStatus, jqXHR) ->
+              # data saved
+        )
         return false
       
       $("form.phase_edition_instance").cleanDirty()
@@ -133,8 +138,15 @@ jQuery ->
       
   $("form.phase_edition_instance a.create_link").livequery ->
     $(this).click ->
-      if $("form.phase_edition_instance").isDirty() && !confirm 'You have unsaved changes.  Are you sure you want to navigate away?'
-        return false
+      form = $("form.phase_edition_instance")
+      if form.isDirty() 
+        $.post(
+          form.attr('action')
+          form.serialize()
+          (data, textStatus, jqXHR) ->
+              # data saved
+        )
+
       $("form.phase_edition_instance").cleanDirty()
   
 
@@ -163,13 +175,21 @@ jQuery ->
   
     $(section_id + ' .ui-tabs-nav a').livequery "click", (event) ->
       event.stopImmediatePropagation()
-      
-      if $("form.phase_edition_instance").isDirty() && !confirm 'You have unsaved changes.  Are you sure you want to navigate away?'
-        return false
-      
+
+      form = $("form.phase_edition_instance")
+      if form.isDirty() 
+        # Submit the form via AJAX
+        $.post(
+          form.attr('action')
+          form.serialize()
+          (data, textStatus, jqXHR) ->
+              # data saved
+        )
+
       $("form.phase_edition_instance").cleanDirty()
       i = $(section_id + ' .ui-tabs-nav a').index(this)
       $(section_id).tabs('select', i)
+
       return false
 
 

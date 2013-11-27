@@ -9,8 +9,8 @@ if (typeof jQuery == 'undefined') throw ("jQuery Required");
 	$.extend({
 		DirtyForms: {
 			debug : false,
-			message : 'You\'ve made changes on this page which aren\'t saved. If you leave you will lose these changes.',
-			title : 'Are you sure you want to do that?',
+			message : '',
+			title : 'You have unsaved changes.  Are you sure you want to navigate away?',
 			dirtyClass : 'dirty',
 			listeningClass : 'dirtylisten',
 			ignoreClass : 'ignoredirty',

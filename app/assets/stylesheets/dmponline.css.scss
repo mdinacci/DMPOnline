@@ -122,6 +122,14 @@ form {
   }
 }
 
+span.info_icon {
+  padding-right: 25px;
+  background: no-repeat url(message_icons/info.png);
+  background-position:right center;
+  padding-top:5px;
+  padding-bottom: 5px;
+}
+
 .plan_right_column {
   position: relative;
   float: right;
@@ -150,6 +158,14 @@ form {
     padding-bottom: 30px;
   }
 }
+.plan_column {
+  position: relative;
+  float: left;
+  width: 100%;
+  .panel_contents {
+    padding-bottom: 30px;
+  }
+}
 .plan_left_column {
   position: relative;
   float: left;
@@ -160,6 +176,14 @@ form {
 }
 .plan_footer {
   clear: both;
+}
+
+.dialogue {
+  display:none;
+  background-color:#F4F4F4;
+  border:1px solid $grey;
+  padding:10px;
+  max-width:200px;
 }
 
 .flash {
@@ -259,13 +283,23 @@ label abbr[title=required] {
 
 .outer_wrapper {
   padding: 25px 30px;
+  max-width:960px;
+}
+
+#cancel_button {
+  @include red-button;
+}
+
+#action_button {
+  @include orange-button;
+  float:left;
 }
 
 a.view_link, a.edit_link, a.create_link {
   @include green-button;
 }
 
-a.delete_link, a.cancel_link, a.lock_link {
+a.delete_link, a.cancel_link,  a.lock_link {
   @include red-button;
 }
 
@@ -276,6 +310,10 @@ a.ignoredirty.red {
 
 a.nav_link {
   @include orange-button;
+}
+
+a.nav_link.cancel {
+	@include red-button;
 }
 
 span.disabled_link {
@@ -308,6 +346,7 @@ span.disabled_link {
   ul.menuitem {
     padding-top: 2em;
   }
+  a, a:link, a:visited { color: $green; }
 }
 .session {
   ul.menuitem {
@@ -404,6 +443,9 @@ dl.phases {
           display: block;
         }
       }
+      > div, > a > div.completed {background:$green;}
+      > div, > a > div.active {background:$offwhite;}
+      > div, > a > div.active:hover {background:$orange;}
     }
   }
 }
@@ -1009,7 +1051,7 @@ h2.step {
       }
       input[type=text] {
         left: auto;
-        width: 60%;
+        width: 50%;
       }
       a {
         margin-left: 2em;
@@ -1311,4 +1353,18 @@ table.repository_log {
   td.log, th.log {
     width: 40%;
   }
+}
+
+// Messages
+
+.default-message {
+    @include default-message;
+}
+
+.warning-message {
+    @include warning-message;
+}
+
+.error-message {
+    @include error-message;
 }

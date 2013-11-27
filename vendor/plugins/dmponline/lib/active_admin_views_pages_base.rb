@@ -53,7 +53,10 @@ class ActiveAdmin::Views::Pages::Base < Arbre::HTML::Document
     if flash.keys.any?
       div :class => 'flashes' do
         flash.each do |type, message|
-          div message, :class => "flash flash_#{type}"
+          div :class => "flash flash_#{type}" do
+            img :src => "/assets/message_icons/#{type}.png", :class => "message_icon"
+            span message
+          end
         end
       end
     end
